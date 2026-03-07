@@ -39,20 +39,20 @@ const Projects = () => {
     ];
 
     return (
-        <section id="projects" className="py-24 bg-white px-4 sm:px-6 lg:px-8">
+        <section id="projects" className="py-16 md:py-24 bg-white px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                    <div className="max-w-2xl">
-                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">
+                <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6">
+                    <div className="max-w-2xl px-1">
+                        <h2 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4 md:mb-6 tracking-tight">
                             Recent <span className="text-gradient">AI Systems</span>
                         </h2>
-                        <p className="text-slate-500 text-lg md:text-xl leading-relaxed font-medium opacity-80">
+                        <p className="text-slate-500 text-base md:text-xl leading-relaxed font-medium opacity-80">
                             I build scalable AI products and high-performance web applications that solve real-world problems.
                         </p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-10">
                     {projects.map((project) => (
                         <div
                             key={project.title}

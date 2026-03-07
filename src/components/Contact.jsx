@@ -3,25 +3,25 @@ import { Mail, Github, MessageCircle, Send, ArrowUpRight } from 'lucide-react';
 
 const Contact = () => {
     return (
-        <section id="contact" className="py-24 bg-white px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section id="contact" className="py-16 md:py-24 bg-white px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             {/* Background Decor */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-50 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-50 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2"></div>
 
             <div className="max-w-7xl mx-auto relative z-10 text-center">
-                <div className="inline-block mb-10">
-                    <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-sm font-black uppercase tracking-widest shadow-sm">
-                        <Send className="w-4 h-4" />
+                <div className="inline-block mb-8 md:mb-10">
+                    <div className="flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs sm:text-sm font-black uppercase tracking-widest shadow-sm">
+                        <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         Let's Collaborate
                     </div>
                 </div>
 
-                <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter leading-[1.1]">
-                    Ready to Build Something <br />
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 mb-4 md:mb-6 tracking-tighter leading-[1.1] px-1">
+                    Ready to Build Something <br className="hidden sm:block" />
                     <span className="text-gradient italic drop-shadow-sm">Extraordinary?</span>
                 </h2>
 
-                <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-14 leading-relaxed font-medium opacity-80">
+                <p className="text-base sm:text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 md:mb-14 leading-relaxed font-medium opacity-80 px-2">
                     Whether you have a specific project in mind or just want to say hi, my inbox is always open.
                 </p>
 

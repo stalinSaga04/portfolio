@@ -65,23 +65,23 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Nav */}
-            <div className={`md:hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden bg-white/90 backdrop-blur-2xl border-b border-slate-200`}>
-                <div className="px-4 pt-4 pb-8 space-y-2">
+            <div className={`md:hidden transition-all duration-500 ease-in-out absolute w-full ${isOpen ? 'max-h-[32rem] opacity-100 border-b border-slate-200/50 shadow-2xl shadow-slate-200/50' : 'max-h-0 opacity-0 border-transparent'} overflow-hidden bg-white/95 backdrop-blur-3xl`}>
+                <div className="px-4 pt-2 pb-6 space-y-1">
                     {navLinks.map((link) => (
                         <a
                             key={link.name}
                             href={link.href}
                             onClick={() => setIsOpen(false)}
-                            className="block px-4 py-3.5 text-base font-bold text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-2xl transition-all duration-300"
+                            className="block px-5 py-4 text-base font-bold text-slate-700 hover:text-indigo-600 active:bg-indigo-50/50 rounded-2xl transition-all duration-300"
                         >
                             {link.name}
                         </a>
                     ))}
-                    <div className="pt-4 px-4">
+                    <div className="pt-4 pb-2 px-2">
                         <a
                             href="#contact"
                             onClick={() => setIsOpen(false)}
-                            className="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-4 rounded-2xl text-base font-bold transition-all duration-300 shadow-lg shadow-indigo-100"
+                            className="block w-full text-center bg-indigo-600 active:bg-indigo-700 text-white px-5 py-4 rounded-2xl text-base font-black transition-all duration-300 shadow-xl shadow-indigo-200/50"
                         >
                             Get Started
                         </a>
