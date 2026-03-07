@@ -16,8 +16,11 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Force scroll to top on refresh
+    // Force scroll to top on refresh and remove hash from URL
     window.scrollTo(0, 0);
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
