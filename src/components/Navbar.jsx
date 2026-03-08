@@ -30,7 +30,10 @@ const Navbar = () => {
                         <div className="bg-indigo-600 p-2 rounded-xl group-hover:rotate-12 transition-all duration-500 shadow-lg shadow-indigo-200">
                             <Code2 className="w-6 h-6 text-white" />
                         </div>
-                        <span className="text-xl font-bold tracking-tight text-slate-900 italic">Sagay<span className="text-indigo-600">AI</span> Lab</span>
+                        <div className="flex flex-col">
+                            <span className="text-xl font-bold tracking-tight text-slate-900 italic">Sagay<span className="text-indigo-600">AI</span> Lab</span>
+                            <span className="hidden lg:block text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] -mt-0.5">Modern Web Development</span>
+                        </div>
                     </Link>
 
                     {/* Desktop Nav */}

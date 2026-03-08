@@ -10,22 +10,34 @@ import TermsConditions from './components/TermsConditions'
 import LoadingScreen from './components/LoadingScreen'
 
 const AppContent = () => {
-  const [showLegal, setShowLegal] = useState(null); // 'privacy' | 'terms' | null
+  const [showLegal, setShowLegal] = useState(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
+  // Time-based dark/light mode (6 PM – 6 AM = dark)
   useEffect(() => {
-    // Handle hash scrolling or scroll to top
+    const updateTheme = () => {
+      const hour = new Date().getHours();
+      const isDark = hour >= 18 || hour < 6;
+      document.documentElement.classList.toggle('dark', isDark);
+    };
+    updateTheme();
+    const interval = setInterval(updateTheme, 60000); // check every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  // Smooth scroll handling
+  useEffect(() => {
     if (location.hash) {
       setTimeout(() => {
         const id = location.hash.replace('#', '');
         const element = document.getElementById(id);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 0);
+      }, 100);
     } else {
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     if ('scrollRestoration' in window.history) {
@@ -52,7 +64,7 @@ const AppContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-indigo-600 selection:text-white flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 selection:bg-indigo-600 selection:text-white flex flex-col relative overflow-hidden transition-colors duration-500">
       <Navbar />
       <div className="flex-1">
         <Routes>

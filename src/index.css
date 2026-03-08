@@ -22,11 +22,23 @@
   color-scheme: light;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-slate-50 text-slate-900 font-sans antialiased;
   user-select: none;
-  scroll-behavior: smooth;
   overflow-x: hidden;
+}
+
+/* Dark Mode (applied via JS based on time) */
+html.dark body {
+  @apply bg-slate-900 text-slate-100;
+}
+
+html.dark section {
+  @apply bg-slate-900;
 }
 
 section {
@@ -60,6 +72,37 @@ section {
   100% {
     background-position: 0% 50%;
   }
+}
+
+/* Signature Quote Animation */
+.signature-text {
+  animation: signature-fade 3s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes signature-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    letter-spacing: 0.05em;
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.02em;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0;
+  }
+}
+
+/* Smooth scroll for all anchor transitions */
+* {
+  scroll-margin-top: 80px;
 }
 
 /* Custom scrollbar */
