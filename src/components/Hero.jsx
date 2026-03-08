@@ -20,76 +20,93 @@ const Hero = () => {
     }, []);
 
     // Meteorite Animation Values
-    const meteoriteY = useTransform(scrollYProgress, [0, 0.4], [-200, 380]);
-    const meteoriteX = useTransform(scrollYProgress, [0, 0.4], [-200, 180]);
-    const meteoriteOpacity = useTransform(scrollYProgress, [0, 0.05, 0.35, 0.4], [0, 1, 1, 0]);
-    const meteoriteScale = useTransform(scrollYProgress, [0, 0.4], [0.5, 1.5]);
+    const meteoriteY = useTransform(scrollYProgress, [0, 0.5], [-300, 250]);
+    const meteoriteX = useTransform(scrollYProgress, [0, 0.5], [-400, 100]);
+    const meteoriteOpacity = useTransform(scrollYProgress, [0, 0.05, 0.45, 0.5], [0, 1, 1, 0]);
+    const meteoriteScale = useTransform(scrollYProgress, [0, 0.5], [0.5, 2]);
 
     // Robot Face Transition
-    const glowOpacity = useTransform(scrollYProgress, [0.38, 0.45], [0, 1]);
-    const faceScale = useSpring(useTransform(scrollYProgress, [0.38, 0.45], [1, 1.05]), { stiffness: 100, damping: 20 });
-    const sectionOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0]);
+    const glowOpacity = useTransform(scrollYProgress, [0.48, 0.55], [0, 1]);
+    const faceScale = useSpring(useTransform(scrollYProgress, [0.48, 0.55], [1, 1.03]), { stiffness: 100, damping: 20 });
 
     return (
-        <section id="home" ref={containerRef} className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-50 min-h-[140vh] flex flex-col items-center">
-            {/* Animated Particles Background */}
+        <section id="home" ref={containerRef} className="relative overflow-hidden bg-slate-50 min-h-screen flex items-center justify-center">
+            {/* === FULL-FIT ROBOT BACKGROUND === */}
+            <motion.div
+                className="absolute inset-0 z-0"
+                style={{ scale: faceScale }}
+            >
+                {/* Base Sketch — full cover */}
+                <img
+                    src={robot_sketch}
+                    alt="AI Base"
+                    className="absolute inset-0 w-full h-full object-cover opacity-15"
+                />
+
+                {/* Glowing AI Version — fades in on scroll */}
+                <motion.img
+                    src={robot_glow}
+                    alt="AI Powered"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ opacity: glowOpacity }}
+                />
+
+                {/* Dark overlay so text remains readable */}
+                <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/60 to-slate-50/90"></div>
+            </motion.div>
+
+            {/* Falling Meteorite (Eri Kal) — sits above the background */}
+            <motion.div
+                className="absolute w-16 h-16 z-30 pointer-events-none"
+                style={{
+                    y: meteoriteY,
+                    x: meteoriteX,
+                    opacity: meteoriteOpacity,
+                    scale: meteoriteScale
+                }}
+            >
+                {/* Meteorite Head */}
+                <div className="w-5 h-5 bg-orange-500 rounded-full blur-[2px] relative overflow-visible">
+                    {/* Glow */}
+                    <div className="absolute inset-0 bg-yellow-400 blur-[10px] rounded-full scale-[2] animate-pulse"></div>
+                    {/* Tail */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-[150%] -translate-y-1/2 w-24 h-2.5 bg-gradient-to-r from-transparent via-orange-600 to-yellow-300 rounded-full opacity-80 -rotate-45 origin-right"></div>
+                </div>
+
+                {/* Impact Flash */}
+                <motion.div
+                    className="absolute top-0 left-0 w-60 h-60 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full blur-[60px] z-10"
+                    style={{
+                        scale: useTransform(scrollYProgress, [0.49, 0.52], [0, 3]),
+                        opacity: useTransform(scrollYProgress, [0.49, 0.5, 0.52], [0, 0.9, 0])
+                    }}
+                />
+            </motion.div>
+
+            {/* Animated Particles — above background, below content */}
             <Particles
                 id="tsparticles"
                 init={particlesInit}
                 options={{
-                    background: {
-                        color: {
-                            value: "transparent",
-                        },
-                    },
+                    background: { color: { value: "transparent" } },
                     fpsLimit: 120,
                     particles: {
-                        color: {
-                            value: "#4f46e5", // indigo-600
-                        },
-                        links: {
-                            color: "#818cf8", // indigo-400
-                            distance: 150,
-                            enable: true,
-                            opacity: 0.2,
-                            width: 1,
-                        },
-                        move: {
-                            direction: "none",
-                            enable: true,
-                            outModes: {
-                                default: "bounce",
-                            },
-                            random: false,
-                            speed: 0.8,
-                            straight: false,
-                        },
-                        number: {
-                            density: {
-                                enable: true,
-                                area: 800,
-                            },
-                            value: 30,
-                        },
-                        opacity: {
-                            value: 0.3,
-                        },
-                        shape: {
-                            type: "circle",
-                        },
-                        size: {
-                            value: { min: 1, max: 3 },
-                        },
+                        color: { value: "#4f46e5" },
+                        links: { color: "#818cf8", distance: 150, enable: true, opacity: 0.15, width: 1 },
+                        move: { direction: "none", enable: true, outModes: { default: "bounce" }, speed: 0.6 },
+                        number: { density: { enable: true, area: 800 }, value: 25 },
+                        opacity: { value: 0.25 },
+                        size: { value: { min: 1, max: 3 } },
                     },
-                    detectRetina: true,
                 }}
-                className="absolute inset-0 z-0 pointer-events-none"
+                className="absolute inset-0 z-[5] pointer-events-none"
             />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col items-center justify-center w-full">
-                <motion.div style={{ opacity: sectionOpacity }} className="text-center w-full max-w-4xl mx-auto flex flex-col items-center">
+            {/* === TEXT CONTENT — overlaid on top of everything === */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col items-center justify-center w-full py-32 lg:py-48">
+                <div className="text-center w-full max-w-4xl mx-auto flex flex-col items-center">
                     {/* Status Badge */}
-                    <div className="inline-flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-full bg-indigo-50/80 backdrop-blur-md border border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer mb-8 animate-fade-in shadow-sm w-max mx-auto">
+                    <div className="inline-flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md border border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer mb-8 animate-fade-in shadow-sm w-max mx-auto">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
@@ -115,7 +132,7 @@ const Hero = () => {
                     </div>
 
                     <div className="max-w-2xl mx-auto mb-10 md:mb-12 px-4 mt-6">
-                        <p className="text-lg sm:text-xl md:text-2xl text-slate-600 leading-relaxed font-medium transition-all duration-300">
+                        <p className="text-lg sm:text-xl md:text-2xl text-slate-700 leading-relaxed font-medium transition-all duration-300">
                             I help businesses grow by designing and developing stunning modern websites, AI-powered tools, and premium SaaS platforms.
                         </p>
                     </div>
@@ -137,58 +154,6 @@ const Hero = () => {
                             Contact Me
                         </a>
                     </div>
-                </motion.div>
-
-                {/* Robotic Animation Container */}
-                <div className="relative mt-20 w-full max-w-[600px] h-[500px] flex items-center justify-center">
-                    <motion.div
-                        className="relative w-full h-full flex items-center justify-center"
-                        style={{ scale: faceScale }}
-                    >
-                        {/* Base Sketch */}
-                        <img
-                            src={robot_sketch}
-                            alt="AI Base"
-                            className="absolute inset-0 w-full h-full object-contain drop-shadow-2xl"
-                        />
-
-                        {/* Glowing Transition Layer */}
-                        <motion.img
-                            src={robot_glow}
-                            alt="AI Powered"
-                            className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_50px_rgba(79,70,229,0.4)]"
-                            style={{ opacity: glowOpacity }}
-                        />
-
-                        {/* Falling Meteorite (Eri Kal) */}
-                        <motion.div
-                            className="absolute w-12 h-12 z-50 pointer-events-none"
-                            style={{
-                                y: meteoriteY,
-                                x: meteoriteX,
-                                opacity: meteoriteOpacity,
-                                scale: meteoriteScale
-                            }}
-                        >
-                            {/* Meteorite Head */}
-                            <div className="w-4 h-4 bg-orange-500 rounded-full blur-[2px] relative overflow-visible">
-                                {/* Meteorite Glow */}
-                                <div className="absolute inset-0 bg-yellow-400 blur-[8px] rounded-full scale-150 animate-pulse"></div>
-
-                                {/* Meteorite Tail */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-[150%] -translate-y-1/2 w-20 h-2 bg-gradient-to-r from-transparent via-orange-600 to-yellow-300 rounded-full opacity-80 -rotate-45 origin-right"></div>
-                            </div>
-
-                            {/* Impact Flash Circle (Invisible until core reach) */}
-                            <motion.div
-                                className="absolute top-0 left-0 w-40 h-40 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full blur-[40px] z-10"
-                                style={{
-                                    scale: useTransform(scrollYProgress, [0.39, 0.42], [0, 2]),
-                                    opacity: useTransform(scrollYProgress, [0.39, 0.4, 0.42], [0, 0.8, 0])
-                                }}
-                            />
-                        </motion.div>
-                    </motion.div>
                 </div>
             </div>
 
