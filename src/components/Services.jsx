@@ -57,10 +57,10 @@ const Services = () => {
                                     {service.description}
                                 </p>
 
-                                <div className="mt-8 md:mt-10 pt-6 md:pt-8 border-t border-slate-200/50 flex items-center justify-between group-hover:border-indigo-200 transition-colors">
-                                    <span className="text-xs md:text-sm font-black text-slate-400 group-hover:text-indigo-600 transition-colors">Inquire now</span>
-                                    <Rocket className="w-4 h-4 md:w-5 md:h-5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500" />
-                                </div>
+                                <a href="/#contact" className="mt-8 md:mt-10 flex items-center justify-center gap-2 w-full py-3.5 md:py-4 bg-slate-900 text-white rounded-xl font-bold text-sm transition-all duration-300 hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-200 group-hover:scale-[1.02]">
+                                    <span>Inquire now</span>
+                                    <Rocket className="w-4 h-4 md:w-5 md:h-5 text-white/70 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500" />
+                                </a>
                             </div>
                         </div>
                     ))}

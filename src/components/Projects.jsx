@@ -13,11 +13,11 @@ const Projects = () => {
         },
         {
             title: 'Savion Academy',
-            description: 'Educational landing page optimized for lead generation. Features course listings and enquiry management.',
+            description: 'Clean landing page designed specifically for lead generation. Features course listings and enquiry management.',
             image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop',
-            tech: ['React', 'Tailwind', 'Responsive Design'],
-            live: 'https://sanvionacademy.vercel.app',
-            category: 'Education SaaS',
+            tech: ['React', 'Tailwind'],
+            live: 'https://savionacademy.vercel.app/',
+            category: 'Funnel Page',
         },
         {
             title: 'Krish Law',

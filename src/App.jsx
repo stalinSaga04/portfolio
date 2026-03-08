@@ -1,30 +1,39 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Projects from './components/Projects'
+import Home from './pages/Home'
 import Skills from './components/Skills'
-import Services from './components/Services'
 import About from './components/About'
-import Contact from './components/Contact'
 import Footer from './components/Footer'
 import PrivacyPolicy from './components/PrivacyPolicy'
 import TermsConditions from './components/TermsConditions'
 import LoadingScreen from './components/LoadingScreen'
 
-function App() {
+const AppContent = () => {
   const [showLegal, setShowLegal] = useState(null); // 'privacy' | 'terms' | null
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
-    // Force scroll to top on refresh and remove hash from URL
-    window.scrollTo(0, 0);
-    if (window.location.hash) {
-      window.history.replaceState(null, '', window.location.pathname);
+    // Handle hash scrolling or scroll to top
+    if (location.hash) {
+      setTimeout(() => {
+        const id = location.hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 0);
+    } else {
+      window.scrollTo(0, 0);
     }
+
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
+  }, [location.pathname, location.hash]);
 
+  useEffect(() => {
     const handleShowLegal = (e) => {
       setShowLegal(e.detail);
       document.body.style.overflow = 'hidden';
@@ -43,22 +52,29 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 selection:bg-indigo-600 selection:text-white">
+    <div className="min-h-screen bg-slate-50 selection:bg-indigo-600 selection:text-white flex flex-col relative overflow-hidden">
       <Navbar />
-      <main>
-        <Hero />
-        <Projects />
-        <Skills />
-        <Services />
-        <About />
-        <Contact />
-      </main>
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/skills" element={<Skills />} />
+        </Routes>
+      </div>
       <Footer />
 
       {/* Legal Modals */}
       {showLegal === 'privacy' && <PrivacyPolicy onClose={closeLegal} />}
       {showLegal === 'terms' && <TermsConditions onClose={closeLegal} />}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   )
 }
 

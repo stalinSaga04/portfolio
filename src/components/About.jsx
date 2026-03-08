@@ -3,7 +3,7 @@ import { User, Lightbulb, Coffee, Code2 } from 'lucide-react';
 
 const About = () => {
     return (
-        <section id="about" className="py-16 md:py-24 bg-slate-50 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section id="about" className="pt-32 pb-16 md:pt-40 md:pb-24 bg-slate-50 px-4 sm:px-6 lg:px-8 relative min-h-screen overflow-hidden">
             {/* Abstract Shapes */}
             <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-blue-100/50 blur-[120px] rounded-full translate-x-1/2"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100/30 blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2"></div>

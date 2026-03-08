@@ -5,11 +5,11 @@ const LoadingScreen = ({ onFinish }) => {
     const [progress, setProgress] = useState(0);
     const [messageIndex, setMessageIndex] = useState(0);
     const messages = [
-        "Initializing Sagay AI...",
-        "Loading Neural Networks...",
-        "Optimizing Interface Components...",
-        "Establishing Secure Connection...",
-        "Syncing Laboratory Data...",
+        "Initializing (stalin sagay.dev)...",
+        "Loading (sagay AI lab)...",
+        "Optimizing Interface...",
+        "Establishing Connection...",
+        "Syncing Data...",
         "Ready."
     ];
 
