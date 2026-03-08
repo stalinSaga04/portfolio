@@ -30,7 +30,7 @@ const Projects = () => {
         {
             title: 'Carecut AI',
             description: 'AI Video Director SaaS. Analyzes footage to automatically generate highlights, shorts, and cinematic edits using Computer Vision.',
-            image: 'https://plus.unsplash.com/premium_photo-1685086785636-2a1a0e5b591f?q=80&w=800&auto=format&fit=crop',
+            image: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop',
             tech: ['Python', 'FastAPI', 'OpenCV'],
             live: 'https://carecut.vercel.app',
             category: 'AI Systems',
@@ -56,7 +56,7 @@ const Projects = () => {
                     {projects.map((project) => (
                         <div
                             key={project.title}
-                            className="group relative h-[420px] rounded-[2rem] overflow-hidden transition-all duration-700 hover:-translate-y-3 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50"
+                            className="group relative h-[420px] rounded-[2rem] overflow-hidden transition-all duration-500 hover:scale-105 shadow-sm hover:shadow-xl hover:shadow-indigo-200/50"
                         >
                             {/* Card Background & Border Glow */}
                             <div className="absolute inset-0 bg-slate-50 border border-slate-200 group-hover:border-indigo-300 transition-colors duration-500 rounded-[2rem]" />
