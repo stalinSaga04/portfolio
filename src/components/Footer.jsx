@@ -43,7 +43,7 @@ const Footer = () => {
                         <div className="bg-slate-800/80 rounded-2xl p-6 border border-slate-600/50 shadow-lg shadow-indigo-500/10 w-full max-w-sm backdrop-blur-sm relative overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
                             <p className={`text-sm md:text-base font-medium text-slate-200 italic leading-relaxed text-left relative z-10 signature-text ${isVisible ? 'is-visible' : ''}`}>
-                                "Choice is our's!\nChance is your's,\n<span className="text-indigo-400 font-bold">Thought is forever."</span>
+                                "Choice is our's!<br />Chance is your's,<br /><span className="text-indigo-400 font-bold">Thought is forever."</span>
                             </p>
                         </div>
                     </div>

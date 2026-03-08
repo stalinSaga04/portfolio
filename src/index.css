@@ -79,37 +79,25 @@ section {
 /* Signature Quote Animation */
 .signature-text {
   display: inline-block;
-  overflow: hidden;
-  white-space: pre-wrap;
-  border-right: 2px solid transparent;
-  width: 0;
-  max-width: 100%;
+  clip-path: inset(0 100% 0 0);
+  opacity: 0.8;
 }
 
 .signature-text.is-visible {
-  border-right-color: theme('colors.indigo.400');
-  animation: typing 3s steps(40, end) forwards, blink-caret .75s step-end infinite;
+  animation: signature-wipe 2.5s ease-out forwards;
 }
 
-@keyframes typing {
-  from {
-    width: 0;
+@keyframes signature-wipe {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.5;
+    transform: translateX(-10px);
   }
 
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink-caret {
-
-  from,
-  to {
-    border-color: transparent
-  }
-
-  50% {
-    border-color: theme('colors.indigo.400');
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
