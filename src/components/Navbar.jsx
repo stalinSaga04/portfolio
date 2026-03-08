@@ -30,7 +30,7 @@ const Navbar = () => {
                         <img
                             src="/favicon.png"
                             alt="SagayAI Lab"
-                            className="w-10 h-10 rounded-xl group-hover:rotate-12 transition-all duration-500 shadow-lg shadow-indigo-200 dark:shadow-indigo-900/50"
+                            className="w-10 h-10 object-cover rounded-full group-hover:rotate-12 transition-all duration-500 shadow-md shadow-indigo-200 dark:shadow-indigo-900/50 mix-blend-multiply dark:mix-blend-screen overflow-hidden bg-white"
                         />
                         <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white italic">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
                     </Link>

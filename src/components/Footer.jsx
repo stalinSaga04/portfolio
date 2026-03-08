@@ -33,7 +33,7 @@ const Footer = () => {
                         <img
                             src="/favicon.png"
                             alt="SagayAI Lab"
-                            className="w-10 h-10 rounded-xl group-hover:rotate-12 transition-all duration-500 shadow-lg shadow-indigo-500/30"
+                            className="w-10 h-10 object-cover rounded-full group-hover:rotate-12 transition-all duration-500 shadow-md shadow-indigo-500/30 mix-blend-screen overflow-hidden bg-white/10"
                         />
                         <span className="text-2xl font-black tracking-tight text-white italic">Sagay<span className="text-indigo-400">AI</span> Lab</span>
                     </div>
