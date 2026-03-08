@@ -33,6 +33,35 @@ section {
   @apply py-12 md:py-20;
 }
 
+/* Hero Animated Gradient — Purple → Magenta → Orange (Cyberpunk) */
+.hero-gradient-bg {
+  background: linear-gradient(135deg,
+      #2d0845 0%,
+      #6b21a8 15%,
+      #9333ea 25%,
+      #c026d3 40%,
+      #db2777 55%,
+      #e11d48 70%,
+      #ea580c 85%,
+      #f97316 100%);
+  background-size: 400% 400%;
+  animation: gradient-shift 12s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
