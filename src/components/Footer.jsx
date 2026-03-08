@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Github, Linkedin, MessageSquare } from 'lucide-react';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const [isVisible, setIsVisible] = useState(false);
+    const quoteRef = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.5 }
+        );
+
+        if (quoteRef.current) {
+            observer.observe(quoteRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
 
     return (
         <footer className="bg-slate-900 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500">
@@ -19,9 +39,10 @@ const Footer = () => {
                     </div>
 
                     {/* Middle: Signature Quote (Typewriter Animation) */}
-                    <div className="text-center flex justify-center w-full">
-                        <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50 shadow-inner w-full max-w-sm">
-                            <p className="text-sm md:text-base font-medium text-slate-300 italic leading-relaxed signature-text text-left">
+                    <div className="text-center flex justify-center w-full" ref={quoteRef}>
+                        <div className="bg-slate-800/80 rounded-2xl p-6 border border-slate-600/50 shadow-lg shadow-indigo-500/10 w-full max-w-sm backdrop-blur-sm relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
+                            <p className={`text-sm md:text-base font-medium text-slate-200 italic leading-relaxed text-left relative z-10 signature-text ${isVisible ? 'is-visible' : ''}`}>
                                 "Choice is our's!\nChance is your's,\n<span className="text-indigo-400 font-bold">Thought is forever."</span>
                             </p>
                         </div>

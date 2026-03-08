@@ -81,10 +81,14 @@ section {
   display: inline-block;
   overflow: hidden;
   white-space: pre-wrap;
-  border-right: 2px solid theme('colors.indigo.400');
-  animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
-  width: fit-content;
+  border-right: 2px solid transparent;
+  width: 0;
   max-width: 100%;
+}
+
+.signature-text.is-visible {
+  border-right-color: theme('colors.indigo.400');
+  animation: typing 3s steps(40, end) forwards, blink-caret .75s step-end infinite;
 }
 
 @keyframes typing {
