@@ -1,16 +1,37 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+
+import robot_sketch from '../assets/robot_sketch.jpg';
+import robot_glow from '../assets/robot_glow.jpg';
 
 const Hero = () => {
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end start"]
+    });
+
     const particlesInit = useCallback(async engine => {
         await loadSlim(engine);
     }, []);
 
+    // Meteorite Animation Values
+    const meteoriteY = useTransform(scrollYProgress, [0, 0.4], [-200, 380]);
+    const meteoriteX = useTransform(scrollYProgress, [0, 0.4], [-200, 180]);
+    const meteoriteOpacity = useTransform(scrollYProgress, [0, 0.05, 0.35, 0.4], [0, 1, 1, 0]);
+    const meteoriteScale = useTransform(scrollYProgress, [0, 0.4], [0.5, 1.5]);
+
+    // Robot Face Transition
+    const glowOpacity = useTransform(scrollYProgress, [0.38, 0.45], [0, 1]);
+    const faceScale = useSpring(useTransform(scrollYProgress, [0.38, 0.45], [1, 1.05]), { stiffness: 100, damping: 20 });
+    const sectionOpacity = useTransform(scrollYProgress, [0.8, 1], [1, 0]);
+
     return (
-        <section id="home" className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-50 min-h-[90vh] flex items-center justify-center">
+        <section id="home" ref={containerRef} className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-50 min-h-[140vh] flex flex-col items-center">
             {/* Animated Particles Background */}
             <Particles
                 id="tsparticles"
@@ -40,7 +61,7 @@ const Hero = () => {
                                 default: "bounce",
                             },
                             random: false,
-                            speed: 1,
+                            speed: 0.8,
                             straight: false,
                         },
                         number: {
@@ -48,7 +69,7 @@ const Hero = () => {
                                 enable: true,
                                 area: 800,
                             },
-                            value: 40,
+                            value: 30,
                         },
                         opacity: {
                             value: 0.3,
@@ -65,21 +86,15 @@ const Hero = () => {
                 className="absolute inset-0 z-0 pointer-events-none"
             />
 
-            {/* Ambient Background Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden max-w-[100vw] z-0">
-                <div className="absolute top-[10%] left-[20%] w-[40%] h-[40%] bg-indigo-300/20 blur-[100px] rounded-full animate-pulse"></div>
-                <div className="absolute bottom-[20%] right-[10%] w-[35%] h-[35%] bg-blue-300/20 blur-[100px] rounded-full animate-pulse delay-700"></div>
-            </div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center justify-center w-full mt-10">
-                <div className="text-center w-full max-w-4xl mx-auto flex flex-col items-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col items-center justify-center w-full">
+                <motion.div style={{ opacity: sectionOpacity }} className="text-center w-full max-w-4xl mx-auto flex flex-col items-center">
                     {/* Status Badge */}
                     <div className="inline-flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-full bg-indigo-50/80 backdrop-blur-md border border-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer mb-8 animate-fade-in shadow-sm w-max mx-auto">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
                         </span>
-                        <span className="text-xs sm:text-sm font-bold text-indigo-600 uppercase tracking-widest whitespace-nowrap">Available for new projects</span>
+                        <span className="text-xs sm:text-sm font-bold text-indigo-600 uppercase tracking-widest whitespace-nowrap">AI & Modern Web Solutions</span>
                     </div>
 
                     <div className="h-[140px] sm:h-[160px] md:h-[220px] flex items-center justify-center w-full">
@@ -122,6 +137,58 @@ const Hero = () => {
                             Contact Me
                         </a>
                     </div>
+                </motion.div>
+
+                {/* Robotic Animation Container */}
+                <div className="relative mt-20 w-full max-w-[600px] h-[500px] flex items-center justify-center">
+                    <motion.div
+                        className="relative w-full h-full flex items-center justify-center"
+                        style={{ scale: faceScale }}
+                    >
+                        {/* Base Sketch */}
+                        <img
+                            src={robot_sketch}
+                            alt="AI Base"
+                            className="absolute inset-0 w-full h-full object-contain drop-shadow-2xl"
+                        />
+
+                        {/* Glowing Transition Layer */}
+                        <motion.img
+                            src={robot_glow}
+                            alt="AI Powered"
+                            className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_50px_rgba(79,70,229,0.4)]"
+                            style={{ opacity: glowOpacity }}
+                        />
+
+                        {/* Falling Meteorite (Eri Kal) */}
+                        <motion.div
+                            className="absolute w-12 h-12 z-50 pointer-events-none"
+                            style={{
+                                y: meteoriteY,
+                                x: meteoriteX,
+                                opacity: meteoriteOpacity,
+                                scale: meteoriteScale
+                            }}
+                        >
+                            {/* Meteorite Head */}
+                            <div className="w-4 h-4 bg-orange-500 rounded-full blur-[2px] relative overflow-visible">
+                                {/* Meteorite Glow */}
+                                <div className="absolute inset-0 bg-yellow-400 blur-[8px] rounded-full scale-150 animate-pulse"></div>
+
+                                {/* Meteorite Tail */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-[150%] -translate-y-1/2 w-20 h-2 bg-gradient-to-r from-transparent via-orange-600 to-yellow-300 rounded-full opacity-80 -rotate-45 origin-right"></div>
+                            </div>
+
+                            {/* Impact Flash Circle (Invisible until core reach) */}
+                            <motion.div
+                                className="absolute top-0 left-0 w-40 h-40 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full blur-[40px] z-10"
+                                style={{
+                                    scale: useTransform(scrollYProgress, [0.39, 0.42], [0, 2]),
+                                    opacity: useTransform(scrollYProgress, [0.39, 0.4, 0.42], [0, 0.8, 0])
+                                }}
+                            />
+                        </motion.div>
+                    </motion.div>
                 </div>
             </div>
 
