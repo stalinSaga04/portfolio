@@ -39,14 +39,14 @@ const Projects = () => {
     ];
 
     return (
-        <section id="projects" className="py-16 md:py-24 bg-white px-4 sm:px-6 lg:px-8">
+        <section id="projects" className="py-16 md:py-24 bg-white dark:bg-slate-900 px-4 sm:px-6 lg:px-8 transition-colors duration-500">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6">
                     <div className="max-w-2xl px-1">
-                        <h2 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4 md:mb-6 tracking-tight">
+                        <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6 tracking-tight">
                             Recent <span className="text-gradient">AI Systems</span>
                         </h2>
-                        <p className="text-slate-500 text-base md:text-xl leading-relaxed font-medium opacity-80">
+                        <p className="text-slate-500 dark:text-slate-400 text-base md:text-xl leading-relaxed font-medium opacity-80">
                             I build scalable AI products and high-performance web applications that solve real-world problems.
                         </p>
                     </div>
@@ -56,11 +56,11 @@ const Projects = () => {
                     {projects.map((project) => (
                         <div
                             key={project.title}
-                            className="group relative h-[420px] rounded-[2rem] overflow-hidden transition-all duration-500 hover:scale-105 shadow-sm hover:shadow-xl hover:shadow-indigo-200/50"
+                            className="group relative h-[420px] rounded-[2rem] overflow-hidden transition-all duration-500 hover:scale-105 shadow-sm hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30"
                         >
                             {/* Card Background & Border Glow */}
-                            <div className="absolute inset-0 bg-slate-50 border border-slate-200 group-hover:border-indigo-300 transition-colors duration-500 rounded-[2rem]" />
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-transparent to-cyan-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            <div className="absolute inset-0 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 group-hover:border-indigo-300 dark:group-hover:border-indigo-500/50 transition-colors duration-500 rounded-[2rem]" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-transparent to-cyan-50/50 dark:from-indigo-900/20 dark:via-transparent dark:to-cyan-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                             <div className="relative h-full flex flex-col">
                                 {/* Image Container */}
@@ -93,11 +93,11 @@ const Projects = () => {
                                 <div className="p-6 pt-2 flex flex-col flex-1 justify-between">
                                     <div>
                                         <div className="flex justify-between items-start mb-3">
-                                            <h3 className="text-2xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors duration-300">
+                                            <h3 className="text-2xl font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
                                                 {project.title}
                                             </h3>
                                             {project.inDev ? (
-                                                <span className="p-2.5 rounded-full bg-amber-50 text-amber-500 border border-amber-200 cursor-default" title="In Development">
+                                                <span className="p-2.5 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-500 border border-amber-200 dark:border-amber-700/50 cursor-default" title="In Development">
                                                     <ExternalLink className="w-4 h-4" />
                                                 </span>
                                             ) : (
@@ -105,23 +105,23 @@ const Projects = () => {
                                                     href={project.live}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="p-2.5 rounded-full bg-white text-slate-900 hover:bg-indigo-600 hover:text-white transition-all duration-300 hover:scale-110 border border-slate-200 hover:border-indigo-400/50"
+                                                    className="p-2.5 rounded-full bg-white dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all duration-300 hover:scale-110 border border-slate-200 dark:border-slate-600 hover:border-indigo-400/50"
                                                 >
                                                     <ExternalLink className="w-4 h-4" />
                                                 </a>
                                             )}
                                         </div>
-                                        <p className="text-slate-500 text-sm line-clamp-2 md:line-clamp-3 mb-4 font-medium leading-relaxed">
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 md:line-clamp-3 mb-4 font-medium leading-relaxed">
                                             {project.description}
                                         </p>
                                     </div>
 
                                     {/* Tech Stack */}
-                                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
+                                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100 dark:border-slate-700/50">
                                         {project.tech.map((item) => (
                                             <span
                                                 key={item}
-                                                className="text-[9px] font-black tracking-tight px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 group-hover:border-indigo-200 transition-colors"
+                                                className="text-[9px] font-black tracking-tight px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 group-hover:border-indigo-200 dark:group-hover:border-indigo-500/50 transition-colors"
                                             >
                                                 {item}
                                             </span>

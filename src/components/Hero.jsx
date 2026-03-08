@@ -54,10 +54,10 @@ const Hero = () => {
                     {/* Status Badge */}
                     <div className="inline-flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/15 hover:border-white/30 transition-colors cursor-pointer mb-8 animate-fade-in shadow-lg w-max mx-auto">
                         <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
                         </span>
-                        <span className="text-xs sm:text-sm font-bold text-pink-200 uppercase tracking-widest whitespace-nowrap">AI & Modern Web Solutions</span>
+                        <span className="text-xs sm:text-sm font-black text-cyan-50 uppercase tracking-[0.2em] whitespace-nowrap">Modern Web Development</span>
                     </div>
 
                     {/* Headline */}
@@ -106,8 +106,8 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Bottom Gradient Fade to slate-50 */}
-            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 to-transparent z-10 pointer-events-none" />
+            {/* Bottom Gradient Fade to slate-50/slate-900 */}
+            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 dark:from-slate-900 to-transparent z-10 pointer-events-none transition-colors duration-500" />
         </section>
     );
 };
