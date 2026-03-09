@@ -28,6 +28,18 @@ const Navbar = () => {
         };
     }, []);
 
+    // Auto-close mobile menu on scroll
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleScroll = () => {
+            setIsOpen(false);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isOpen]);
+
     const toggleTheme = () => {
         const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
         localStorage.setItem('theme', newTheme);
