@@ -14,16 +14,32 @@ const AppContent = () => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
-  // Time-based dark/light mode (6 PM – 6 AM = dark)
+  // Theme handling (Storage > Time-based)
   useEffect(() => {
     const updateTheme = () => {
-      const hour = new Date().getHours();
-      const isDark = hour >= 18 || hour < 6;
+      const storedTheme = localStorage.getItem('theme');
+      let isDark;
+
+      if (storedTheme) {
+        isDark = storedTheme === 'dark';
+      } else {
+        const hour = new Date().getHours();
+        isDark = hour >= 18 || hour < 6;
+      }
+
       document.documentElement.classList.toggle('dark', isDark);
     };
+
     updateTheme();
-    const interval = setInterval(updateTheme, 60000); // check every minute
-    return () => clearInterval(interval);
+
+    // Listen for manual theme changes
+    window.addEventListener('theme-change', updateTheme);
+    const interval = setInterval(updateTheme, 60000); // sync time every minute
+
+    return () => {
+      window.removeEventListener('theme-change', updateTheme);
+      clearInterval(interval);
+    };
   }, []);
 
   // Smooth scroll handling

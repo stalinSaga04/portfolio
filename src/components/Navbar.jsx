@@ -1,18 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Code2 } from 'lucide-react';
+import { Menu, X, Code2, Sun, Moon } from 'lucide-react';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
         };
+
+        // Initial dark state check
+        setIsDark(document.documentElement.classList.contains('dark'));
+
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        const handleThemeChange = () => {
+            setIsDark(document.documentElement.classList.contains('dark'));
+        };
+        window.addEventListener('theme-change', handleThemeChange);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('theme-change', handleThemeChange);
+        };
     }, []);
+
+    const toggleTheme = () => {
+        const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        document.documentElement.classList.toggle('dark');
+        window.dispatchEvent(new CustomEvent('theme-change'));
+    };
 
     const navLinks = [
         { name: 'Projects', href: '/#projects' },
@@ -55,10 +76,25 @@ const Navbar = () => {
                         >
                             Get Started
                         </Link>
+
+                        {/* Theme Toggle */}
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-sm"
+                            title="Toggle Theme"
+                        >
+                            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                        </button>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <div className="md:hidden">
+                    {/* Mobile Menu Button + Theme Toggle */}
+                    <div className="md:hidden flex items-center gap-2">
+                        <button
+                            onClick={toggleTheme}
+                            className="text-slate-600 dark:text-slate-300 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl transition-all duration-300"
+                        >
+                            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                        </button>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl transition-all duration-300"
