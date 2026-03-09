@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
 import { motion } from 'framer-motion';
