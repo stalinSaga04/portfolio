@@ -56,11 +56,11 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 items-center">
                     {/* Left: Logo */}
                     <div className="flex items-center gap-3 group cursor-pointer justify-center md:justify-start" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white dark:bg-black p-1.5 shadow-md shadow-indigo-500/30 group-hover:rotate-12 transition-all duration-500 overflow-hidden">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white dark:bg-black p-0.5 shadow-md shadow-indigo-500/30 group-hover:rotate-12 transition-all duration-500 overflow-hidden">
                             <img
                                 src="/favicon.png"
                                 alt="SagayAI Lab"
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-contain scale-110"
                             />
                         </div>
                         <span className="text-2xl font-black tracking-tight text-white italic">Sagay<span className="text-indigo-400">AI</span> Lab</span>
