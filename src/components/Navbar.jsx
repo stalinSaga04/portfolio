@@ -27,9 +27,11 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center">
                     <Link to="/" className="flex items-center gap-2.5 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        <div className="bg-indigo-600 dark:bg-indigo-500 rounded-xl p-2 group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-indigo-600/30">
-                            <Code2 className="w-5 h-5 text-white" />
-                        </div>
+                        <img
+                            src="/favicon.png"
+                            alt="SagayAI Lab"
+                            className="w-10 h-10 rounded-full group-hover:rotate-12 transition-all duration-500 shadow-md shadow-indigo-200 dark:shadow-indigo-900/50"
+                        />
                         <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white italic">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
                     </Link>
 
