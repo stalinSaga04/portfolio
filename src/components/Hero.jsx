@@ -65,9 +65,9 @@ const Hero = () => {
                         <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.1] md:leading-[1.1] animate-fade-in-up px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
                             <TypeAnimation
                                 sequence={[
-                                    'AI & Web Developer',
+                                    'From simple ideas...',
                                     2000,
-                                    'Building Intelligent\nWeb Applications',
+                                    'Powerful digital\nexperiences.',
                                     2000,
                                 ]}
                                 wrapper="span"
@@ -81,7 +81,7 @@ const Hero = () => {
                     {/* Subtext */}
                     <div className="max-w-2xl mx-auto mb-10 md:mb-12 px-4 mt-6">
                         <p className="text-lg sm:text-xl md:text-2xl text-white/80 leading-relaxed font-medium">
-                            I help businesses grow by designing and developing stunning modern websites, AI-powered tools, and premium SaaS platforms.
+                            I design and build modern websites that help businesses grow online.
                         </p>
                     </div>
 

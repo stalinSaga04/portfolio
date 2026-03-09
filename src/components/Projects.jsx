@@ -44,10 +44,10 @@ const Projects = () => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6">
                     <div className="max-w-2xl px-1">
                         <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6 tracking-tight">
-                            Recent <span className="text-gradient">AI Systems</span>
+                            Selected <span className="text-gradient">Projects</span>
                         </h2>
                         <p className="text-slate-500 dark:text-slate-400 text-base md:text-xl leading-relaxed font-medium opacity-80">
-                            I build scalable AI products and high-performance web applications that solve real-world problems.
+                            Modern websites and landing pages built for businesses, professionals, and local brands.
                         </p>
                     </div>
                 </div>
