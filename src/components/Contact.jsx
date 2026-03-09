@@ -1,5 +1,6 @@
 import React from 'react';
 import { Mail, MessageCircle, Send, Linkedin } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Contact = () => {
     return (
@@ -9,23 +10,36 @@ const Contact = () => {
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-50/50 dark:bg-blue-900/20 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
 
             <div className="max-w-4xl mx-auto relative z-10 text-center">
-                <div className="inline-block mb-8 md:mb-10 animate-fade-in">
-                    <div className="flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 text-xs sm:text-sm font-black uppercase tracking-widest shadow-sm">
-                        <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                        Let's Collaborate
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <div className="inline-block mb-8 md:mb-10">
+                        <div className="flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 text-xs sm:text-sm font-black uppercase tracking-widest shadow-sm">
+                            <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            Let's Collaborate
+                        </div>
                     </div>
-                </div>
 
-                <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter leading-[1.1] px-1 animate-fade-in-up">
-                    Let's Build Something <br className="hidden sm:block" />
-                    <span className="text-gradient italic drop-shadow-sm">Amazing</span>
-                </h2>
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter leading-[1.1] px-1">
+                        Let's Build Something <br className="hidden sm:block" />
+                        <span className="text-gradient italic drop-shadow-sm">Amazing</span>
+                    </h2>
 
-                <p className="text-lg sm:text-xl md:text-2xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-12 md:mb-16 leading-relaxed font-medium opacity-90 px-2 animate-fade-in-up delay-200">
-                    If you have a project idea or want a modern website for your business, let's discuss it.
-                </p>
+                    <p className="text-lg sm:text-xl md:text-2xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-12 md:mb-16 leading-relaxed font-medium opacity-90 px-2">
+                        If you have a project idea or want a modern website for your business, let's discuss it.
+                    </p>
+                </motion.div>
 
-                <div className="flex flex-col items-center gap-6 animate-fade-in-up delay-300">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="flex flex-col items-center gap-6"
+                >
                     {/* Primary Action */}
                     <a
                         href="https://wa.me/918122139068"
@@ -57,7 +71,7 @@ const Contact = () => {
                             <span>LinkedIn</span>
                         </a>
                     </div>
-                </div>
+                </motion.div>
             </div>
 
             {/* Subtle Divider Overlay */}

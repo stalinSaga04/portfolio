@@ -1,5 +1,6 @@
 import React from 'react';
 import { Globe, Target, Cpu, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Services = () => {
     const services = [
@@ -26,19 +27,29 @@ const Services = () => {
     return (
         <section id="services" className="py-16 md:py-24 bg-white dark:bg-slate-900 px-4 sm:px-6 lg:px-8 border-y border-slate-100 dark:border-slate-800 transition-colors duration-500">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-12 md:mb-20">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-12 md:mb-20"
+                >
                     <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 dark:text-white mb-4 md:mb-6 tracking-tight px-1">
                         What I Help Businesses <span className="text-gradient italic">Achieve</span>
                     </h2>
                     <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto text-lg sm:text-xl pt-2 leading-relaxed font-medium px-1">
                         My exact focus is delivering measurable results and driving your business forward through modern digital solutions.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
                     {services.map((service, index) => (
-                        <div
+                        <motion.div
                             key={service.title}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
                             className="relative group bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-500/50 rounded-[2.5rem] p-8 md:p-10 transition-all duration-500 hover:-translate-y-2 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-900/20 flex flex-col items-center text-center"
                         >
                             <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-indigo-50/50 dark:from-indigo-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-t-[2.5rem]"></div>
@@ -65,7 +76,7 @@ const Services = () => {
                                     <ChevronRight className="w-4 h-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
                                 </a>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

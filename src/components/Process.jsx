@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, PenTool, Code, Rocket } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Process = () => {
     const steps = [
@@ -43,7 +44,13 @@ const Process = () => {
             <div className="absolute top-1/2 left-0 w-96 h-96 bg-indigo-100/40 dark:bg-indigo-900/20 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="text-center mb-16 md:mb-24">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-16 md:mb-24"
+                >
                     <span className="text-sm font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-100 dark:bg-indigo-900/30 px-4 py-2 rounded-full mb-6 inline-block shadow-sm">
                         Proven Workflow
                     </span>
@@ -53,7 +60,7 @@ const Process = () => {
                     <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
                         A streamlined, transparent approach to translating your vision into a high-performance digital reality.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="relative">
                     {/* Connecting Line (Desktop only) */}
@@ -61,7 +68,14 @@ const Process = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 relative z-10">
                         {steps.map((step, index) => (
-                            <div key={step.title} className="flex flex-col items-center text-center group">
+                            <motion.div
+                                key={step.title}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: "-50px" }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                className="flex flex-col items-center text-center group"
+                            >
                                 <div className={`w-24 h-24 rounded-3xl ${step.bg} ${step.text} flex items-center justify-center mb-6 md:mb-8 transition-transform duration-500 group-hover:scale-110 shadow-lg shadow-slate-200/50 dark:shadow-slate-900/50 relative overflow-hidden border border-slate-200/50 dark:border-slate-700/50`}>
                                     <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
                                     <div className="relative z-10 group-hover:-translate-y-1 transition-transform duration-300">
@@ -81,7 +95,7 @@ const Process = () => {
                                 <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed font-medium px-2">
                                     {step.description}
                                 </p>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>

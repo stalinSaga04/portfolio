@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layers, Server, Cpu, Wrench } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Skills = () => {
     const skillCategories = [
@@ -40,7 +41,13 @@ const Skills = () => {
             <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-cyan-100/30 dark:bg-cyan-900/20 blur-[120px] rounded-full pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto relative z-10">
-                <div className="text-center mb-16 md:mb-24 px-1">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-16 md:mb-24 px-1"
+                >
                     <span className="text-sm font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest bg-indigo-100 dark:bg-indigo-900/30 px-4 py-2 rounded-full mb-6 inline-block shadow-sm">
                         Technical Arsenal
                     </span>
@@ -50,12 +57,16 @@ const Skills = () => {
                     <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
                         I leverage modern frameworks and robust tools to build scalable, high-performance applications from concept to deployment.
                     </p>
-                </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-                    {skillCategories.map((category) => (
-                        <div
+                    {skillCategories.map((category, index) => (
+                        <motion.div
                             key={category.title}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
                             className="group relative bg-white dark:bg-slate-800 rounded-3xl p-8 sm:p-10 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500/50 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-900/20 transition-all duration-500"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/30 dark:from-indigo-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl pointer-events-none"></div>
@@ -82,13 +93,19 @@ const Skills = () => {
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
 
-                <div className="mt-20 text-center">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                    className="mt-20 text-center"
+                >
                     <p className="text-slate-500 dark:text-slate-400 font-medium mb-6 animate-pulse">Always learning. Currently expanding into Advanced AI Agents.</p>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

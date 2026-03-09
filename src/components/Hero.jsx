@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
+import { motion } from 'framer-motion';
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
@@ -22,7 +22,7 @@ const Hero = () => {
                 <img
                     src={robot_glow}
                     alt="AI"
-                    className="w-full h-full object-cover opacity-25 mix-blend-luminosity"
+                    className="w-full h-full object-cover lg:object-cover sm:object-contain opacity-25 mix-blend-luminosity scale-110 sm:scale-100 lg:scale-110 transition-transform duration-700"
                 />
             </div>
 
@@ -52,17 +52,27 @@ const Hero = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col items-center justify-center w-full py-32 lg:py-48">
                 <div className="text-center w-full max-w-4xl mx-auto flex flex-col items-center">
                     {/* Status Badge */}
-                    <div className="inline-flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/15 hover:border-white/30 transition-colors cursor-pointer mb-8 animate-fade-in shadow-lg w-max mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="inline-flex flex-row items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/15 hover:border-white/30 transition-colors cursor-pointer mb-8 shadow-lg w-max mx-auto"
+                    >
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
                         </span>
                         <span className="text-xs sm:text-sm font-black text-cyan-50 uppercase tracking-[0.2em] whitespace-nowrap">Modern Web Development</span>
-                    </div>
+                    </motion.div>
 
                     {/* Headline */}
-                    <div className="h-[140px] sm:h-[160px] md:h-[220px] flex items-center justify-center w-full">
-                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.1] md:leading-[1.1] animate-fade-in-up px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="h-[140px] sm:h-[160px] md:h-[220px] flex items-center justify-center w-full"
+                    >
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
                             <TypeAnimation
                                 sequence={[
                                     'From simple ideas...',
@@ -76,17 +86,27 @@ const Hero = () => {
                                 className="inline-block whitespace-pre-line"
                             />
                         </h1>
-                    </div>
+                    </motion.div>
 
                     {/* Subtext */}
-                    <div className="max-w-2xl mx-auto mb-10 md:mb-12 px-4 mt-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="max-w-2xl mx-auto mb-10 md:mb-12 px-4 mt-6"
+                    >
                         <p className="text-lg sm:text-xl md:text-2xl text-white/80 leading-relaxed font-medium">
                             I design and build modern websites that help businesses grow online.
                         </p>
-                    </div>
+                    </motion.div>
 
                     {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16 animate-fade-in-up delay-300 w-full px-4 sm:px-0">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16 w-full px-4 sm:px-0"
+                    >
                         <a
                             href="#projects"
                             className="group relative w-full sm:w-auto px-8 py-4 bg-white text-slate-900 rounded-2xl font-black text-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 overflow-hidden"
@@ -102,7 +122,7 @@ const Hero = () => {
                         >
                             Contact Me
                         </a>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
 

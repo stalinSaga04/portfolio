@@ -70,12 +70,6 @@ const Navbar = () => {
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         ))}
-                        <Link
-                            to="/#contact"
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-full text-sm font-bold transition-all duration-500 hover:scale-105 active:scale-95 shadow-lg shadow-indigo-100 dark:shadow-indigo-900/50"
-                        >
-                            Get Started
-                        </Link>
 
                         {/* Theme Toggle */}
                         <button
@@ -118,15 +112,6 @@ const Navbar = () => {
                             {link.name}
                         </Link>
                     ))}
-                    <div className="pt-4 pb-2 px-2">
-                        <Link
-                            to="/#contact"
-                            onClick={() => setIsOpen(false)}
-                            className="block w-full text-center bg-indigo-600 active:bg-indigo-700 text-white px-5 py-4 rounded-2xl text-base font-black transition-all duration-300 shadow-xl shadow-indigo-200/50 dark:shadow-indigo-900/50"
-                        >
-                            Get Started
-                        </Link>
-                    </div>
                 </div>
             </div>
         </nav>
