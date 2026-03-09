@@ -4,6 +4,8 @@ import { Github, Linkedin, MessageSquare } from 'lucide-react';
 const Footer = () => {
     const currentYear = new Date().getFullYear();
     const [isVisible, setIsVisible] = useState(false);
+    const [isFlipped, setIsFlipped] = useState(false);
+    const [hasAutoFlipped, setHasAutoFlipped] = useState(false);
     const quoteRef = useRef(null);
 
     useEffect(() => {
@@ -24,6 +26,30 @@ const Footer = () => {
         return () => observer.disconnect();
     }, []);
 
+    // Auto-flip effect
+    useEffect(() => {
+        let flipTimer;
+        let unflipTimer;
+
+        if (isVisible && !hasAutoFlipped) {
+            // Wait 5 seconds for the wipe animation + reading time
+            flipTimer = setTimeout(() => {
+                setIsFlipped(true);
+                setHasAutoFlipped(true);
+
+                // Unflip after 4 seconds
+                unflipTimer = setTimeout(() => {
+                    setIsFlipped(false);
+                }, 4000);
+            }, 5000);
+        }
+
+        return () => {
+            clearTimeout(flipTimer);
+            clearTimeout(unflipTimer);
+        };
+    }, [isVisible, hasAutoFlipped]);
+
     return (
         <footer className="bg-slate-900 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden transition-colors duration-500">
             <div className="max-w-7xl mx-auto relative z-10">
@@ -38,13 +64,39 @@ const Footer = () => {
                         <span className="text-2xl font-black tracking-tight text-white italic">Sagay<span className="text-indigo-400">AI</span> Lab</span>
                     </div>
 
-                    {/* Middle: Signature Quote (Typewriter Animation) */}
+                    {/* Middle: Signature Quote & Flip Card */}
                     <div className="text-center flex justify-center w-full" ref={quoteRef}>
-                        <div className="bg-slate-800/80 rounded-2xl p-6 border border-slate-600/50 shadow-lg shadow-indigo-500/10 w-full max-w-sm backdrop-blur-sm relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
-                            <p className={`text-sm md:text-base font-medium text-slate-200 italic leading-relaxed text-left relative z-10 signature-text ${isVisible ? 'is-visible' : ''}`}>
-                                "Choice is our's!<br />Chance is your's,<br /><span className="text-indigo-400 font-bold">Thought is forever."</span>
-                            </p>
+                        <div
+                            className="w-full max-w-sm h-36 relative perspective-1000 group cursor-pointer"
+                            onMouseEnter={() => setIsFlipped(true)}
+                            onMouseLeave={() => setIsFlipped(false)}
+                        >
+                            <div className={`w-full h-full transition-transform duration-700 preserve-3d relative ${isFlipped ? 'rotate-y-180' : ''}`}>
+
+                                {/* Front Side: The Quote */}
+                                <div className="absolute inset-0 backface-hidden flex w-full h-full bg-slate-800/80 rounded-2xl p-6 border border-slate-600/50 shadow-lg shadow-indigo-500/10 backdrop-blur-sm overflow-hidden text-left items-center justify-center">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
+                                    <div className="w-full">
+                                        <p className={`text-sm md:text-base font-medium text-slate-200 italic leading-relaxed relative z-10 signature-text ${isVisible ? 'is-visible' : ''}`}>
+                                            "Choice is our's!<br />Chance is your's,<br /><span className="text-indigo-400 font-bold">Thought is forever."</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Back Side: YOU for YOU */}
+                                <div className="absolute inset-0 backface-hidden rotate-y-180 w-full h-full rounded-2xl overflow-hidden p-[2px] shadow-lg shadow-purple-500/20">
+                                    {/* Animated Glowing Borders */}
+                                    <div className="absolute inset-[-50%] w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0_300deg,theme(colors.indigo.500)_360deg)] animate-[spin_3s_linear_infinite] opacity-80"></div>
+                                    <div className="absolute inset-[-50%] w-[200%] h-[200%] bg-[conic-gradient(from_180deg,transparent_0_300deg,theme(colors.purple.500)_360deg)] animate-[spin_3s_linear_infinite] opacity-80"></div>
+
+                                    {/* Inner Content */}
+                                    <div className="absolute inset-[2px] bg-slate-900 rounded-2xl flex items-center justify-center z-10">
+                                        <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400 tracking-widest drop-shadow-[0_0_15px_rgba(168,85,247,0.3)] select-none">
+                                            YOU <span className="text-slate-500 text-lg mx-1">for</span> YOU
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
