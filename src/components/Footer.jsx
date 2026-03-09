@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Github, Linkedin, MessageSquare } from 'lucide-react';
+import { Github, Linkedin, MessageSquare, Code2 } from 'lucide-react';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -56,11 +56,9 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 items-center">
                     {/* Left: Logo */}
                     <div className="flex items-center gap-3 group cursor-pointer justify-center md:justify-start" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        <img
-                            src="/favicon.png"
-                            alt="SagayAI Lab"
-                            className="w-10 h-10 rounded-full group-hover:rotate-12 transition-all duration-500 shadow-md shadow-indigo-500/30"
-                        />
+                        <div className="bg-indigo-600 rounded-xl p-2 group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-indigo-500/30">
+                            <Code2 className="w-5 h-5 text-white" />
+                        </div>
                         <span className="text-2xl font-black tracking-tight text-white italic">Sagay<span className="text-indigo-400">AI</span> Lab</span>
                     </div>
 
