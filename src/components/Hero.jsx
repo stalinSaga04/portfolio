@@ -77,7 +77,7 @@ const Hero = () => {
                         <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)] text-center flex flex-col items-center justify-center gap-2 sm:gap-4 w-full">
                             <span>From Simple Ideas</span>
                             <span className="text-3xl sm:text-4xl md:text-6xl text-white/90">to</span>
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 w-full">
+                            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full">
                                 <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300 transform sm:-translate-y-1">
                                     <TypeAnimation
                                         sequence={[
