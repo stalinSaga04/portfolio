@@ -40,6 +40,9 @@ const HeroScrollFrames = ({ scrollYProgress }) => {
             h = ctx.canvas.height;
         }
 
+        // Prevent NaN crashes if canvas or image dimensions are zero during initial render
+        if (!w || !h || !img.width || !img.height) return;
+
         // default offset is center
         offsetX = typeof offsetX === "number" ? offsetX : 0.5;
         offsetY = typeof offsetY === "number" ? offsetY : 0.5;
@@ -76,14 +79,30 @@ const HeroScrollFrames = ({ scrollYProgress }) => {
         if (cw > iw) cw = iw;
         if (ch > ih) ch = ih;
 
-        // fill image in dest. rectangle
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
+        // Prevent strictly NaN or Infinity values which crash hardware acceleration
+        if (!isFinite(cx) || !isFinite(cy) || !isFinite(cw) || !isFinite(ch) || !isFinite(w) || !isFinite(h)) {
+            return;
+        }
+
+        try {
+            // fill image in dest. rectangle
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
+        } catch (e) {
+            console.warn("Canvas drawImage failed:", e);
+        }
     };
 
     // 3. Render the correct frame based on scroll progress
     const renderFrame = (index) => {
-        if (!canvasRef.current || imagesRef.current.length < FRAME_COUNT) return;
+        if (!canvasRef.current) return;
+
+        // Safe check for images loaded mapping
+        let loadedCount = 0;
+        for (let i = 0; i < FRAME_COUNT; i++) {
+            if (imagesRef.current[i]) loadedCount++;
+        }
+        if (loadedCount < FRAME_COUNT) return;
 
         // Ensure index is within bounds [0, 18]
         const safeIndex = Math.max(0, Math.min(index, FRAME_COUNT - 1));
