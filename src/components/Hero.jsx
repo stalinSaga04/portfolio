@@ -36,7 +36,7 @@ const Hero = () => {
                 <img
                     src={hero_robot}
                     alt="AI"
-                    className="w-full h-full object-cover mix-blend-luminosity transition-transform duration-700"
+                    className="w-full h-full object-cover object-center mix-blend-luminosity transition-transform duration-700"
                 />
             </motion.div>
 
@@ -79,32 +79,34 @@ const Hero = () => {
                         <span className="text-xs sm:text-sm font-black text-cyan-50 uppercase tracking-[0.2em] whitespace-nowrap">Modern Web Development</span>
                     </motion.div>
 
-                    {/* Headline — Bold sans-serif with gradient italic accent word */}
+                    {/* Headline — Stacked layout matching screenshot */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="flex items-center justify-center w-full mb-6"
+                        className="flex items-center justify-center w-full mb-8"
                     >
-                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)] text-center">
-                            From Simple Ideas to{' '}
-                            <br className="hidden sm:block" />
-                            <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300">
-                                <TypeAnimation
-                                    sequence={[
-                                        'Powerful',
-                                        2500,
-                                        'Digital',
-                                        2500,
-                                        'Extraordinary',
-                                        2500,
-                                    ]}
-                                    wrapper="span"
-                                    speed={40}
-                                    repeat={Infinity}
-                                />
-                            </span>
-                            {' '}Experiences.
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)] text-center flex flex-col items-center justify-center gap-2 sm:gap-4 w-full">
+                            <span>From Simple Ideas</span>
+                            <span className="text-3xl sm:text-4xl md:text-6xl text-white/90">to</span>
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 w-full">
+                                <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300 transform sm:-translate-y-1">
+                                    <TypeAnimation
+                                        sequence={[
+                                            'Powerful',
+                                            2500,
+                                            'Digital',
+                                            2500,
+                                            'Extraordinary',
+                                            2500,
+                                        ]}
+                                        wrapper="span"
+                                        speed={40}
+                                        repeat={Infinity}
+                                    />
+                                </span>
+                                <span>Experiences.</span>
+                            </div>
                         </h1>
                     </motion.div>
 
