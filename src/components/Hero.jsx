@@ -79,26 +79,32 @@ const Hero = () => {
                         <span className="text-xs sm:text-sm font-black text-cyan-50 uppercase tracking-[0.2em] whitespace-nowrap">Modern Web Development</span>
                     </motion.div>
 
-                    {/* Headline — Bold sans-serif matching "What I Help Businesses Achieve" style */}
+                    {/* Headline — Bold sans-serif with gradient italic accent word */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="h-[140px] sm:h-[160px] md:h-[220px] flex items-center justify-center w-full"
+                        className="flex items-center justify-center w-full mb-6"
                     >
-                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
-                            <TypeAnimation
-                                sequence={[
-                                    'From simple ideas...',
-                                    2000,
-                                    'Powerful digital\nexperiences.',
-                                    2000,
-                                ]}
-                                wrapper="span"
-                                speed={50}
-                                repeat={Infinity}
-                                className="inline-block whitespace-pre-line"
-                            />
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)] text-center">
+                            From Simple Ideas to{' '}
+                            <br className="hidden sm:block" />
+                            <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300">
+                                <TypeAnimation
+                                    sequence={[
+                                        'Powerful',
+                                        2500,
+                                        'Digital',
+                                        2500,
+                                        'Extraordinary',
+                                        2500,
+                                    ]}
+                                    wrapper="span"
+                                    speed={40}
+                                    repeat={Infinity}
+                                />
+                            </span>
+                            {' '}Experiences.
                         </h1>
                     </motion.div>
 
@@ -107,7 +113,7 @@ const Hero = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="max-w-2xl mx-auto mb-10 md:mb-12 px-4 mt-6"
+                        className="max-w-2xl mx-auto mb-10 md:mb-12 px-4"
                     >
                         <p className="text-lg sm:text-xl md:text-2xl text-white/80 leading-relaxed font-medium">
                             I design and build modern websites that help businesses grow online.
