@@ -62,7 +62,7 @@ const Navbar = () => {
                     <Link to="/" className="flex items-center gap-2.5 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white dark:bg-black p-0.5 shadow-md shadow-indigo-200 dark:shadow-indigo-900/50 group-hover:rotate-12 transition-all duration-500 overflow-hidden">
                             <img
-                                src="/favicon.png"
+                                src={isDark ? "/favicon-dark.png" : "/favicon.png"}
                                 alt="SagayAI Lab"
                                 className="w-full h-full object-contain scale-110"
                             />

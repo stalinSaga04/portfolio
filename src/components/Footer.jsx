@@ -58,7 +58,7 @@ const Footer = () => {
                     <div className="flex items-center gap-3 group cursor-pointer justify-center md:justify-start" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white dark:bg-black p-0.5 shadow-md shadow-indigo-500/30 group-hover:rotate-12 transition-all duration-500 overflow-hidden">
                             <img
-                                src="/favicon.png"
+                                src="/favicon-dark.png"
                                 alt="SagayAI Lab"
                                 className="w-full h-full object-contain scale-110"
                             />

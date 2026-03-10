@@ -73,7 +73,7 @@ const Hero = () => {
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="h-[140px] sm:h-[160px] md:h-[220px] flex items-center justify-center w-full"
                     >
-                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]" style={{ fontFamily: "'Playfair Display', serif" }}>
                             <TypeAnimation
                                 sequence={[
                                     'From simple ideas...',
@@ -84,7 +84,7 @@ const Hero = () => {
                                 wrapper="span"
                                 speed={50}
                                 repeat={Infinity}
-                                className="inline-block whitespace-pre-line"
+                                className="inline-block whitespace-pre-line italic"
                             />
                         </h1>
                     </motion.div>
