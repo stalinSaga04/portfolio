@@ -15,49 +15,21 @@ const HeroScrollFrames = ({ scrollYProgress }) => {
 
     // 1. Preload all 19 frame images into memory
     useEffect(() => {
-        const loadImages = async () => {
-            const loadedImages = [];
-            let loadedCount = 0;
-
+        const loadImages = () => {
             for (let i = 1; i <= FRAME_COUNT; i++) {
-                const img = new Image();
-                // Ensure correct padding (e.g., 001, 002... 019)
                 const paddedIndex = i.toString().padStart(3, '0');
+                const img = new Image();
+                // Loading directly from public/hero_frames folder
+                img.src = `/hero_frames/ezgif-frame-${paddedIndex}.jpg`;
 
-                // We use dynamic import for Vite assets, or standard local path 
-                // Since they are in src/assets/hero_frames, we can build the path directly
-                // Note: In Vite, we should ideally use new URL(..., import.meta.url) but 
-                // string paths often work if imported/handled correctly. 
-                // A reliable way for 19 unknown dynamic files is fetching from public, 
-                // but since they are in src/assets, we will construct the import.
-
-                // Let's use the standard relative URL structure that Vite supports for assets
-                // if they are directly referenced, or we can move them to public if needed.
-                // Assuming Vite processes them if we use a precise glob, but simple manual requires
-                // are safer in React. For 19 frames, we can just point to the mapped URL.
-
-                // *ACTUAL FIX FOR VITE*: To ensure assets in `src/assets` work dynamically, 
-                // we often need import.meta.glob or just require. 
-                // For simplicity and to avoid build failures, we'll assume the files are imported 
-                // via relative pathing if possible, but the safest raw path in Vite is often treating them 
-                // as public.
-                // Let's use a dynamic import approach via Vite's `import.meta.glob` if available, 
-                // or just standard URL mapping.
+                img.onload = () => {
+                    imagesRef.current[i - 1] = img;
+                    setImagesLoaded((prev) => prev + 1);
+                };
             }
         };
 
-        // Since we are writing the exact paths, let's use Vite's new URL feature
-        for (let i = 1; i <= FRAME_COUNT; i++) {
-            const paddedIndex = i.toString().padStart(3, '0');
-            const img = new Image();
-            // Using standard Vite asset URL resolution
-            img.src = new URL(`../assets/hero_frames/ezgif-frame-${paddedIndex}.jpg`, import.meta.url).href;
-
-            img.onload = () => {
-                imagesRef.current[i - 1] = img;
-                setImagesLoaded((prev) => prev + 1);
-            };
-        }
+        loadImages();
     }, []);
 
     // 2. Custom Draw Function to emulate CSS `object-cover`
