@@ -23,7 +23,7 @@ const CtaSection = () => {
                         Let's Talk
                     </span>
 
-                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-white mb-8 tracking-tight leading-[1.1] drop-shadow-lg" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-white mb-8 tracking-tight leading-[1.1] drop-shadow-lg">
                         Ready to Build Your <br className="hidden sm:block" />
                         <span className="italic bg-gradient-to-r from-orange-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">Website?</span>
                     </h2>

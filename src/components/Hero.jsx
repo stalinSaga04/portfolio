@@ -1,31 +1,44 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
-import robot_glow from '../assets/robot_glow.jpg';
+import hero_robot from '../assets/hero_robot.jpg';
 
 const Hero = () => {
+    const sectionRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start start", "end start"]
+    });
+
+    // Parallax: image scales up and fades as user scrolls down
+    const imageScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.35]);
+    const imageOpacity = useTransform(scrollYProgress, [0, 0.8], [0.3, 0]);
+
     const particlesInit = useCallback(async engine => {
         await loadSlim(engine);
     }, []);
 
     return (
-        <section id="home" className="relative overflow-hidden min-h-screen flex items-center justify-center">
+        <section ref={sectionRef} id="home" className="relative overflow-hidden min-h-screen flex items-center justify-center">
 
             {/* === ANIMATED GRADIENT BACKGROUND (Purple → Magenta → Orange) === */}
             <div className="absolute inset-0 z-0 hero-gradient-bg"></div>
 
-            {/* Robot Face — single image, centered, subtle overlay */}
-            <div className="absolute inset-0 z-[1] flex items-center justify-center pointer-events-none">
+            {/* Robot Face — new cyberpunk image with scroll parallax */}
+            <motion.div
+                className="absolute inset-0 z-[1] flex items-center justify-center pointer-events-none"
+                style={{ scale: imageScale, opacity: imageOpacity }}
+            >
                 <img
-                    src={robot_glow}
+                    src={hero_robot}
                     alt="AI"
-                    className="w-full h-full object-cover lg:object-cover sm:object-contain opacity-25 mix-blend-luminosity scale-110 sm:scale-100 lg:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover mix-blend-luminosity transition-transform duration-700"
                 />
-            </div>
+            </motion.div>
 
             {/* Extra dark overlay for text readability */}
             <div className="absolute inset-0 z-[2] bg-black/30"></div>
@@ -66,14 +79,14 @@ const Hero = () => {
                         <span className="text-xs sm:text-sm font-black text-cyan-50 uppercase tracking-[0.2em] whitespace-nowrap">Modern Web Development</span>
                     </motion.div>
 
-                    {/* Headline */}
+                    {/* Headline — Bold sans-serif matching "What I Help Businesses Achieve" style */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="h-[140px] sm:h-[160px] md:h-[220px] flex items-center justify-center w-full"
                     >
-                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight leading-[1.1] md:leading-[1.1] px-2 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
                             <TypeAnimation
                                 sequence={[
                                     'From simple ideas...',
@@ -84,7 +97,7 @@ const Hero = () => {
                                 wrapper="span"
                                 speed={50}
                                 repeat={Infinity}
-                                className="inline-block whitespace-pre-line italic"
+                                className="inline-block whitespace-pre-line"
                             />
                         </h1>
                     </motion.div>
@@ -101,27 +114,21 @@ const Hero = () => {
                         </p>
                     </motion.div>
 
-                    {/* CTA Buttons */}
+                    {/* Single CTA — View Projects (funnel entry) */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.6 }}
-                        className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16 w-full px-4 sm:px-0"
+                        className="flex items-center justify-center mb-16 w-full px-4 sm:px-0"
                     >
                         <a
                             href="#projects"
-                            className="group relative w-full sm:w-auto px-8 py-4 bg-white text-slate-900 rounded-2xl font-black text-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 overflow-hidden"
+                            className="group relative w-full sm:w-auto px-10 py-5 bg-white text-slate-900 rounded-2xl font-black text-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 overflow-hidden"
                         >
                             <span className="relative z-10 flex items-center gap-2">
                                 View Projects
                                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </span>
-                        </a>
-                        <a
-                            href="#contact"
-                            className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md text-white border-2 border-white/20 rounded-2xl font-black text-lg transition-all duration-300 hover:border-white/50 hover:bg-white/20 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center"
-                        >
-                            Contact Me
                         </a>
                     </motion.div>
                 </div>

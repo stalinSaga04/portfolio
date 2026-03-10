@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, Target, Cpu, ChevronRight } from 'lucide-react';
+import { Globe, Target, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Services = () => {
@@ -66,16 +66,9 @@ const Services = () => {
                                 {service.title}
                             </h3>
 
-                            <p className="relative z-10 text-slate-500 dark:text-slate-400 text-base md:text-lg leading-relaxed font-medium mb-8">
+                            <p className="relative z-10 text-slate-500 dark:text-slate-400 text-base md:text-lg leading-relaxed font-medium">
                                 {service.description}
                             </p>
-
-                            <div className="mt-auto relative z-10 w-full">
-                                <a href="/#contact" className="flex items-center justify-center gap-2 w-full py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-2xl font-bold text-sm transition-all duration-300 hover:bg-indigo-600 dark:hover:bg-indigo-600 group-hover:shadow-[0_0_20px_rgba(79,70,229,0.3)]">
-                                    <span>Learn more</span>
-                                    <ChevronRight className="w-4 h-4 text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
-                                </a>
-                            </div>
                         </motion.div>
                     ))}
                 </div>
@@ -85,3 +78,4 @@ const Services = () => {
 };
 
 export default Services;
+
