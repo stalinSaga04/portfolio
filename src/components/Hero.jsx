@@ -5,7 +5,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
-import hero_robot from '../assets/hero_robot.jpg';
+import hero_robot from '../assets/hero_robot.jpg'; // We can keep this for fallback if needed, or remove it. Let's remove it and use HeroScrollFrames.
+import HeroScrollFrames from './HeroScrollFrames';
 
 const Hero = () => {
     const sectionRef = useRef(null);
@@ -13,10 +14,6 @@ const Hero = () => {
         target: sectionRef,
         offset: ["start start", "end start"]
     });
-
-    // Parallax: image scales up and fades as user scrolls down
-    const imageScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.35]);
-    const imageOpacity = useTransform(scrollYProgress, [0, 0.8], [0.3, 0]);
 
     const particlesInit = useCallback(async engine => {
         await loadSlim(engine);
@@ -28,17 +25,8 @@ const Hero = () => {
             {/* === ANIMATED GRADIENT BACKGROUND (Purple → Magenta → Orange) === */}
             <div className="absolute inset-0 z-0 hero-gradient-bg"></div>
 
-            {/* Robot Face — new cyberpunk image with scroll parallax */}
-            <motion.div
-                className="absolute inset-0 z-[1] flex items-center justify-center pointer-events-none"
-                style={{ scale: imageScale, opacity: imageOpacity }}
-            >
-                <img
-                    src={hero_robot}
-                    alt="AI"
-                    className="w-full h-full object-cover object-center mix-blend-luminosity transition-transform duration-700"
-                />
-            </motion.div>
+            {/* Robot Face — High Performance Canvas Scroll Sequence */}
+            <HeroScrollFrames scrollYProgress={scrollYProgress} />
 
             {/* Extra dark overlay for text readability */}
             <div className="absolute inset-0 z-[2] bg-black/30"></div>
