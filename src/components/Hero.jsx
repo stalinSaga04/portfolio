@@ -31,10 +31,16 @@ class Bat {
     this.baseSize = (Math.random() * 6 + 8) * depthScale; // 8–14px base, scaled by depth
     this.size = this.baseSize;
 
-    // Speed depends on depth: closer = faster
-    const speedScale = depth === 0 ? 0.4 : depth === 1 ? 0.7 : 1.0;
-    this.vx = ((Math.random() - 0.3) * 2 + 0.8) * speedScale; // mostly rightward drift
-    this.vy = (Math.random() - 0.5) * 1.5 * speedScale;
+    // Speed depends on depth: mostly horizontal flight, no chaotic bouncing
+    const speedScale = depth === 0 ? 0.3 : depth === 1 ? 0.6 : 0.9;
+    
+    // Set fixed directions so bats stream across horizontally
+    // Some fly left-to-right, some right-to-left
+    const dir = Math.random() > 0.5 ? 1 : -1;
+    this.vx = (Math.random() * 2 + 1) * speedScale * dir; 
+    
+    // Very minimal vertical drift to keep it clean and cinematic
+    this.vy = (Math.random() - 0.5) * 0.4 * speedScale;
 
     // Wing flap: individual frequency & phase for natural look
     this.flapFreq = Math.random() * 0.008 + 0.006; // radians per ms
@@ -101,10 +107,12 @@ class Bat {
 
       if (this.x < -120 || this.x > width + 120 || this.y < -120 || this.y > height + 120) {
         this.state = 'wander';
-        this.x = -60;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.3) * 2 + 0.8;
-        this.vy = (Math.random() - 0.5) * 1.5;
+        const speedScale = this.depth === 0 ? 0.3 : this.depth === 1 ? 0.6 : 0.9;
+        const dir = Math.random() > 0.5 ? 1 : -1;
+        this.vx = (Math.random() * 2 + 1) * speedScale * dir;
+        this.vy = (Math.random() - 0.5) * 0.4 * speedScale;
+        this.x = dir === 1 ? -60 : width + 60;
       }
     }
   }
@@ -178,7 +186,7 @@ const Hero = () => {
 
   // Canvas refs
   const bgCanvasRef = useRef(null); // Robot frames
-  const batCanvasRef = useRef(null); // Single bat canvas (behind text)
+  const batCanvasRef = useRef(null); // Bat canvas
 
   const imagesRef = useRef([]);
   const frameIndexRef = useRef({ value: 0 });
@@ -236,13 +244,13 @@ const Hero = () => {
     if (!loaded) return;
 
     const isMobile = window.innerWidth < 768;
-    const numBats = isMobile ? 10 : 25;
+    const numBats = isMobile ? 12 : 28; // Mobile: 8-12, Desktop: 20-30
     const bats = [];
     for (let i = 0; i < numBats; i++) {
-      // Distribute depth: 0 (far), 1 (mid), 2 (near)
+      // Distribute depth: 0 (far), 1 (mid), 2 (near) // 1 and 2 cross text
       const depth = i % 3;
-      // Spawn offscreen left so they fly in gracefully
-      const startX = -(Math.random() * 200 + 50);
+      // Spawn randomly across the screen initially so it doesn't look empty
+      const startX = Math.random() * window.innerWidth;
       const startY = Math.random() * window.innerHeight;
       bats.push(new Bat(startX, startY, depth));
     }
@@ -369,12 +377,9 @@ const Hero = () => {
     isAnimatingRef.current = true;
     if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
 
-    // Hide scroll hint on first scroll
+    // Hide scroll hint purely through local state to prevent conflicts
     if (!scrollStarted) {
       setScrollStarted(true);
-      if (scrollHintRef.current) {
-        gsap.to(scrollHintRef.current, { opacity: 0, y: 20, duration: 0.4, ease: 'power2.in' });
-      }
     }
 
     let readingCooldownMs = 800;
@@ -402,7 +407,7 @@ const Hero = () => {
       value: frameTargets[targetStage],
       duration: 1.2,
       ease: "power2.inOut",
-      onUpdate: () => renderFrame(frameIndexRef.current.value)
+      // the loop handles rendering automatically now via requestAnimationFrame
     }, 0);
 
     // Transition Logic
@@ -463,10 +468,7 @@ const Hero = () => {
             b.vy = (Math.random() - 0.5) * 1.5;
           });
         });
-        // Bring scroll hint back
-        if (scrollHintRef.current) {
-          tl.to(scrollHintRef.current, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
-        }
+        // Bring back scroll state
         setScrollStarted(false);
       }
     }
@@ -517,21 +519,24 @@ const Hero = () => {
   return (
     <section ref={sectionRef} id="home" className="hero-section relative overflow-hidden bg-black" style={{ touchAction: 'none' }}>
 
-      {/* ── Background Gradient (Z: 0) ── */}
+      {/* ── Background Gradient (Layer 1 Background - Z: 0) ── */}
       <div className="absolute inset-0 z-0 hero-gradient-bg" />
 
-      {/* ── Robot Face Canvas (Z: 5) ── */}
-      <div className="hero-canvas-wrap relative z-[5]">
+      {/* ── Dark Overlay to dim the background (Z: 2) ── */}
+      <div className="absolute inset-0 z-[2] hero-overlay pointer-events-none opacity-50" />
+
+      {/* ── Bat Canvas (Layer 2 Flying Bats - Z: 5) ── */}
+      <canvas ref={batCanvasRef} className="absolute inset-0 z-[5] pointer-events-none" />
+
+      {/* ── Robot Face Mask (Layer 3 Robot Mask - Z: 10) ── */}
+      {/* mix-blend-screen turns the black bg of the JPG transparent, natively hiding bats behind the bright mask! */}
+      <div className="hero-canvas-wrap relative z-[10]" style={{ mixBlendMode: 'screen' }}>
         <canvas ref={bgCanvasRef} className="hero-canvas" />
       </div>
 
-      {/* ── Dark Overlay (Z: 10) ── */}
-      <div className="absolute inset-0 z-[10] hero-overlay pointer-events-none" />
-      <div className="hero-scanline z-[10] pointer-events-none" />
-      <div className="hero-eye-glow z-[10] pointer-events-none" />
-
-      {/* ── Bat Canvas (Z: 15) — BELOW text so text is always readable ── */}
-      <canvas ref={batCanvasRef} className="absolute inset-0 z-[15] pointer-events-none" />
+      {/* ── Overlay effects matching Robot depth (Z: 20) ── */}
+      <div className="hero-scanline z-[20] pointer-events-none" />
+      <div className="hero-eye-glow z-[20] pointer-events-none" />
 
       {/* ── Text Container (Z: 25) — ABOVE bats ── */}
       <div className="hero-text-container z-[25]">
@@ -563,11 +568,15 @@ const Hero = () => {
       <div className="hero-hud hero-hud-bl z-[30]" />
       <div className="hero-hud hero-hud-br z-[30]" />
 
-      {/* ── Scroll Hint (Z: 35) — Visible immediately, disappears on first scroll ── */}
+      {/* ── Scroll Hint (Z: 35) ── */}
       <div
         ref={scrollHintRef}
-        className="hero-scroll-hint z-[35]"
-        style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.6s ease' }}
+        className="hero-scroll-hint z-[35] transition-all duration-700 ease-in-out"
+        style={{ 
+          opacity: loaded && !scrollStarted ? 1 : 0, 
+          transform: loaded && !scrollStarted ? 'translate(-50%, 0)' : 'translate(-50%, 20px)',
+          pointerEvents: scrollStarted ? 'none' : 'auto'
+        }}
       >
         <div className="hero-scroll-arrow">↓</div>
         <span className="hero-scroll-label">Scroll to begin</span>
