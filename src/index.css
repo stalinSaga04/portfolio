@@ -238,10 +238,10 @@ section {
 .hero-overlay {
   background: linear-gradient(
     180deg,
-    rgba(0, 8, 20, 0.3) 0%,
-    rgba(0, 8, 20, 0.5) 40%,
-    rgba(0, 8, 20, 0.6) 70%,
-    rgba(0, 8, 20, 0.4) 100%
+    rgba(0, 8, 20, 0.15) 0%,
+    rgba(0, 8, 20, 0.3) 40%,
+    rgba(0, 8, 20, 0.4) 70%,
+    rgba(0, 8, 20, 0.2) 100%
   );
   pointer-events: none;
 }
@@ -261,6 +261,8 @@ section {
   width: 100%;
   height: 100%;
   display: block;
+  /* Improve clarity, sharpness, and punchiness; prevent washed out look */
+  filter: contrast(1.15) saturate(1.2) brightness(1.1);
 }
 
 /* ── Horizontal scan light ──
@@ -437,7 +439,7 @@ section {
 
 /* ── Stage 1 — Name ── */
 .hero-text-name {
-  font-size: clamp(3rem, 9vw, 7rem);
+  font-size: clamp(42px, 8vw, 80px); /* Mobile 42px -> Desktop 80px */
   font-weight: 900;
   color: #EAF6FF;
   text-shadow:
@@ -450,7 +452,7 @@ section {
 
 /* ── Stage 2 — Title ── */
 .hero-text-title {
-  font-size: clamp(2rem, 6vw, 4.5rem);
+  font-size: clamp(36px, 7vw, 72px); /* Mobile 36px -> Desktop 72px */
   font-weight: 800;
   color: #EAF6FF;
   text-shadow:
@@ -459,23 +461,49 @@ section {
   line-height: 1.2;
 }
 
-/* ── Stage 3 — Final Statement (distinctive cinematic style) ── */
-.hero-text-final {
-  font-size: clamp(1.4rem, 3.5vw, 2.5rem);
-  font-weight: 700;
-  color: #EAF6FF;
+/* ── Stage 3 — Redesign (Bold Hero Message) ── */
+.stage-3-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-shadow:
-    0 0 40px rgba(0, 229, 255, 0.12),
-    0 2px 20px rgba(0, 0, 0, 0.5);
-  line-height: 1.5;
-  max-width: 900px;
-  margin: 0 auto;
-  letter-spacing: 0.03em;
+    0 0 40px rgba(0, 229, 255, 0.15),
+    0 4px 30px rgba(0, 0, 0, 0.6);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
-.hero-text-final-line {
-  display: block;
-  margin-bottom: 0.2em;
+.stage-3-line1 {
+  font-size: clamp(34px, 6vw, 64px);
+  color: #EAF6FF;
+}
+
+.stage-3-line2 {
+  font-size: clamp(38px, 7.5vw, 82px);
+  line-height: 1; /* Keep tightly stacked */
+  padding-bottom: 0.1em;
+}
+
+.stage-3-line3 {
+  font-size: clamp(36px, 7vw, 72px);
+  color: #EAF6FF;
+}
+
+.stage-3-subtitle {
+  font-size: clamp(16px, 3vw, 20px);
+  color: rgba(234, 246, 255, 0.9);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Enhancing glow effect for highlight text */
+.glowing-text {
+  text-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.6),
+    0 0 50px rgba(0, 229, 255, 0.3),
+    0 4px 30px rgba(0, 0, 0, 0.8);
 }
 
 /* ── Glowing keyword emphasis (for Stage 3 key phrases) ── */

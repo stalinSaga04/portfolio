@@ -16,167 +16,6 @@ function drawCover(ctx, img, cw, ch) {
   ctx.drawImage(img, 0, 0, iw, ih, ox, oy, nw, nh);
 }
 
-// ══════════════════════════════════════════════════════════════════════
-//  Bat Class — Proper silhouette with articulated wings & depth
-// ══════════════════════════════════════════════════════════════════════
-class Bat {
-  constructor(x, y, depth) {
-    this.x = x;
-    this.y = y;
-    // depth: 0 = far background, 1 = mid, 2 = near foreground
-    this.depth = depth;
-
-    // Size depends on depth for parallax feel
-    const depthScale = depth === 0 ? 0.6 : depth === 1 ? 1.0 : 1.4;
-    this.baseSize = (Math.random() * 6 + 8) * depthScale; // 8–14px base, scaled by depth
-    this.size = this.baseSize;
-
-    // Speed depends on depth: mostly horizontal flight, no chaotic bouncing
-    const speedScale = depth === 0 ? 0.3 : depth === 1 ? 0.6 : 0.9;
-    
-    // Set fixed directions so bats stream across horizontally
-    // Some fly left-to-right, some right-to-left
-    const dir = Math.random() > 0.5 ? 1 : -1;
-    this.vx = (Math.random() * 2 + 1) * speedScale * dir; 
-    
-    // Very minimal vertical drift to keep it clean and cinematic
-    this.vy = (Math.random() - 0.5) * 0.4 * speedScale;
-
-    // Wing flap: individual frequency & phase for natural look
-    this.flapFreq = Math.random() * 0.008 + 0.006; // radians per ms
-    this.flapPhase = Math.random() * Math.PI * 2;
-
-    // Gentle rotation oscillation
-    this.rotationBase = 0;
-    this.rotationOscFreq = Math.random() * 0.002 + 0.001;
-    this.rotationOscAmp = Math.random() * 0.15 + 0.05; // subtle tilt
-
-    this.timeOffset = Math.random() * 10000;
-    this.state = 'wander'; // wander, form, explode
-    this.targetX = 0;
-    this.targetY = 0;
-    this.explodeVx = 0;
-    this.explodeVy = 0;
-
-    // Opacity depends on depth
-    this.opacity = depth === 0 ? 0.35 : depth === 1 ? 0.55 : 0.75;
-  }
-
-  update(width, height) {
-    if (this.state === 'wander') {
-      this.x += this.vx;
-      this.y += this.vy;
-
-      // Gentle sine-wave floating for organic feel
-      this.y += Math.sin(Date.now() * 0.0008 + this.timeOffset) * 0.4;
-
-      // AI Face Avoidance: push bats away from the central robot face
-      const cx = width / 2;
-      const cy = height / 2;
-      const dxO = this.x - cx;
-      const dyO = this.y - cy;
-      const distO = Math.sqrt(dxO * dxO + dyO * dyO);
-      const avoidRadius = Math.min(width, height) * 0.3;
-      if (distO < avoidRadius && distO > 0) {
-        const force = (avoidRadius - distO) / avoidRadius;
-        this.x += (dxO / distO) * force * 2;
-        this.y += (dyO / distO) * force * 2;
-      }
-
-      // Wrap around screen edges smoothly
-      if (this.x > width + 60) this.x = -60;
-      if (this.x < -60) this.x = width + 60;
-      if (this.y < -30) { this.y = -30; this.vy = Math.abs(this.vy); }
-      if (this.y > height + 30) { this.y = height + 30; this.vy = -Math.abs(this.vy); }
-
-      // Base angle from movement direction
-      this.rotationBase = Math.atan2(this.vy, this.vx);
-
-    } else if (this.state === 'form') {
-      const dx = this.targetX - this.x;
-      const dy = this.targetY - this.y;
-      this.x += dx * 0.08;
-      this.y += dy * 0.08;
-      this.rotationBase = Math.atan2(dy, dx);
-    } else if (this.state === 'explode') {
-      this.x += this.explodeVx;
-      this.y += this.explodeVy;
-      this.explodeVx *= 1.04;
-      this.explodeVy *= 1.04;
-      this.rotationBase = Math.atan2(this.explodeVy, this.explodeVx);
-
-      if (this.x < -120 || this.x > width + 120 || this.y < -120 || this.y > height + 120) {
-        this.state = 'wander';
-        this.y = Math.random() * height;
-        const speedScale = this.depth === 0 ? 0.3 : this.depth === 1 ? 0.6 : 0.9;
-        const dir = Math.random() > 0.5 ? 1 : -1;
-        this.vx = (Math.random() * 2 + 1) * speedScale * dir;
-        this.vy = (Math.random() - 0.5) * 0.4 * speedScale;
-        this.x = dir === 1 ? -60 : width + 60;
-      }
-    }
-  }
-
-  draw(ctx, time) {
-    ctx.save();
-    ctx.translate(this.x, this.y);
-
-    // Subtle rotation oscillation
-    const rotOsc = Math.sin(time * this.rotationOscFreq + this.timeOffset) * this.rotationOscAmp;
-    ctx.rotate(this.rotationBase + rotOsc);
-
-    // Wing flap angle: smooth sine wave between -30° and +30°
-    const flapAngle = Math.sin(time * this.flapFreq + this.flapPhase) * 0.5; // radians
-
-    ctx.globalAlpha = this.opacity;
-    ctx.fillStyle = '#1a1a2e';
-
-    const s = this.size;
-
-    // ── Draw Body (small oval) ──
-    ctx.beginPath();
-    ctx.ellipse(0, 0, s * 0.2, s * 0.45, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // ── Draw Left Wing ──
-    ctx.save();
-    ctx.rotate(flapAngle); // wing flap
-    ctx.beginPath();
-    ctx.moveTo(-s * 0.15, -s * 0.1);
-    // Upper wing edge (swept back)
-    ctx.bezierCurveTo(-s * 0.6, -s * 0.7, -s * 1.4, -s * 0.6, -s * 1.8, -s * 0.15);
-    // Wing tip scallop (bat wing fingers)
-    ctx.bezierCurveTo(-s * 1.5, -s * 0.05, -s * 1.3, s * 0.15, -s * 1.0, s * 0.05);
-    ctx.bezierCurveTo(-s * 0.8, s * 0.15, -s * 0.5, s * 0.2, -s * 0.15, s * 0.1);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    // ── Draw Right Wing (mirrored) ──
-    ctx.save();
-    ctx.rotate(-flapAngle); // opposite flap
-    ctx.beginPath();
-    ctx.moveTo(s * 0.15, -s * 0.1);
-    ctx.bezierCurveTo(s * 0.6, -s * 0.7, s * 1.4, -s * 0.6, s * 1.8, -s * 0.15);
-    ctx.bezierCurveTo(s * 1.5, -s * 0.05, s * 1.3, s * 0.15, s * 1.0, s * 0.05);
-    ctx.bezierCurveTo(s * 0.8, s * 0.15, s * 0.5, s * 0.2, s * 0.15, s * 0.1);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    // ── Small ears ──
-    ctx.beginPath();
-    ctx.moveTo(-s * 0.1, -s * 0.4);
-    ctx.lineTo(-s * 0.2, -s * 0.65);
-    ctx.lineTo(0, -s * 0.45);
-    ctx.lineTo(s * 0.2, -s * 0.65);
-    ctx.lineTo(s * 0.1, -s * 0.4);
-    ctx.fill();
-
-    ctx.globalAlpha = 1;
-    ctx.restore();
-  }
-}
 
 // ══════════════════════════════════════════════════════════════════════
 //  Hero Component
@@ -186,7 +25,6 @@ const Hero = () => {
 
   // Canvas refs
   const bgCanvasRef = useRef(null); // Robot frames
-  const batCanvasRef = useRef(null); // Bat canvas
 
   const imagesRef = useRef([]);
   const frameIndexRef = useRef({ value: 0 });
@@ -199,11 +37,6 @@ const Hero = () => {
   const isAnimatingRef = useRef(false);
   const currentStageRef = useRef(0);
   const observerRef = useRef(null);
-
-  // Bats
-  const batsRef = useRef([]);
-  const batAnimRunning = useRef(false);
-  const requestRef = useRef();
 
   // Auto Scroll Timer
   const autoScrollTimerRef = useRef(null);
@@ -239,72 +72,6 @@ const Hero = () => {
     }
   }, []);
 
-  // ── 2. Init Bats ONLY after images loaded ──
-  useEffect(() => {
-    if (!loaded) return;
-
-    const isMobile = window.innerWidth < 768;
-    const numBats = isMobile ? 12 : 28; // Mobile: 8-12, Desktop: 20-30
-    const bats = [];
-    for (let i = 0; i < numBats; i++) {
-      // Distribute depth: 0 (far), 1 (mid), 2 (near) // 1 and 2 cross text
-      const depth = i % 3;
-      // Spawn randomly across the screen initially so it doesn't look empty
-      const startX = Math.random() * window.innerWidth;
-      const startY = Math.random() * window.innerHeight;
-      bats.push(new Bat(startX, startY, depth));
-    }
-    batsRef.current = bats;
-    batAnimRunning.current = true;
-  }, [loaded]);
-
-  // ── 3. Bat Animation Loop (only runs when batAnimRunning) ──
-  const drawBats = useCallback((time) => {
-    if (!batAnimRunning.current) return;
-
-    const canvas = batCanvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
-
-    ctx.clearRect(0, 0, w, h);
-
-    batsRef.current.forEach(bat => {
-      bat.update(w, h);
-      bat.draw(ctx, time);
-    });
-
-    requestRef.current = requestAnimationFrame(drawBats);
-  }, []);
-
-  useEffect(() => {
-    if (!loaded) return;
-
-    const resizeCanvas = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      if (batCanvasRef.current) {
-        batCanvasRef.current.width = w;
-        batCanvasRef.current.height = h;
-      }
-    };
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    // Small delay so bats fly in after BG appears
-    const batTimer = setTimeout(() => {
-      requestRef.current = requestAnimationFrame(drawBats);
-    }, 600);
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      clearTimeout(batTimer);
-      cancelAnimationFrame(requestRef.current);
-    };
-  }, [loaded, drawBats]);
 
   // ── 4. Render Robot Frame ──
   const renderFrame = useCallback((index) => {
@@ -335,43 +102,6 @@ const Hero = () => {
 
   // ── 5. Stage Transitions ──
 
-  // Helper to generate coordinates for STALIN text
-  const generateSTALINTargets = (bats) => {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = 800;
-    tempCanvas.height = 200;
-    const ctx = tempCanvas.getContext('2d');
-    ctx.fillStyle = 'white';
-    ctx.font = '900 120px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('STALIN', 400, 100);
-
-    const imgData = ctx.getImageData(0, 0, 800, 200).data;
-    const pixels = [];
-    for (let y = 0; y < 200; y += 4) {
-      for (let x = 0; x < 800; x += 4) {
-        const alpha = imgData[(y * 800 + x) * 4 + 3];
-        if (alpha > 128) {
-          pixels.push({ x, y });
-        }
-      }
-    }
-
-    bats.forEach(bat => {
-      if (pixels.length > 0) {
-        const p = pixels[Math.floor(Math.random() * pixels.length)];
-        bat.targetX = p.x + (w / 2 - 400);
-        bat.targetY = p.y + (h / 2 - 100);
-      } else {
-        bat.targetX = w / 2;
-        bat.targetY = h / 2;
-      }
-    });
-  };
-
   const gotoStage = useCallback((targetStage, direction) => {
     if (isAnimatingRef.current) return;
     isAnimatingRef.current = true;
@@ -382,17 +112,11 @@ const Hero = () => {
       setScrollStarted(true);
     }
 
-    let readingCooldownMs = 800;
-    if (targetStage === 1) readingCooldownMs = 1500;
-    else if (targetStage === 2) readingCooldownMs = 2500;
-    else if (targetStage === 3) readingCooldownMs = 3500;
-
     const tl = gsap.timeline({
       onComplete: () => {
-        setTimeout(() => {
-          isAnimatingRef.current = false;
-          resetAutoScroll(targetStage);
-        }, readingCooldownMs);
+        // Unlock immediately to make scroll steps snappy and reliable
+        isAnimatingRef.current = false;
+        resetAutoScroll(targetStage);
         currentStageRef.current = targetStage;
       }
     });
@@ -417,39 +141,14 @@ const Hero = () => {
     const nextMask = targetStage > 0 ? brushMaskRefs.current[targetStage - 1] : null;
 
     if (isForward) {
-      if (currentStageRef.current === 0 && targetStage === 1) {
-        // Cinematic Start: Form STALIN -> Explode -> Show Text 1
-        batsRef.current.forEach(b => b.state = 'form');
-        generateSTALINTargets(batsRef.current);
-
-        tl.to({}, { duration: 1.0 });
-
-        tl.add(() => {
-          batsRef.current.forEach(b => {
-            b.state = 'explode';
-            const cx = window.innerWidth / 2;
-            const cy = window.innerHeight / 2;
-            const angle = Math.atan2(b.y - cy, b.x - cx);
-            b.explodeVx = Math.cos(angle) * (Math.random() * 10 + 5);
-            b.explodeVy = Math.sin(angle) * (Math.random() * 10 + 5);
-          });
-        }, "+=0.2");
-
-        if (nextWrap && nextMask) {
-          tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, "+=0.1");
-          tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, "-=0.1");
-          tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, "-=0.1");
-        }
-      } else {
-        if (currWrap && currMask) {
-          tl.to(currWrap, { ...exitOpts, duration: 0.3 }, 0);
-          tl.set(currMask, { '--brush-reveal': '0%' }, 0.3);
-        }
-        if (nextWrap && nextMask) {
-          tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, 0.3);
-          tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, 0.4);
-          tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, 0.9);
-        }
+      if (currWrap && currMask) {
+        tl.to(currWrap, { ...exitOpts, duration: 0.3 }, 0);
+        tl.set(currMask, { '--brush-reveal': '0%' }, 0.3);
+      }
+      if (nextWrap && nextMask) {
+        tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, 0.3);
+        tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, 0.4);
+        tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, 0.9);
       }
     } else {
       if (currWrap && currMask) {
@@ -461,13 +160,6 @@ const Hero = () => {
         tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, 0.4);
         tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, 0.9);
       } else if (targetStage === 0) {
-        tl.add(() => {
-          batsRef.current.forEach(b => {
-            b.state = 'wander';
-            b.vx = (Math.random() - 0.3) * 2 + 0.8;
-            b.vy = (Math.random() - 0.5) * 1.5;
-          });
-        });
         // Bring back scroll state
         setScrollStarted(false);
       }
@@ -525,12 +217,10 @@ const Hero = () => {
       {/* ── Dark Overlay to dim the background (Z: 2) ── */}
       <div className="absolute inset-0 z-[2] hero-overlay pointer-events-none opacity-50" />
 
-      {/* ── Bat Canvas (Layer 2 Flying Bats - Z: 5) ── */}
-      <canvas ref={batCanvasRef} className="absolute inset-0 z-[5] pointer-events-none" />
-
-      {/* ── Robot Face Mask (Layer 3 Robot Mask - Z: 10) ── */}
-      {/* mix-blend-screen turns the black bg of the JPG transparent, natively hiding bats behind the bright mask! */}
-      <div className="hero-canvas-wrap relative z-[10]" style={{ mixBlendMode: 'screen' }}>
+      {/* ── Robot Face Mask (Layer 2 Robot Mask - Z: 10) ── */}
+      {/* We removed bats, so we don't need mix-blend-mode to let bats show through. */}
+      {/* We just draw the robot canvas natively. */}
+      <div className="hero-canvas-wrap relative z-[10]">
         <canvas ref={bgCanvasRef} className="hero-canvas" />
       </div>
 
@@ -548,16 +238,17 @@ const Hero = () => {
 
         <div ref={(el) => (textWrapRefs.current[1] = el)} className="hero-text-stage" style={{ opacity: 0 }}>
           <div ref={(el) => (brushMaskRefs.current[1] = el)} className="brush-mask hero-text-title">
-            <span className="block">Creative Developer &</span>
-            <span className="block hero-highlight hero-highlight-italic">AI Enthusiast</span>
+            <span className="block">Creative Developer</span>
+            <span className="block"><span className="font-light mr-3">&</span><span className="hero-highlight hero-highlight-italic">AI Enthusiast</span></span>
           </div>
         </div>
 
         <div ref={(el) => (textWrapRefs.current[2] = el)} className="hero-text-stage" style={{ opacity: 0 }}>
-          <div ref={(el) => (brushMaskRefs.current[2] = el)} className="brush-mask hero-text-desc text-center">
-            I build <span className="hero-highlight mx-1">intelligent tools</span>,
-            modern <span className="hero-highlight mx-1">web apps</span>,<br/>
-            and creative <span className="hero-highlight mx-1">digital experiences</span>.
+          <div ref={(el) => (brushMaskRefs.current[2] = el)} className="brush-mask hero-text-desc text-center stage-3-container">
+            <span className="block stage-3-line1 font-black">I BUILD</span>
+            <span className="block stage-3-line2 font-black hero-highlight glowing-text">INTELLIGENT TOOLS</span>
+            <span className="block stage-3-line3 font-black">& MODERN <span className="hero-highlight glowing-text">WEB APPS</span></span>
+            <span className="block stage-3-subtitle mt-4 opacity-80 backdrop-blur-sm rounded-lg py-1 px-3">Creating creative digital experiences</span>
           </div>
         </div>
       </div>
