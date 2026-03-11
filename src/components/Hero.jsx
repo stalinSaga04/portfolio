@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { Observer, ScrollTrigger } from 'gsap/all';
 
@@ -16,78 +16,95 @@ function drawCover(ctx, img, cw, ch) {
   ctx.drawImage(img, 0, 0, iw, ih, ox, oy, nw, nh);
 }
 
-// ── Bat Swarm Generator ──
+// ══════════════════════════════════════════════════════════════════════
+//  Bat Class — Proper silhouette with articulated wings & depth
+// ══════════════════════════════════════════════════════════════════════
 class Bat {
-  constructor(x, y, zIndex) {
+  constructor(x, y, depth) {
     this.x = x;
     this.y = y;
-    this.zIndex = zIndex; // > 0 is foreground, < 0 is background
-    this.baseSize = Math.random() * 4 + 4; // Much smaller bats
+    // depth: 0 = far background, 1 = mid, 2 = near foreground
+    this.depth = depth;
+
+    // Size depends on depth for parallax feel
+    const depthScale = depth === 0 ? 0.6 : depth === 1 ? 1.0 : 1.4;
+    this.baseSize = (Math.random() * 6 + 8) * depthScale; // 8–14px base, scaled by depth
     this.size = this.baseSize;
-    this.vx = (Math.random() - 0.5) * 4;
-    this.vy = (Math.random() - 0.5) * 4;
-    this.flapSpeed = Math.random() * 0.2 + 0.2;
-    this.timeOffset = Math.random() * 100;
+
+    // Speed depends on depth: closer = faster
+    const speedScale = depth === 0 ? 0.4 : depth === 1 ? 0.7 : 1.0;
+    this.vx = ((Math.random() - 0.3) * 2 + 0.8) * speedScale; // mostly rightward drift
+    this.vy = (Math.random() - 0.5) * 1.5 * speedScale;
+
+    // Wing flap: individual frequency & phase for natural look
+    this.flapFreq = Math.random() * 0.008 + 0.006; // radians per ms
+    this.flapPhase = Math.random() * Math.PI * 2;
+
+    // Gentle rotation oscillation
+    this.rotationBase = 0;
+    this.rotationOscFreq = Math.random() * 0.002 + 0.001;
+    this.rotationOscAmp = Math.random() * 0.15 + 0.05; // subtle tilt
+
+    this.timeOffset = Math.random() * 10000;
     this.state = 'wander'; // wander, form, explode
     this.targetX = 0;
     this.targetY = 0;
-    this.angle = 0;
     this.explodeVx = 0;
     this.explodeVy = 0;
+
+    // Opacity depends on depth
+    this.opacity = depth === 0 ? 0.35 : depth === 1 ? 0.55 : 0.75;
   }
 
   update(width, height) {
     if (this.state === 'wander') {
-      // Swarm rightwards slowly, bounce Y
-      this.x += this.vx * 0.5 + 1; // drift right
-      this.y += this.vy * 0.5;
-      
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Gentle sine-wave floating for organic feel
+      this.y += Math.sin(Date.now() * 0.0008 + this.timeOffset) * 0.4;
+
       // AI Face Avoidance: push bats away from the central robot face
       const cx = width / 2;
       const cy = height / 2;
-      const dxOrigin = this.x - cx;
-      const dyOrigin = this.y - cy;
-      const distOrigin = Math.sqrt(dxOrigin * dxOrigin + dyOrigin * dyOrigin);
-      if (distOrigin < 350) {
-        const force = (350 - distOrigin) / 350;
-        this.y += (dyOrigin / distOrigin) * force * 4; // Push vertically around the face
+      const dxO = this.x - cx;
+      const dyO = this.y - cy;
+      const distO = Math.sqrt(dxO * dxO + dyO * dyO);
+      const avoidRadius = Math.min(width, height) * 0.3;
+      if (distO < avoidRadius && distO > 0) {
+        const force = (avoidRadius - distO) / avoidRadius;
+        this.x += (dxO / distO) * force * 2;
+        this.y += (dyO / distO) * force * 2;
       }
 
-      // Smooth floating instead of rapid vibration
-      this.y += Math.sin(Date.now() * 0.001 + this.timeOffset) * 0.5;
-      
-      // Wrap around
-      if (this.x > width + 50) this.x = -50;
-      if (this.x < -50) this.x = width + 50;
-      if (this.y < 0) this.vy *= -1;
-      if (this.y > height) this.vy *= -1;
-      
-      this.angle = Math.atan2(this.vy, this.vx * 0.5 + 1);
+      // Wrap around screen edges smoothly
+      if (this.x > width + 60) this.x = -60;
+      if (this.x < -60) this.x = width + 60;
+      if (this.y < -30) { this.y = -30; this.vy = Math.abs(this.vy); }
+      if (this.y > height + 30) { this.y = height + 30; this.vy = -Math.abs(this.vy); }
+
+      // Base angle from movement direction
+      this.rotationBase = Math.atan2(this.vy, this.vx);
 
     } else if (this.state === 'form') {
-      // Move toward target
       const dx = this.targetX - this.x;
       const dy = this.targetY - this.y;
       this.x += dx * 0.08;
       this.y += dy * 0.08;
-      this.angle = Math.atan2(dy, dx);
+      this.rotationBase = Math.atan2(dy, dx);
     } else if (this.state === 'explode') {
-      // Fly outward fast
       this.x += this.explodeVx;
       this.y += this.explodeVy;
-      
-      this.explodeVx *= 1.05; // accelerate
-      this.explodeVy *= 1.05;
-      
-      this.angle = Math.atan2(this.explodeVy, this.explodeVx);
-      
-      if (this.x < -100 || this.x > width + 100 || this.y < -100 || this.y > height + 100) {
-        // Reset to wander after exploding off screen
+      this.explodeVx *= 1.04;
+      this.explodeVy *= 1.04;
+      this.rotationBase = Math.atan2(this.explodeVy, this.explodeVx);
+
+      if (this.x < -120 || this.x > width + 120 || this.y < -120 || this.y > height + 120) {
         this.state = 'wander';
-        this.x = -50;
+        this.x = -60;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 4;
-        this.vy = (Math.random() - 0.5) * 4;
+        this.vx = (Math.random() - 0.3) * 2 + 0.8;
+        this.vy = (Math.random() - 0.5) * 1.5;
       }
     }
   }
@@ -95,83 +112,108 @@ class Bat {
   draw(ctx, time) {
     ctx.save();
     ctx.translate(this.x, this.y);
-    ctx.rotate(this.angle);
-    
-    // Simulate flap
-    const flap = Math.sin(time * this.flapSpeed + this.timeOffset);
-    ctx.scale(1, 0.8 + flap * 0.2); // Subtle squish for flapping, not drastic
 
-    // Use a soft, subtle grey/black for bats so they look dark and cinematic,
-    // not stark white which ruins the atmosphere.
-    ctx.fillStyle = this.zIndex > 0 ? 'rgba(50, 60, 80, 0.85)' : 'rgba(20, 25, 40, 0.5)';
-    
-    ctx.beginPath();
-    ctx.moveTo(0, 0); // Center body
+    // Subtle rotation oscillation
+    const rotOsc = Math.sin(time * this.rotationOscFreq + this.timeOffset) * this.rotationOscAmp;
+    ctx.rotate(this.rotationBase + rotOsc);
+
+    // Wing flap angle: smooth sine wave between -30° and +30°
+    const flapAngle = Math.sin(time * this.flapFreq + this.flapPhase) * 0.5; // radians
+
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = '#1a1a2e';
+
     const s = this.size;
-    
-    // More natural, swept-back wing shapes
-    // Left wing
-    ctx.quadraticCurveTo(-s * 0.5, -s * 0.8, -s * 1.8, -s * 0.5);
-    ctx.quadraticCurveTo(-s * 1.2, s * 0.2, 0, s * 0.8);
-    // Right wing
-    ctx.quadraticCurveTo(s * 1.2, s * 0.2, s * 1.8, -s * 0.5);
-    ctx.quadraticCurveTo(s * 0.5, -s * 0.8, 0, 0);
-    
+
+    // ── Draw Body (small oval) ──
+    ctx.beginPath();
+    ctx.ellipse(0, 0, s * 0.2, s * 0.45, 0, 0, Math.PI * 2);
     ctx.fill();
+
+    // ── Draw Left Wing ──
+    ctx.save();
+    ctx.rotate(flapAngle); // wing flap
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.15, -s * 0.1);
+    // Upper wing edge (swept back)
+    ctx.bezierCurveTo(-s * 0.6, -s * 0.7, -s * 1.4, -s * 0.6, -s * 1.8, -s * 0.15);
+    // Wing tip scallop (bat wing fingers)
+    ctx.bezierCurveTo(-s * 1.5, -s * 0.05, -s * 1.3, s * 0.15, -s * 1.0, s * 0.05);
+    ctx.bezierCurveTo(-s * 0.8, s * 0.15, -s * 0.5, s * 0.2, -s * 0.15, s * 0.1);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // ── Draw Right Wing (mirrored) ──
+    ctx.save();
+    ctx.rotate(-flapAngle); // opposite flap
+    ctx.beginPath();
+    ctx.moveTo(s * 0.15, -s * 0.1);
+    ctx.bezierCurveTo(s * 0.6, -s * 0.7, s * 1.4, -s * 0.6, s * 1.8, -s * 0.15);
+    ctx.bezierCurveTo(s * 1.5, -s * 0.05, s * 1.3, s * 0.15, s * 1.0, s * 0.05);
+    ctx.bezierCurveTo(s * 0.8, s * 0.15, s * 0.5, s * 0.2, s * 0.15, s * 0.1);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // ── Small ears ──
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.1, -s * 0.4);
+    ctx.lineTo(-s * 0.2, -s * 0.65);
+    ctx.lineTo(0, -s * 0.45);
+    ctx.lineTo(s * 0.2, -s * 0.65);
+    ctx.lineTo(s * 0.1, -s * 0.4);
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
     ctx.restore();
   }
 }
 
+// ══════════════════════════════════════════════════════════════════════
+//  Hero Component
+// ══════════════════════════════════════════════════════════════════════
 const Hero = () => {
   const sectionRef = useRef(null);
-  
+
   // Canvas refs
   const bgCanvasRef = useRef(null); // Robot frames
-  const batBackCanvasRef = useRef(null); // Bats behind text
-  const batFrontCanvasRef = useRef(null); // Bats in front of text
-  
+  const batCanvasRef = useRef(null); // Single bat canvas (behind text)
+
   const imagesRef = useRef([]);
   const frameIndexRef = useRef({ value: 0 });
   const textWrapRefs = useRef([]);
   const brushMaskRefs = useRef([]);
   const [loaded, setLoaded] = useState(false);
-  
+  const [scrollStarted, setScrollStarted] = useState(false);
+
   // GSAP Observer & State
   const isAnimatingRef = useRef(false);
-  const currentStageRef = useRef(0); // 0 = Intro, 1 = Stage 1, 2 = Stage 2, 3 = Stage 3
-  
+  const currentStageRef = useRef(0);
+  const observerRef = useRef(null);
+
   // Bats
   const batsRef = useRef([]);
+  const batAnimRunning = useRef(false);
   const requestRef = useRef();
 
   // Auto Scroll Timer
   const autoScrollTimerRef = useRef(null);
+  // Scroll hint ref
+  const scrollHintRef = useRef(null);
 
-  const resetAutoScroll = (stageToWatch) => {
+  const resetAutoScroll = useCallback((stageToWatch) => {
     if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
     if (stageToWatch !== undefined && stageToWatch < 3) {
       autoScrollTimerRef.current = setTimeout(() => {
         if (currentStageRef.current === stageToWatch && !isAnimatingRef.current) {
           gotoStage(stageToWatch + 1, 1);
         }
-      }, 5000); // Auto advance after 5 seconds of idle
+      }, 5000);
     }
-  };
-
-  // ── 1. Init Bats ──
-  useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const numBats = isMobile ? 15 : 30;
-    const bats = [];
-    for (let i = 0; i < numBats; i++) {
-        // Half in front (>0), half behind (<0)
-        const z = i % 2 === 0 ? 1 : -1;
-        bats.push(new Bat(Math.random() * window.innerWidth, Math.random() * window.innerHeight, z));
-    }
-    batsRef.current = bats;
   }, []);
 
-  // ── 2. Preload frames ──
+  // ── 1. Preload frames ──
   useEffect(() => {
     let count = 0;
     for (let i = 1; i <= FRAME_COUNT; i++) {
@@ -189,58 +231,75 @@ const Hero = () => {
     }
   }, []);
 
-  // ── 3. Bat Animation Loop ──
-  const drawBats = (time) => {
-    const bCanvas = batBackCanvasRef.current;
-    const fCanvas = batFrontCanvasRef.current;
-    if (!bCanvas || !fCanvas) return;
+  // ── 2. Init Bats ONLY after images loaded ──
+  useEffect(() => {
+    if (!loaded) return;
 
-    const bCtx = bCanvas.getContext('2d');
-    const fCtx = fCanvas.getContext('2d');
-    const w = bCanvas.width;
-    const h = bCanvas.height;
+    const isMobile = window.innerWidth < 768;
+    const numBats = isMobile ? 10 : 25;
+    const bats = [];
+    for (let i = 0; i < numBats; i++) {
+      // Distribute depth: 0 (far), 1 (mid), 2 (near)
+      const depth = i % 3;
+      // Spawn offscreen left so they fly in gracefully
+      const startX = -(Math.random() * 200 + 50);
+      const startY = Math.random() * window.innerHeight;
+      bats.push(new Bat(startX, startY, depth));
+    }
+    batsRef.current = bats;
+    batAnimRunning.current = true;
+  }, [loaded]);
 
-    bCtx.clearRect(0, 0, w, h);
-    fCtx.clearRect(0, 0, w, h);
+  // ── 3. Bat Animation Loop (only runs when batAnimRunning) ──
+  const drawBats = useCallback((time) => {
+    if (!batAnimRunning.current) return;
+
+    const canvas = batCanvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
 
     batsRef.current.forEach(bat => {
       bat.update(w, h);
-      if (bat.zIndex < 0) {
-        bat.draw(bCtx, time);
-      } else {
-        bat.draw(fCtx, time);
-      }
+      bat.draw(ctx, time);
     });
 
     requestRef.current = requestAnimationFrame(drawBats);
-  };
+  }, []);
 
   useEffect(() => {
+    if (!loaded) return;
+
     const resizeCanvas = () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      if (batBackCanvasRef.current) {
-        batBackCanvasRef.current.width = w;
-        batBackCanvasRef.current.height = h;
-      }
-      if (batFrontCanvasRef.current) {
-        batFrontCanvasRef.current.width = w;
-        batFrontCanvasRef.current.height = h;
+      if (batCanvasRef.current) {
+        batCanvasRef.current.width = w;
+        batCanvasRef.current.height = h;
       }
     };
-    
+
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
-    requestRef.current = requestAnimationFrame(drawBats);
-    
+
+    // Small delay so bats fly in after BG appears
+    const batTimer = setTimeout(() => {
+      requestRef.current = requestAnimationFrame(drawBats);
+    }, 600);
+
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      clearTimeout(batTimer);
       cancelAnimationFrame(requestRef.current);
     };
-  }, []);
+  }, [loaded, drawBats]);
 
   // ── 4. Render Robot Frame ──
-  const renderFrame = (index) => {
+  const renderFrame = useCallback((index) => {
     const canvas = bgCanvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -257,96 +316,96 @@ const Hero = () => {
     const safeIdx = Math.max(0, Math.min(Math.round(index), FRAME_COUNT - 1));
     const img = imagesRef.current[safeIdx];
     if (img) drawCover(ctx, img, w, h);
-  };
+  }, []);
 
   useEffect(() => {
     if (loaded) {
       renderFrame(frameIndexRef.current.value);
-      resetAutoScroll(0); // Start 5s timer for Stage 1 if user doesn't scroll
+      resetAutoScroll(0);
     }
-  }, [loaded]);
+  }, [loaded, renderFrame, resetAutoScroll]);
 
   // ── 5. Stage Transitions ──
-  
+
   // Helper to generate coordinates for STALIN text
   const generateSTALINTargets = (bats) => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = 800;
-      tempCanvas.height = 200;
-      const ctx = tempCanvas.getContext('2d');
-      ctx.fillStyle = 'white';
-      ctx.font = '900 120px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('STALIN', 400, 100);
-      
-      const imgData = ctx.getImageData(0, 0, 800, 200).data;
-      const pixels = [];
-      for(let y = 0; y < 200; y += 4) {
-          for(let x = 0; x < 800; x += 4) {
-              const alpha = imgData[(y * 800 + x) * 4 + 3];
-              if (alpha > 128) {
-                  pixels.push({x, y});
-              }
-          }
-      }
-      
-      bats.forEach(bat => {
-        if (pixels.length > 0) {
-            const p = pixels[Math.floor(Math.random() * pixels.length)];
-            bat.targetX = p.x + (w/2 - 400); 
-            bat.targetY = p.y + (h/2 - 100);
-        } else {
-            bat.targetX = w/2;
-            bat.targetY = h/2;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = 800;
+    tempCanvas.height = 200;
+    const ctx = tempCanvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.font = '900 120px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('STALIN', 400, 100);
+
+    const imgData = ctx.getImageData(0, 0, 800, 200).data;
+    const pixels = [];
+    for (let y = 0; y < 200; y += 4) {
+      for (let x = 0; x < 800; x += 4) {
+        const alpha = imgData[(y * 800 + x) * 4 + 3];
+        if (alpha > 128) {
+          pixels.push({ x, y });
         }
-      });
+      }
+    }
+
+    bats.forEach(bat => {
+      if (pixels.length > 0) {
+        const p = pixels[Math.floor(Math.random() * pixels.length)];
+        bat.targetX = p.x + (w / 2 - 400);
+        bat.targetY = p.y + (h / 2 - 100);
+      } else {
+        bat.targetX = w / 2;
+        bat.targetY = h / 2;
+      }
+    });
   };
 
-  const gotoStage = (targetStage, direction) => {
+  const gotoStage = useCallback((targetStage, direction) => {
     if (isAnimatingRef.current) return;
     isAnimatingRef.current = true;
     if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
 
-    // Calculate dynamic reading cooldown based on the text length of the target stage
-    // so users with slower reading speeds have forced time to read before they can skip.
-    let readingCooldownMs = 800; // default for transitions
-    if (targetStage === 1) {
-      readingCooldownMs = 1500; // "Hi, I'm Stalin"
-    } else if (targetStage === 2) {
-      readingCooldownMs = 2500; // "Creative Developer & AI Enthusiast"
-    } else if (targetStage === 3) {
-      readingCooldownMs = 3500; // "I build intelligent tools..."
+    // Hide scroll hint on first scroll
+    if (!scrollStarted) {
+      setScrollStarted(true);
+      if (scrollHintRef.current) {
+        gsap.to(scrollHintRef.current, { opacity: 0, y: 20, duration: 0.4, ease: 'power2.in' });
+      }
     }
-    
+
+    let readingCooldownMs = 800;
+    if (targetStage === 1) readingCooldownMs = 1500;
+    else if (targetStage === 2) readingCooldownMs = 2500;
+    else if (targetStage === 3) readingCooldownMs = 3500;
+
     const tl = gsap.timeline({
       onComplete: () => {
-        // Enforce the reading cooldown to lock out scroll/swipe gestures
-        // and absorb any raw trackpad inertia.
         setTimeout(() => {
           isAnimatingRef.current = false;
-          resetAutoScroll(targetStage); // Restart 5s auto-scroll after cooldown
+          resetAutoScroll(targetStage);
         }, readingCooldownMs);
         currentStageRef.current = targetStage;
       }
     });
 
     const isForward = direction === 1;
-    const wrapOpts = { opacity: 0, xPercent: isForward ? -130 : 130 }; // enter from
-    const exitOpts = { opacity: 0, xPercent: isForward ? 130 : -130, ease: "power3.in" }; // exit to
+    const wrapOpts = { opacity: 0, xPercent: isForward ? -130 : 130 };
+    const exitOpts = { opacity: 0, xPercent: isForward ? 130 : -130, ease: "power3.in" };
 
     // Frame animations mapped to stages
     const frameTargets = { 0: 0, 1: 6, 2: 12, 3: 18 };
     tl.to(frameIndexRef.current, {
-        value: frameTargets[targetStage],
-        duration: 1.2,
-        ease: "power2.inOut",
-        onUpdate: () => renderFrame(frameIndexRef.current.value)
+      value: frameTargets[targetStage],
+      duration: 1.2,
+      ease: "power2.inOut",
+      onUpdate: () => renderFrame(frameIndexRef.current.value)
     }, 0);
 
-    // ── Transition Logic ──
+    // Transition Logic
     const currWrap = currentStageRef.current > 0 ? textWrapRefs.current[currentStageRef.current - 1] : null;
     const currMask = currentStageRef.current > 0 ? brushMaskRefs.current[currentStageRef.current - 1] : null;
     const nextWrap = targetStage > 0 ? textWrapRefs.current[targetStage - 1] : null;
@@ -357,61 +416,61 @@ const Hero = () => {
         // Cinematic Start: Form STALIN -> Explode -> Show Text 1
         batsRef.current.forEach(b => b.state = 'form');
         generateSTALINTargets(batsRef.current);
-        
-        tl.to({}, { duration: 1.0 }); // Wait for bats to form
-        
+
+        tl.to({}, { duration: 1.0 });
+
         tl.add(() => {
-           batsRef.current.forEach(b => {
-               b.state = 'explode';
-               // Explode outward from center of STALIN
-               const cx = window.innerWidth / 2;
-               const cy = window.innerHeight / 2;
-               const angle = Math.atan2(b.y - cy, b.x - cx);
-               b.explodeVx = Math.cos(angle) * (Math.random() * 10 + 5);
-               b.explodeVy = Math.sin(angle) * (Math.random() * 10 + 5);
-           });
+          batsRef.current.forEach(b => {
+            b.state = 'explode';
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            const angle = Math.atan2(b.y - cy, b.x - cx);
+            b.explodeVx = Math.cos(angle) * (Math.random() * 10 + 5);
+            b.explodeVy = Math.sin(angle) * (Math.random() * 10 + 5);
+          });
         }, "+=0.2");
 
-        // Immediately after explosion, text 1 enters
         if (nextWrap && nextMask) {
           tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, "+=0.1");
           tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, "-=0.1");
           tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, "-=0.1");
         }
       } else {
-        // Normal Forward Transition (1->2, 2->3)
         if (currWrap && currMask) {
-           tl.to(currWrap, { ...exitOpts, duration: 0.3 }, 0);
-           tl.set(currMask, { '--brush-reveal': '0%' }, 0.3);
+          tl.to(currWrap, { ...exitOpts, duration: 0.3 }, 0);
+          tl.set(currMask, { '--brush-reveal': '0%' }, 0.3);
         }
         if (nextWrap && nextMask) {
-           tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, 0.3);
-           tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, 0.4);
-           tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, 0.9);
+          tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, 0.3);
+          tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, 0.4);
+          tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, 0.9);
         }
       }
     } else {
-      // Normal Backward Transition
       if (currWrap && currMask) {
-         tl.to(currWrap, { ...exitOpts, duration: 0.3 }, 0);
-         tl.set(currMask, { '--brush-reveal': '0%' }, 0.3);
+        tl.to(currWrap, { ...exitOpts, duration: 0.3 }, 0);
+        tl.set(currMask, { '--brush-reveal': '0%' }, 0.3);
       }
       if (nextWrap && nextMask) {
-         tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, 0.3);
-         tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, 0.4);
-         tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, 0.9);
+        tl.fromTo(nextWrap, wrapOpts, { xPercent: 0, opacity: 1, duration: 0.2, ease: "power4.out" }, 0.3);
+        tl.fromTo(nextMask, { '--brush-reveal': '0%' }, { '--brush-reveal': '120%', duration: 0.6, ease: "power2.out" }, 0.4);
+        tl.to(nextWrap, { keyframes: [{ x: 3 }, { x: -2 }, { x: 2 }, { x: -1 }, { x: 0 }], duration: 0.1, ease: 'none' }, 0.9);
       } else if (targetStage === 0) {
-         // Reversing back to 0 -> bring bats back? Just set state to wander.
-         tl.add(() => {
-           batsRef.current.forEach(b => {
-               b.state = 'wander';
-               b.vx = (Math.random() - 0.5) * 4;
-               b.vy = (Math.random() - 0.5) * 4;
-           });
-         });
+        tl.add(() => {
+          batsRef.current.forEach(b => {
+            b.state = 'wander';
+            b.vx = (Math.random() - 0.3) * 2 + 0.8;
+            b.vy = (Math.random() - 0.5) * 1.5;
+          });
+        });
+        // Bring scroll hint back
+        if (scrollHintRef.current) {
+          tl.to(scrollHintRef.current, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+        }
+        setScrollStarted(false);
       }
     }
-  };
+  }, [scrollStarted, renderFrame, resetAutoScroll]);
 
   // ── 6. Setup GSAP Observer ──
   useEffect(() => {
@@ -419,69 +478,63 @@ const Hero = () => {
       target: window,
       type: "wheel,touch,pointer",
       wheelSpeed: -1,
-      tolerance: 30, // threshold to trigger
-      preventDefault: true, // lock normal scrolling
+      tolerance: 30,
+      preventDefault: true,
       onUp: () => {
-         if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
-         // Scroll down -> targetStage increases
-         if (currentStageRef.current < 3 && !isAnimatingRef.current) {
-            gotoStage(currentStageRef.current + 1, 1);
-         } else if (currentStageRef.current === 3 && !isAnimatingRef.current) {
-            // Unpin somehow or let natural scroll take over?
-            // "The hero section must be pinned while the animation sequence plays"
-            // If they scroll past stage 3, we should let them scroll down the page.
-            // Using Observer, we usually disable it.
-            observer.disable();
-         }
+        if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
+        if (currentStageRef.current < 3 && !isAnimatingRef.current) {
+          gotoStage(currentStageRef.current + 1, 1);
+        } else if (currentStageRef.current === 3 && !isAnimatingRef.current) {
+          observer.disable();
+        }
       },
       onDown: () => {
-         if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
-         // Scroll up -> targetStage decreases
-         if (currentStageRef.current > 0 && !isAnimatingRef.current) {
-            gotoStage(currentStageRef.current - 1, -1);
-         }
+        if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
+        if (currentStageRef.current > 0 && !isAnimatingRef.current) {
+          gotoStage(currentStageRef.current - 1, -1);
+        }
       }
     });
-    
-    // Re-enable observer if user scrolls back up into view
+
+    observerRef.current = observer;
+
     const trigger = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: 'bottom top',
-        onEnterBack: () => {
-             observer.enable();
-             // Prevent native scroll
-             window.scrollTo({ top: 0 });
-        }
+      trigger: sectionRef.current,
+      start: 'top top',
+      end: 'bottom top',
+      onEnterBack: () => {
+        observer.enable();
+        window.scrollTo({ top: 0 });
+      }
     });
 
     return () => {
       observer.kill();
       trigger.kill();
     };
-  }, []);
+  }, [gotoStage]);
 
   return (
     <section ref={sectionRef} id="home" className="hero-section relative overflow-hidden bg-black" style={{ touchAction: 'none' }}>
-      
-      {/* ── Background Layer (Z: 0) ── */}
-      <div className="absolute inset-0 z-0 hero-gradient-bg" />
-      
-      {/* ── Bat Back Canvas (Z: 5) - Behind Robot Face ── */}
-      <canvas ref={batBackCanvasRef} className="absolute inset-0 z-5 pointer-events-none" />
 
-      {/* ── Robot Face (Z: 10) ── */}
-      <div className="hero-canvas-wrap relative z-10">
+      {/* ── Background Gradient (Z: 0) ── */}
+      <div className="absolute inset-0 z-0 hero-gradient-bg" />
+
+      {/* ── Robot Face Canvas (Z: 5) ── */}
+      <div className="hero-canvas-wrap relative z-[5]">
         <canvas ref={bgCanvasRef} className="hero-canvas" />
       </div>
-      
-      {/* ── Dark Overlay (Z: 15) ── */}
-      <div className="absolute inset-0 z-[15] hero-overlay pointer-events-none" />
-      <div className="hero-scanline z-[15] pointer-events-none" />
-      <div className="hero-eye-glow z-[15] pointer-events-none" />
 
-      {/* ── Text Container (Z: 20) ── */}
-      <div className="hero-text-container z-20">
+      {/* ── Dark Overlay (Z: 10) ── */}
+      <div className="absolute inset-0 z-[10] hero-overlay pointer-events-none" />
+      <div className="hero-scanline z-[10] pointer-events-none" />
+      <div className="hero-eye-glow z-[10] pointer-events-none" />
+
+      {/* ── Bat Canvas (Z: 15) — BELOW text so text is always readable ── */}
+      <canvas ref={batCanvasRef} className="absolute inset-0 z-[15] pointer-events-none" />
+
+      {/* ── Text Container (Z: 25) — ABOVE bats ── */}
+      <div className="hero-text-container z-[25]">
         <div ref={(el) => (textWrapRefs.current[0] = el)} className="hero-text-stage" style={{ opacity: 0 }}>
           <div ref={(el) => (brushMaskRefs.current[0] = el)} className="brush-mask hero-text-name">
             Hi, I'm <span className="hero-highlight">Stalin</span>
@@ -504,23 +557,24 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* ── Bat Front Canvas (Z: 30) ── */}
-      <canvas ref={batFrontCanvasRef} className="absolute inset-0 z-30 pointer-events-none" />
+      {/* ── HUD Corners (Z: 30) ── */}
+      <div className="hero-hud hero-hud-tl z-[30]" />
+      <div className="hero-hud hero-hud-tr z-[30]" />
+      <div className="hero-hud hero-hud-bl z-[30]" />
+      <div className="hero-hud hero-hud-br z-[30]" />
 
-      {/* ── HUD and UI (Z: 40) ── */}
-      <div className="hero-hud hero-hud-tl z-40" />
-      <div className="hero-hud hero-hud-tr z-40" />
-      <div className="hero-hud hero-hud-bl z-40" />
-      <div className="hero-hud hero-hud-br z-40" />
-
-      <div className="hero-scroll-hint z-40">
-        <div className="hero-scroll-mouse">
-          <div className="hero-scroll-wheel" />
-        </div>
-        <span className="hero-scroll-label">Scroll to explore</span>
+      {/* ── Scroll Hint (Z: 35) — Visible immediately, disappears on first scroll ── */}
+      <div
+        ref={scrollHintRef}
+        className="hero-scroll-hint z-[35]"
+        style={{ opacity: loaded ? 1 : 0, transition: 'opacity 0.6s ease' }}
+      >
+        <div className="hero-scroll-arrow">↓</div>
+        <span className="hero-scroll-label">Scroll to begin</span>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 dark:from-slate-900 to-transparent z-50 pointer-events-none transition-colors duration-500" />
+      {/* ── Bottom Fade (Z: 40) ── */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 dark:from-slate-900 to-transparent z-[40] pointer-events-none transition-colors duration-500" />
     </section>
   );
 };
