@@ -1,11 +1,10 @@
 import React, { useCallback, useRef } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import Particles from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
-import hero_robot from '../assets/hero_robot.jpg'; // We can keep this for fallback if needed, or remove it. Let's remove it and use HeroScrollFrames.
 import HeroScrollFrames from './HeroScrollFrames';
 
 const Hero = () => {
@@ -67,7 +66,7 @@ const Hero = () => {
                         <span className="text-xs sm:text-sm font-black text-cyan-50 uppercase tracking-[0.2em] whitespace-nowrap">Modern Web Development</span>
                     </motion.div>
 
-                    {/* Headline — Stacked layout matching screenshot */}
+                    {/* Headline — Stacked layout */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
