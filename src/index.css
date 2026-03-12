@@ -480,6 +480,8 @@ section {
    --brush-reveal animated by GSAP from 0% → 120%. */
 .brush-mask {
   --brush-reveal: 0%;
+  padding: 0.2em 0.4em;
+  margin: -0.2em -0.4em;
 
   -webkit-mask-image:
     linear-gradient(
@@ -570,8 +572,9 @@ section {
 .stage-3-line2 {
   /* Desktop 96px, Mobile 42px */
   font-size: clamp(42px, 8vw, 96px);
-  line-height: 1; 
-  padding-bottom: 0.1em;
+  line-height: 1.1; /* Prevent vertical clipping */
+  padding: 0.1em 0.3em;
+  margin: -0.1em -0.3em;
   text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
 }
 
@@ -607,13 +610,28 @@ section {
   font-weight: 800;
 }
 
-/* ── Gradient highlight for key words ── */
+/* ── Dynamic Gradient highlight for key words ── */
 .hero-highlight {
-  background: linear-gradient(135deg, #00E5FF, #3B82F6, #8B5CF6);
+  background: linear-gradient(135deg, #00E5FF, #3B82F6, #8B5CF6, #00E5FF);
+  background-size: 300% 300%;
+  animation: dynamicTextGradient 4s ease-in-out infinite;
+  
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  
+  /* Protective attractive border stroke to prevent background damage */
+  -webkit-text-stroke: 1px rgba(0, 229, 255, 0.3);
+  
   filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.4));
+  padding: 0 0.1em;
+  display: inline-block;
+}
+
+@keyframes dynamicTextGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .hero-highlight-italic {
