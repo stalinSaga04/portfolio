@@ -585,11 +585,15 @@ section {
 }
 
 .stage-3-subtitle {
-  /* Desktop 20px, Mobile 16px */
-  font-size: clamp(16px, 3vw, 20px);
-  color: #d1d5db;
-  font-weight: 500;
+  /* Desktop 22px, Mobile 16px */
+  font-size: clamp(16px, 3.5vw, 22px);
+  color: #ffffff;
+  font-weight: 600;
   letter-spacing: 0.05em;
+  text-shadow: 
+    0 2px 10px rgba(0,0,0,0.8),
+    0 4px 20px rgba(0,0,0,0.6),
+    0 0 10px rgba(0, 229, 255, 0.4);
 }
 
 /* Enhancing glow effect for highlight text */
@@ -655,18 +659,26 @@ section {
 
 .hero-scroll-arrow {
   font-size: 1.8rem;
-  color: rgba(0, 229, 255, 0.7);
-  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+  color: rgba(0, 229, 255, 0.9);
+  text-shadow: 
+    0 0 15px rgba(0, 229, 255, 0.6),
+    0 2px 10px rgba(0,0,0,0.9);
+  -webkit-text-stroke: 1px rgba(0,0,0,0.5);
   animation: scroll-bounce 1.6s ease-in-out infinite;
   line-height: 1;
 }
 
 .hero-scroll-label {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: rgba(0, 229, 255, 0.45);
-  font-weight: 600;
+  letter-spacing: 0.25em;
+  color: rgba(0, 229, 255, 0.9);
+  font-weight: 700;
+  text-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.5),
+    0 2px 10px rgba(0,0,0,0.9),
+    0 4px 20px rgba(0,0,0,0.8);
+  -webkit-text-stroke: 0.5px rgba(0,0,0,0.5);
 }
 
 @keyframes scroll-bounce {

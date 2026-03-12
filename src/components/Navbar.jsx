@@ -67,7 +67,7 @@ const Navbar = () => {
                                 className="w-full h-full object-contain scale-110"
                             />
                         </div>
-                        <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white italic">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
+                        <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] italic">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
                     </Link>
 
                     {/* Desktop Nav */}
@@ -76,7 +76,7 @@ const Navbar = () => {
                             <Link
                                 key={link.name}
                                 to={link.href}
-                                className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 relative group"
+                                className="text-sm font-semibold text-slate-600 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 relative group"
                             >
                                 {link.name}
                                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
@@ -86,7 +86,7 @@ const Navbar = () => {
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
-                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-sm"
+                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-sm"
                             title="Toggle Theme"
                         >
                             {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -97,7 +97,7 @@ const Navbar = () => {
                     <div className="md:hidden flex items-center gap-2">
                         <button
                             onClick={toggleTheme}
-                            className="text-slate-600 dark:text-slate-300 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl transition-all duration-300"
+                            className="text-slate-600 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl transition-all duration-300"
                         >
                             {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                         </button>
