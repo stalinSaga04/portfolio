@@ -58,9 +58,9 @@ const Footer = () => {
                     <div className="flex items-center gap-3 group cursor-pointer justify-center md:justify-start" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white dark:bg-black p-0.5 shadow-md shadow-indigo-500/30 group-hover:rotate-12 transition-all duration-500 overflow-hidden">
                             <img
-                                src="/favicon-dark.png"
+                                src="/logo.png"
                                 alt="SagayAI Lab"
-                                className="w-full h-full object-contain scale-110"
+                                className="w-full h-full object-contain"
                             />
                         </div>
                         <span className="text-2xl font-black tracking-tight text-white italic">Sagay<span className="text-indigo-400">AI</span> Lab</span>
@@ -80,7 +80,7 @@ const Footer = () => {
                                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
                                     <div className="w-full">
                                         <p className={`text-sm md:text-base font-medium text-slate-200 italic leading-relaxed relative z-10 signature-text ${isVisible ? 'is-visible' : ''}`}>
-                                            "Choice is our's!<br />Chance is your's,<br /><span className="text-indigo-400 font-bold">Thought is forever."</span>
+                                            "Choice is our's!<br />Chance is your's."
                                         </p>
                                     </div>
                                 </div>
@@ -93,8 +93,8 @@ const Footer = () => {
 
                                     {/* Inner Content */}
                                     <div className="absolute inset-[2px] bg-slate-900 rounded-2xl flex items-center justify-center z-10">
-                                        <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400 tracking-widest drop-shadow-[0_0_15px_rgba(168,85,247,0.3)] select-none">
-                                            YOU <span className="text-slate-500 text-lg mx-1">for</span> YOU
+                                        <h3 className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400 tracking-widest drop-shadow-[0_0_15px_rgba(168,85,247,0.3)] select-none uppercase">
+                                            CREATe <span className="text-slate-500 text-lg mx-1">YOUr</span> SPARk
                                         </h3>
                                     </div>
                                 </div>

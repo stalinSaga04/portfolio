@@ -55,6 +55,7 @@ const Hero = () => {
   const [loaded, setLoaded] = useState(false);
   const [introComplete, setIntroComplete] = useState(false);
   const [particles] = useState(() => createParticles(30));
+  const [scrollText, setScrollText] = useState("Scroll to explore");
 
   // Mutable refs for scroll state
   const isAnimatingRef = useRef(false);
@@ -66,11 +67,19 @@ const Hero = () => {
   // ── 1. Preload all 19 frames ──
   useEffect(() => {
     let count = 0;
+    const firstFrameIdx = 18; // The frame we want to show immediately
+    
     for (let i = 1; i <= FRAME_COUNT; i++) {
       const img = new Image();
       img.src = `/hero_frames/ezgif-frame-${String(i).padStart(3, '0')}.jpg`;
       img.onload = () => {
         imagesRef.current[i - 1] = img;
+        
+        // DRAW IMMEDIATELY if it's the first frame we need
+        if (i - 1 === firstFrameIdx) {
+          renderFrame(firstFrameIdx);
+        }
+
         count++;
         if (count === FRAME_COUNT) setLoaded(true);
       };
@@ -79,7 +88,7 @@ const Hero = () => {
         if (count === FRAME_COUNT) setLoaded(true);
       };
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── 2. Render a specific frame ──
   const renderFrame = useCallback((index) => {
@@ -273,10 +282,13 @@ const Hero = () => {
     }
 
     // Scroll hint
+    const hintTexts = ["Scroll to explore", "Scroll to reveal", "Explore Projects"];
+    setScrollText(hintTexts[targetStage]);
+
     if (scrollHintRef.current) {
       let hintOpacity = 1;
-      if (targetStage === 1) hintOpacity = 0.4;
-      if (targetStage === 2) hintOpacity = 0;
+      if (targetStage === 1) hintOpacity = 0.5;
+      if (targetStage === 2) hintOpacity = 1; // High visibility for the final CTA
       tl.to(scrollHintRef.current, { opacity: hintOpacity, duration: 0.5 }, 0);
     }
 
@@ -425,9 +437,9 @@ const Hero = () => {
 
 
       {/* Scroll Hint (Z: 35) — visible from start */}
-      <div ref={scrollHintRef} className="hero-scroll-hint z-[35]" style={{ opacity: 0 }}>
-        <div className="hero-scroll-arrow">↓</div>
-        <span className="hero-scroll-label">Scroll to explore</span>
+      <div ref={scrollHintRef} className="hero-scroll-hint z-[35] flex flex-col items-center justify-center pointer-events-none" style={{ opacity: 0 }}>
+        <div className="hero-scroll-arrow mb-1 sm:mb-2 text-2xl sm:text-3xl">↓</div>
+        <span className="hero-scroll-label whitespace-nowrap text-[10px] sm:text-sm">{scrollText}</span>
       </div>
     </section>
   );
