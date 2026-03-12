@@ -59,15 +59,18 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center">
                     {/* Logo Pill */}
-                    <Link to="/" className="flex items-center gap-3 group cursor-pointer bg-white/60 dark:bg-black/40 backdrop-blur-md border border-slate-200/50 dark:border-white/10 pr-5 pl-2 py-1.5 rounded-full shadow-lg shadow-black/5 hover:bg-white/80 dark:hover:bg-black/60 transition-all duration-300" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        <div className="w-9 h-9 flex items-center justify-center p-0.5 group-hover:scale-110 transition-transform duration-500">
+                    <Link to="/" className="flex items-center gap-4 group cursor-pointer pr-6 pl-1.5 py-1.5 rounded-full transition-all duration-300 relative" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                        {/* Enlarged Logo with Circular Background */}
+                        <div className="w-14 h-14 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-lg border-2 border-slate-100 dark:border-slate-700 z-10 group-hover:scale-105 transition-transform duration-500 overflow-hidden">
                             <img
                                 src="/logo.png"
                                 alt="SagayAI Lab Logo"
-                                className="w-full h-full object-contain"
+                                className="w-10 h-10 object-contain"
                             />
                         </div>
-                        <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white italic">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
+                        {/* Background glass pill for the text */}
+                        <div className="absolute left-10 right-0 h-10 bg-white/60 dark:bg-black/40 backdrop-blur-md border border-slate-200/50 dark:border-white/10 rounded-full -z-0"></div>
+                        <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white italic relative z-10 ml-6">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
                     </Link>
 
                     {/* Desktop Nav Pill */}

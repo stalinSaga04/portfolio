@@ -205,29 +205,30 @@ const Hero = () => {
     const tl = gsap.timeline({
       onComplete: () => {
         currentStageRef.current = targetStage;
-
         if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
+        
+        // Auto-advance to next stage after 6s of inactivity, but only if not on final stage
         if (targetStage < 2) {
           autoScrollTimerRef.current = setTimeout(() => {
             if (currentStageRef.current === targetStage && !isAnimatingRef.current) {
               gotoStage(targetStage + 1, 1);
             }
-          }, 5000);
+          }, 6000);
         }
 
         momentumTimerRef.current = setTimeout(() => {
           isAnimatingRef.current = false;
           momentumTimerRef.current = null;
-        }, 300);
+        }, 150); // Reduced momentum lock for faster repeat input
       }
     });
 
-    // Frame scrub (Iron Man mask open/close)
+    // Snappier Frame scrub (Iron Man mask)
     const frameTargets = { 0: 0, 1: 9, 2: 18 };
     tl.to(frameIndexRef.current, {
       value: frameTargets[targetStage],
-      duration: 1.2,
-      ease: "power2.inOut",
+      duration: 0.8, // Faster duration for "instant" feel
+      ease: "power3.inOut", // More aggressive start/end
       onUpdate: () => renderFrameRef.current(frameIndexRef.current.value)
     }, 0);
 
