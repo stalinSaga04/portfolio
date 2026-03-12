@@ -277,11 +277,15 @@ const Hero = () => {
   return (
     <section ref={sectionRef} id="home" className="hero-section relative overflow-hidden bg-black" style={{ touchAction: 'none' }}>
 
-      {/* Background Gradient (Z: 0) */}
-      <div className="absolute inset-0 z-0 hero-gradient-bg" />
+      {/* Background Space Image (Z: 0) */}
+      <img
+        src="/hero_bg.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+      />
 
-      {/* Dark Overlay (Z: 2) */}
-      <div className="absolute inset-0 z-[2] hero-overlay pointer-events-none opacity-50" />
+      {/* Dark Overlay — subtle dim so robot pops (Z: 2) */}
+      <div className="absolute inset-0 z-[2] bg-black/30 pointer-events-none" />
 
       {/* Robot Face Canvas — Iron Man style frame animation (Z: 10) */}
       <div className="hero-canvas-wrap relative z-[10]">

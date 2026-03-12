@@ -255,6 +255,7 @@ section {
   z-index: 5;
   pointer-events: none;
   will-change: transform;
+  mix-blend-mode: screen;
 }
 
 .hero-canvas {
