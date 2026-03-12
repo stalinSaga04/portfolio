@@ -1,5 +1,6 @@
 import React from 'react';
 import { User, Lightbulb, Coffee, Code2 } from 'lucide-react';
+import Skills from './Skills';
 
 const About = () => {
     return (
@@ -59,12 +60,14 @@ const About = () => {
                             <p className="text-center text-slate-500 dark:text-slate-400 font-medium leading-relaxed px-2">
                                 I believe the best products balance elegant design with uncompromising engineering. Let's build something great.
                             </p>
-                            <a href="/skills" className="mt-8 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all shadow-lg active:scale-95">
-                                View Technical Skills
-                            </a>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Embedded Skills Section */}
+            <div className="mt-16 relative z-10 w-full">
+                <Skills />
             </div>
         </section>
     );

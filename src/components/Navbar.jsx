@@ -49,7 +49,6 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Projects', href: '/#projects' },
-        { name: 'Skills', href: '/skills' },
         { name: 'Services', href: '/#services' },
         { name: 'About', href: '/about' },
         { name: 'Contact', href: '/#contact' },
@@ -59,45 +58,47 @@ const Navbar = () => {
         <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/70 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50 py-3' : 'bg-transparent py-5'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center">
-                    <Link to="/" className="flex items-center gap-2.5 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center bg-white dark:bg-black p-0.5 shadow-md shadow-indigo-200 dark:shadow-indigo-900/50 group-hover:rotate-12 transition-all duration-500 overflow-hidden">
+                    {/* Logo Pill */}
+                    <Link to="/" className="flex items-center gap-3 group cursor-pointer bg-white/60 dark:bg-black/40 backdrop-blur-md border border-slate-200/50 dark:border-white/10 pr-5 pl-2 py-1.5 rounded-full shadow-lg shadow-black/5 hover:bg-white/80 dark:hover:bg-black/60 transition-all duration-300" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                        <div className="w-9 h-9 flex items-center justify-center p-0.5 group-hover:scale-110 transition-transform duration-500">
                             <img
-                                src={isDark ? "/favicon-dark.png" : "/favicon.png"}
-                                alt="SagayAI Lab"
-                                className="w-full h-full object-contain scale-110"
+                                src="/logo.png"
+                                alt="SagayAI Lab Logo"
+                                className="w-full h-full object-contain"
                             />
                         </div>
-                        <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] italic">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
+                        <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white italic">Sagay<span className="text-indigo-600 dark:text-indigo-400">AI</span> Lab</span>
                     </Link>
 
-                    {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center space-x-10">
+                    {/* Desktop Nav Pill */}
+                    <div className="hidden md:flex items-center space-x-1 bg-white/60 dark:bg-black/40 backdrop-blur-md border border-slate-200/50 dark:border-white/10 px-2 py-1.5 rounded-full shadow-lg shadow-black/5">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
                                 to={link.href}
-                                className="text-sm font-semibold text-slate-600 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 relative group"
+                                className="text-sm font-semibold text-slate-700 dark:text-slate-100 px-4 py-2 rounded-full hover:bg-slate-200/50 dark:hover:bg-white/10 hover:text-indigo-600 dark:hover:text-indigo-300 transition-all duration-300"
                             >
                                 {link.name}
-                                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         ))}
+
+                        <div className="w-px h-6 bg-slate-300/50 dark:bg-white/20 mx-2"></div>
 
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
-                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300 shadow-sm"
+                            className="p-2 rounded-full text-slate-700 dark:text-slate-100 hover:bg-slate-200/50 dark:hover:bg-white/10 hover:text-indigo-600 dark:hover:text-indigo-300 transition-all duration-300"
                             title="Toggle Theme"
                         >
                             {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                         </button>
                     </div>
 
-                    {/* Mobile Menu Button + Theme Toggle */}
-                    <div className="md:hidden flex items-center gap-2">
+                    {/* Mobile Menu Button + Theme Toggle (Pill style) */}
+                    <div className="md:hidden flex items-center gap-2 bg-white/60 dark:bg-black/40 backdrop-blur-md border border-slate-200/50 dark:border-white/10 px-2 py-1.5 rounded-full shadow-lg shadow-black/5">
                         <button
                             onClick={toggleTheme}
-                            className="text-slate-600 dark:text-white dark:drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl transition-all duration-300"
+                            className="text-slate-700 dark:text-slate-100 p-2 hover:bg-slate-200/50 dark:hover:bg-white/10 rounded-full transition-all duration-300"
                         >
                             {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                         </button>

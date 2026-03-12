@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
-import Skills from './components/Skills'
 import About from './components/About'
 import Footer from './components/Footer'
 import PrivacyPolicy from './components/PrivacyPolicy'
@@ -86,7 +85,6 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/skills" element={<Skills />} />
         </Routes>
       </div>
       <Footer />

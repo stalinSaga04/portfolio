@@ -422,11 +422,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* HUD Corners (Z: 30) */}
-      <div className="hero-hud hero-hud-tl z-[30]" />
-      <div className="hero-hud hero-hud-tr z-[30]" />
-      <div className="hero-hud hero-hud-bl z-[30]" />
-      <div className="hero-hud hero-hud-br z-[30]" />
 
       {/* Scroll Hint (Z: 35) — visible from start */}
       <div ref={scrollHintRef} className="hero-scroll-hint z-[35]" style={{ opacity: 0 }}>

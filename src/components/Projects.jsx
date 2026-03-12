@@ -59,7 +59,7 @@ const Projects = () => {
                     </div>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-10">
                     {projects.map((project, index) => (
                         <motion.div
                             key={project.title}
@@ -67,7 +67,7 @@ const Projects = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className="group relative h-[420px] rounded-[2rem] overflow-hidden transition-all duration-500 hover:scale-105 shadow-sm hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30"
+                            className="group relative h-[380px] md:h-[420px] rounded-[2rem] overflow-hidden transition-all duration-500 hover:scale-[1.02] md:hover:scale-105 shadow-sm hover:shadow-xl hover:shadow-indigo-200/50 dark:hover:shadow-indigo-900/30"
                         >
                             {/* Card Background & Border Glow */}
                             <div className="absolute inset-0 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 group-hover:border-indigo-300 dark:group-hover:border-indigo-500/50 transition-colors duration-500 rounded-[2rem]" />

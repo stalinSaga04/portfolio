@@ -50,12 +50,12 @@ const Services = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className="relative group bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-500/50 rounded-[2.5rem] p-8 md:p-10 transition-all duration-500 hover:-translate-y-2 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-900/20 flex flex-col items-center text-center"
+                            className="relative group bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-500/50 rounded-[2.5rem] p-6 sm:p-8 md:p-10 transition-all duration-500 hover:-translate-y-2 shadow-sm hover:shadow-2xl hover:shadow-indigo-100/50 dark:hover:shadow-indigo-900/20 flex flex-col items-center text-center"
                         >
                             <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-indigo-50/50 dark:from-indigo-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-t-[2.5rem]"></div>
 
-                            <div className="relative z-10 p-5 rounded-3xl bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 mb-6 shadow-md shadow-indigo-100/50 dark:shadow-none group-hover:scale-110 transition-transform duration-500 border border-indigo-50 dark:border-slate-700">
-                                {service.icon}
+                            <div className="relative z-10 p-4 sm:p-5 rounded-3xl bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 mb-6 shadow-md shadow-indigo-100/50 dark:shadow-none group-hover:scale-110 transition-transform duration-500 border border-indigo-50 dark:border-slate-700">
+                                {React.cloneElement(service.icon, { className: "w-6 h-6 sm:w-8 h-8" })}
                             </div>
 
                             <span className="relative z-10 text-[10px] uppercase tracking-widest font-black py-1.5 px-4 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 mb-4">
