@@ -305,20 +305,20 @@ section {
   100% { left: 100%; opacity: 0; }
 }
 
-/* ── Eye glow — subtle pulsing radial glow near center ── */
+/* ── Eye glow — radial glow near center (controlled by GSAP) ── */
 .hero-eye-glow {
   position: absolute;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  height: 200px;
-  z-index: 3;
+  width: 400px;
+  height: 280px;
+  z-index: 14;
   pointer-events: none;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 229, 255, 0.12) 0%,
-    rgba(0, 229, 255, 0.04) 40%,
+    rgba(0, 229, 255, 0.25) 0%,
+    rgba(0, 229, 255, 0.08) 40%,
     transparent 70%
   );
   animation: eye-pulse 3s ease-in-out infinite;
@@ -326,7 +326,93 @@ section {
 
 @keyframes eye-pulse {
   0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CINEMATIC INTRO EFFECTS
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Circuit Glow Overlay ── */
+.hero-circuit-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.circuit-line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 229, 255, 0.4) 50%, transparent 100%);
+  height: 1px;
+  animation: circuit-pulse 3s ease-in-out infinite;
+}
+
+.circuit-line-1 { top: 20%; left: 0; width: 40%; animation-delay: 0s; }
+.circuit-line-2 { top: 45%; right: 0; width: 35%; animation-delay: 0.5s; }
+.circuit-line-3 { top: 70%; left: 10%; width: 30%; animation-delay: 1s; }
+.circuit-line-4 {
+  top: 15%; right: 5%; width: 1px; height: 25%;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 229, 255, 0.3) 50%, transparent 100%);
+  animation-delay: 0.8s;
+}
+.circuit-line-5 {
+  top: 55%; left: 8%; width: 1px; height: 20%;
+  background: linear-gradient(180deg, transparent 0%, rgba(59, 130, 246, 0.3) 50%, transparent 100%);
+  animation-delay: 1.5s;
+}
+.circuit-line-6 { bottom: 25%; left: 5%; width: 45%; animation-delay: 2s; }
+
+@keyframes circuit-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ── Floating Particles ── */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.6);
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.4);
+  animation: particle-float ease-in-out infinite;
+}
+
+@keyframes particle-float {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  50% { transform: translateY(-40px) translateX(15px); opacity: 0.6; }
+  90% { opacity: 0.2; }
+  100% { transform: translateY(-80px) translateX(-10px); opacity: 0; }
+}
+
+/* ── Eye Scan Line (Phase 3 sweep) ── */
+.hero-scan-line {
+  position: absolute;
+  top: 32%;
+  width: 100%;
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.1) 15%,
+    rgba(0, 229, 255, 0.8) 45%,
+    #00E5FF 50%,
+    rgba(0, 229, 255, 0.8) 55%,
+    rgba(0, 229, 255, 0.1) 85%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 20px 5px rgba(0, 229, 255, 0.3),
+    0 0 60px 10px rgba(0, 229, 255, 0.15);
+  filter: blur(0.5px);
 }
 
 /* ── HUD corner accents ── */
