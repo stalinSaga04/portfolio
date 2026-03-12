@@ -103,7 +103,7 @@ const Hero = () => {
 
   // ── 3. Draw initial frame ──
   useEffect(() => {
-    if (loaded) renderFrame(0);
+    if (loaded) renderFrame(18); // Start with mask CLOSED
   }, [loaded, renderFrame]);
 
   // ── 4. renderFrameRef (prevents stale closures) ──
@@ -117,6 +117,9 @@ const Hero = () => {
     if (!loaded) return;
 
     document.body.style.overflow = "hidden";
+
+    // Set initial frame value for animation
+    frameIndexRef.current.value = 18;
 
     const introTL = gsap.timeline({
       onComplete: () => {
@@ -135,8 +138,13 @@ const Hero = () => {
       introTL.to(scrollHintRef.current, { opacity: 1, duration: 1 }, 0);
     }
 
-    // ─── Phase 1 (0-3s): Plain scene — just robot + bg, hold ───
-    // Nothing to animate here — scene is already visible
+    // ─── Phase 1 (0-2.5s): Mask Opening — animate from closed (18) to open (0) ───
+    introTL.to(frameIndexRef.current, {
+      value: 0,
+      duration: 2.5,
+      ease: "power2.inOut",
+      onUpdate: () => renderFrameRef.current(frameIndexRef.current.value)
+    }, 0);
 
     // ─── Phase 2 (3-6s): Circuit glow + floating particles ───
     if (circuitOverlayRef.current) {
@@ -389,14 +397,14 @@ const Hero = () => {
       <div className="hero-text-container z-[25]">
         
         {/* STAGE 1: "Hi, I'm Stalin" — hidden until Phase 4 */}
-        <div ref={(el) => (textWrapRefs.current[0] = el)} className="hero-text-stage" style={{ opacity: 0, transform: 'scale(0.9)' }}>
+        <div ref={(el) => (textWrapRefs.current[0] = el)} className="hero-text-stage" style={{ opacity: 0, transform: 'scale(0.9)', pointerEvents: 'none' }}>
           <div ref={(el) => (brushMaskRefs.current[0] = el)} className="brush-mask hero-text-name">
             Hi, I'm <span className="hero-highlight">Stalin</span>
           </div>
         </div>
 
         {/* STAGE 2 */}
-        <div ref={(el) => (textWrapRefs.current[1] = el)} className="hero-text-stage" style={{ opacity: 0 }}>
+        <div ref={(el) => (textWrapRefs.current[1] = el)} className="hero-text-stage" style={{ opacity: 0, pointerEvents: 'none' }}>
           <div ref={(el) => (brushMaskRefs.current[1] = el)} className="brush-mask hero-text-title">
             <span className="block">Creative Developer</span>
             <span className="block"><span className="font-light mr-3">&</span><span className="hero-highlight hero-highlight-italic">AI Enthusiast</span></span>
@@ -404,7 +412,7 @@ const Hero = () => {
         </div>
 
         {/* STAGE 3 */}
-        <div ref={(el) => (textWrapRefs.current[2] = el)} className="hero-text-stage" style={{ opacity: 0 }}>
+        <div ref={(el) => (textWrapRefs.current[2] = el)} className="hero-text-stage" style={{ opacity: 0, pointerEvents: 'none' }}>
           <div className="hero-text-desc text-center stage-3-container">
             <span className="block stage-3-line1 font-black">BUILDING</span>
             <span className="block stage-3-line2 font-black hero-highlight glowing-text">NEXT-GEN PRODUCTS</span>
