@@ -1,91 +1,46 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, Cpu, Globe, Code2, Sparkles, Zap, ChevronDown } from 'lucide-react';
 
-const NeuralCanvas = () => {
-    const canvasRef = useRef(null);
+const MouseParallaxBackground = () => {
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const containerRef = useRef(null);
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        let animationFrameId;
-        
-        const numParticles = window.innerWidth < 768 ? 50 : 120;
-        let particles = [];
-
-        const resize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 1.5 + 0.5;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 229, 255, 0.8)';
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < numParticles; i++) {
-            particles.push(new Particle());
-        }
-
-        const drawNetwork = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw background connections
-            ctx.lineWidth = 0.5;
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 120) {
-                        const alpha = 1 - (distance / 120);
-                        ctx.strokeStyle = `rgba(0, 229, 255, ${alpha * 0.25})`;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            animationFrameId = requestAnimationFrame(drawNetwork);
+        const handleMouseMove = (e) => {
+            if (!containerRef.current) return;
+            const { clientWidth, clientHeight } = document.documentElement;
+            // Calculate mouse position relative to center of screen (-1 to 1)
+            const x = (e.clientX / clientWidth) * 2 - 1;
+            const y = (e.clientY / clientHeight) * 2 - 1;
+            setMousePosition({ x, y });
         };
 
-        drawNetwork();
-
-        return () => {
-            window.removeEventListener('resize', resize);
-            cancelAnimationFrame(animationFrameId);
-        };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
 
-    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-50" />;
+    return (
+        <div ref={containerRef} className="absolute inset-0 w-full h-full overflow-hidden perspective-1000">
+            {/* The Image layer that rotates and shifts slightly opposite to mouse */}
+            <motion.div 
+                className="absolute inset-[-5%] w-[110%] h-[110%] bg-cover bg-center"
+                style={{ backgroundImage: 'url(/hero_bg.png)' }}
+                animate={{
+                    x: mousePosition.x * -30,
+                    y: mousePosition.y * -30,
+                    rotateX: mousePosition.y * 5,
+                    rotateY: mousePosition.x * -5,
+                }}
+                transition={{ type: "spring", stiffness: 50, damping: 20, mass: 0.5 }}
+            >
+                {/* Techy Scanline & Dark Overlay to ensure text readability */}
+                <div className="absolute inset-0 bg-blue-900/30 mix-blend-multiply" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-transparent to-[#020617] h-full" />
+                <div className="hero-scanline z-0 opacity-30" />
+            </motion.div>
+        </div>
+    );
 };
 
 const Hero = () => {
@@ -101,30 +56,28 @@ const Hero = () => {
     // The user requested very fast, snappy reveals based on scroll depth.
     // Sharp transition thresholds create that instant 'snap' feel without scroll locking.
 
-    // Stage 1 (0% to 25% scroll depth, snaps out by 30%)
-    const opacity1 = useTransform(scrollYProgress, [0, 0.25, 0.28], [1, 1, 0]);
-    const scale1 = useTransform(scrollYProgress, [0, 0.28], [1, 0.95]);
+    // Stage 1 (0% to 30% scroll depth)
+    const opacity1 = useTransform(scrollYProgress, [0, 0.3, 0.35], [1, 1, 0]);
+    const scale1 = useTransform(scrollYProgress, [0, 0.35], [1, 0.95]);
 
-    // Stage 2 (28% to 60% scroll depth)
-    const opacity2 = useTransform(scrollYProgress, [0.25, 0.3, 0.6, 0.63], [0, 1, 1, 0]);
-    const y2 = useTransform(scrollYProgress, [0.25, 0.3, 0.6, 0.63], [40, 0, 0, -40]);
-    const scale2 = useTransform(scrollYProgress, [0.25, 0.3, 0.6, 0.63], [0.95, 1, 1, 1.05]);
+    // Stage 2 (35% to 65% scroll depth)
+    const opacity2 = useTransform(scrollYProgress, [0.3, 0.35, 0.65, 0.7], [0, 1, 1, 0]);
+    const y2 = useTransform(scrollYProgress, [0.3, 0.35, 0.65, 0.7], [40, 0, 0, -40]);
+    const scale2 = useTransform(scrollYProgress, [0.3, 0.35, 0.65, 0.7], [0.95, 1, 1, 1.05]);
 
-    // Stage 3 (63% to 100% scroll depth - fades into About section naturally)
-    const opacity3 = useTransform(scrollYProgress, [0.6, 0.65, 0.9, 1], [0, 1, 1, 0]);
-    const y3 = useTransform(scrollYProgress, [0.6, 0.65], [40, 0]);
+    // Stage 3 (70% to 100% scroll depth - fades into About section naturally)
+    const opacity3 = useTransform(scrollYProgress, [0.65, 0.7, 0.95, 1], [0, 1, 1, 0]);
+    const y3 = useTransform(scrollYProgress, [0.65, 0.7], [40, 0]);
 
     // Scroll Hint Text mapped to scroll progress
     const hintOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [1, 0.5, 0.5, 0]);
 
     return (
-        <section ref={containerRef} className="relative h-[300vh] bg-[#020617] text-white">
-            {/* STICKY CONTAINER: Locks to screen for 300vh of native scroll */}
+        <section ref={containerRef} className="relative h-[200vh] bg-[#020617] text-white overflow-hidden">
+            {/* STICKY CONTAINER: Locks to screen for 200vh to smoothly overlap with Services */}
             <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
                 
-                {/* Visual Backgrounds */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.05)_0%,transparent_70%)] pointer-events-none" />
-                <NeuralCanvas />
+                <MouseParallaxBackground />
 
                 {/* Abstract Glowing Orbs for Depth */}
                 <div className="absolute top-1/4 -left-1/4 w-[50vw] h-[50vw] bg-indigo-500/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
