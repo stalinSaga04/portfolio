@@ -16,17 +16,9 @@ const AppContent = () => {
   // Theme handling (Storage > Time-based)
   useEffect(() => {
     const updateTheme = () => {
-      const storedTheme = localStorage.getItem('theme');
-      let isDark;
-
-      if (storedTheme) {
-        isDark = storedTheme === 'dark';
-      } else {
-        const hour = new Date().getHours();
-        isDark = hour >= 18 || hour < 6;
-      }
-
-      document.documentElement.classList.toggle('dark', isDark);
+      // Enforce dark theme site-wide to match Hero section aesthetic
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
     };
 
     updateTheme();

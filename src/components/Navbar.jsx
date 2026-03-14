@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Code2, Sun, Moon } from 'lucide-react';
+import { Menu, X, Code2 } from 'lucide-react';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [isDark, setIsDark] = useState(false);
+    const isDark = true; // Hardcoded since theme is permanently dark
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,10 +41,7 @@ const Navbar = () => {
     }, [isOpen]);
 
     const toggleTheme = () => {
-        const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-        localStorage.setItem('theme', newTheme);
-        document.documentElement.classList.toggle('dark');
-        window.dispatchEvent(new CustomEvent('theme-change'));
+        // Theme toggle disabled to maintain Hero theme consistency
     };
 
     const navLinks = [
@@ -60,12 +57,12 @@ const Navbar = () => {
                 <div className="flex justify-between items-center">
                     {/* Logo Pill */}
                     <Link to="/" className="flex items-center gap-4 group cursor-pointer pr-6 pl-1.5 py-1.5 rounded-full transition-all duration-300 relative" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        {/* Enlarged Logo with Circular Background */}
-                        <div className="w-14 h-14 flex items-center justify-center bg-white dark:bg-slate-800 rounded-full shadow-lg border-2 border-slate-100 dark:border-slate-700 z-10 group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                        {/* Prominent White Circular Logo Container */}
+                        <div className="w-14 h-14 flex items-center justify-center bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)] z-10 group-hover:scale-110 transition-transform duration-500 overflow-hidden">
                             <img
                                 src="/logo.png"
                                 alt="SagayAI Lab Logo"
-                                className="w-10 h-10 object-contain"
+                                className="w-[120%] h-[120%] object-contain mix-blend-multiply"
                             />
                         </div>
                         {/* Background glass pill for the text */}
@@ -87,24 +84,11 @@ const Navbar = () => {
 
                         <div className="w-px h-6 bg-slate-300/50 dark:bg-white/20 mx-2"></div>
 
-                        {/* Theme Toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            className="p-2 rounded-full text-slate-700 dark:text-slate-100 hover:bg-slate-200/50 dark:hover:bg-white/10 hover:text-indigo-600 dark:hover:text-indigo-300 transition-all duration-300"
-                            title="Toggle Theme"
-                        >
-                            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                        </button>
+                        {/* Theme Toggle Removed */}
                     </div>
 
-                    {/* Mobile Menu Button + Theme Toggle (Pill style) */}
+                    {/* Mobile Menu Button (Pill style) */}
                     <div className="md:hidden flex items-center gap-2 bg-white/60 dark:bg-black/40 backdrop-blur-md border border-slate-200/50 dark:border-white/10 px-2 py-1.5 rounded-full shadow-lg shadow-black/5">
-                        <button
-                            onClick={toggleTheme}
-                            className="text-slate-700 dark:text-slate-100 p-2 hover:bg-slate-200/50 dark:hover:bg-white/10 rounded-full transition-all duration-300"
-                        >
-                            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                        </button>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl transition-all duration-300"

@@ -300,33 +300,28 @@ const Hero = () => {
 
     const observer = Observer.create({
       target: window,
-      type: "wheel,touch,pointer",
-      wheelSpeed: -1,
-      tolerance: 10,
+      type: "wheel,touch",
+      wheelSpeed: -0.5,
+      tolerance: 5,
       preventDefault: true,
-      onChange: () => {
-        if (momentumTimerRef.current) {
-          clearTimeout(momentumTimerRef.current);
-          momentumTimerRef.current = setTimeout(() => {
-            isAnimatingRef.current = false;
-            momentumTimerRef.current = null;
-          }, 150);
-        }
-      },
+      allowClicks: true,
       onUp: () => {
-        if (!introComplete) return; // Block scrolling during intro
+        if (!introComplete || isAnimatingRef.current) return;
         if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
-        if (currentStageRef.current < 2 && !isAnimatingRef.current) {
+        
+        if (currentStageRef.current < 2) {
           gotoStage(currentStageRef.current + 1, 1);
-        } else if (currentStageRef.current === 2 && !isAnimatingRef.current) {
-          observer.disable();
+        } else {
+          // At final stage, release to normal scroll
+          observerRef.current?.disable();
           document.body.style.overflow = "auto";
         }
       },
       onDown: () => {
-        if (!introComplete) return;
+        if (!introComplete || isAnimatingRef.current) return;
         if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
-        if (currentStageRef.current > 0 && !isAnimatingRef.current) {
+
+        if (currentStageRef.current > 0) {
           gotoStage(currentStageRef.current - 1, -1);
         }
       }
@@ -334,10 +329,18 @@ const Hero = () => {
 
     observerRef.current = observer;
 
+    let lastScrollY = window.scrollY;
+    
     const handleNativeScroll = () => {
-      if (window.scrollY <= 0 && currentStageRef.current === 2 && !observer.isEnabled) {
+      const isScrollUp = window.scrollY < lastScrollY;
+      lastScrollY = window.scrollY;
+
+      if (window.scrollY <= 5 && currentStageRef.current === 2 && !observer.isEnabled && isScrollUp) {
+        // Re-trap the scroll
         document.body.style.overflow = "hidden";
         observer.enable();
+        // Automatically bounce back into the hero animation
+        gotoStage(1, -1);
       }
     };
     window.addEventListener('scroll', handleNativeScroll);
@@ -407,7 +410,7 @@ const Hero = () => {
       <div className="hero-scanline z-[20] pointer-events-none" />
 
       {/* Text Container (Z: 25) */}
-      <div className="hero-text-container z-[25]">
+      <div className="hero-text-container z-[25] px-4 sm:px-8 w-full">
         
         {/* STAGE 1: "Hi, I'm Stalin" — hidden until Phase 4 */}
         <div ref={(el) => (textWrapRefs.current[0] = el)} className="hero-text-stage" style={{ opacity: 0, transform: 'scale(0.9)', pointerEvents: 'none' }}>
