@@ -1,77 +1,151 @@
-import React, { useState, useEffect } from 'react';
-import { Cpu } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const LoadingScreen = ({ onFinish }) => {
-    const [progress, setProgress] = useState(0);
-    const [messageIndex, setMessageIndex] = useState(0);
-    const messages = [
-        "Initializing (stalin sagay.dev)...",
-        "Loading (sagay AI lab)...",
-        "Optimizing Interface...",
-        "Establishing Connection...",
-        "Syncing Data...",
-        "Ready."
-    ];
+    const canvasRef = useRef(null);
+    const [isExiting, setIsExiting] = useState(false);
 
+    // After a minimum display time of 2.5 seconds, start the exit animation 
+    // to seamlessly transition into the Hero.
     useEffect(() => {
-        const interval = setInterval(() => {
-            setProgress((prev) => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    setTimeout(onFinish, 500);
-                    return 100;
-                }
-                return prev + 2;
-            });
-        }, 30);
-
-        return () => clearInterval(interval);
+        const timer = setTimeout(() => {
+            setIsExiting(true);
+            setTimeout(onFinish, 800); // 800ms fade out duration
+        }, 2500);
+        return () => clearTimeout(timer);
     }, [onFinish]);
 
+    // Neural Network Canvas Animation
     useEffect(() => {
-        const messageInterval = setInterval(() => {
-            setMessageIndex((prev) => (prev < messages.length - 1 ? prev + 1 : prev));
-        }, 600);
-        return () => clearInterval(messageInterval);
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        let animationFrameId;
+        let particles = [];
+        const numParticles = window.innerWidth < 768 ? 40 : 80;
+
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 229, 255, 0.6)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < numParticles; i++) {
+            particles.push(new Particle());
+        }
+
+        const drawNetwork = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw connections
+            ctx.lineWidth = 0.5;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        const alpha = 1 - (distance / 150);
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${alpha * 0.3})`;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Update and draw particles
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            animationFrameId = requestAnimationFrame(drawNetwork);
+        };
+
+        drawNetwork();
+
+        return () => {
+            window.removeEventListener('resize', resize);
+            cancelAnimationFrame(animationFrameId);
+        };
     }, []);
 
     return (
-        <div className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center p-6">
-            <div className="relative mb-12">
-                <div className="w-24 h-24 bg-indigo-50 rounded-3xl flex items-center justify-center animate-pulse border border-indigo-100 shadow-xl shadow-indigo-100/50">
-                    <Cpu className="w-12 h-12 text-indigo-600 animate-spin-slow" />
-                </div>
-                <div className="absolute -inset-4 bg-indigo-400/10 blur-2xl rounded-full -z-10 animate-pulse"></div>
-            </div>
-
-            <div className="w-full max-w-sm">
-                <div className="flex justify-between items-end mb-4">
-                    <div className="flex flex-col">
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-600 mb-2">System Status</span>
-                        <h3 className="text-xl font-black text-slate-900 tracking-tight transition-all duration-300">
-                            {messages[messageIndex]}
-                        </h3>
-                    </div>
-                    <span className="text-2xl font-black text-slate-900 tabular-nums italic">{progress}%</span>
-                </div>
-
-                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-                    <div
-                        className="h-full bg-indigo-600 transition-all duration-300 ease-out rounded-full shadow-[0_0_15px_rgba(79,70,229,0.5)]"
-                        style={{ width: `${progress}%` }}
+        <AnimatePresence>
+            {!isExiting && (
+                <motion.div 
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 0, filter: 'blur(10px)', scale: 1.05 }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                    className="fixed inset-0 z-[9999] bg-[#020617] flex flex-col items-center justify-center overflow-hidden"
+                >
+                    {/* Neural Canvas Background */}
+                    <canvas 
+                        ref={canvasRef} 
+                        className="absolute inset-0 pointer-events-none opacity-60 mix-blend-screen"
                     />
-                </div>
-            </div>
 
-            <div className="absolute bottom-12 flex flex-col items-center opacity-30">
-                <div className="text-[10px] font-black tracking-[0.5em] text-slate-400 uppercase mb-4">Sagay AI Laboratory v2.0</div>
-                <div className="flex gap-4">
-                    <div className="w-1 h-1 bg-indigo-600 rounded-full animate-bounce"></div>
-                    <div className="w-1 h-1 bg-indigo-600 rounded-full animate-bounce delay-100"></div>
-                    <div className="w-1 h-1 bg-indigo-600 rounded-full animate-bounce delay-200"></div>
-                </div>
-            </div>
-        </div>
+                    {/* Central Glowing Orb */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] animate-pulse pointer-events-none"></div>
+
+                    {/* Text Content */}
+                    <div className="relative z-10 flex flex-col items-center">
+                        <motion.h1 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1, delay: 0.2 }}
+                            className="text-4xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-indigo-200"
+                            style={{ textShadow: "0 0 40px rgba(0, 229, 255, 0.3)" }}
+                        >
+                            StalinSaga.dev
+                        </motion.h1>
+                        
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1, delay: 0.6 }}
+                            className="mt-6 flex items-center gap-3"
+                        >
+                            <div className="flex gap-1.5">
+                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></div>
+                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse delay-75"></div>
+                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse delay-150"></div>
+                            </div>
+                            <span className="text-sm font-semibold tracking-[0.3em] text-cyan-500/80 uppercase">
+                                Neural Initializing
+                            </span>
+                        </motion.div>
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 };
 

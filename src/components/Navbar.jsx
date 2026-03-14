@@ -12,19 +12,10 @@ const Navbar = () => {
             setScrolled(window.scrollY > 20);
         };
 
-        // Initial dark state check
-        setIsDark(document.documentElement.classList.contains('dark'));
-
         window.addEventListener('scroll', handleScroll);
-
-        const handleThemeChange = () => {
-            setIsDark(document.documentElement.classList.contains('dark'));
-        };
-        window.addEventListener('theme-change', handleThemeChange);
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('theme-change', handleThemeChange);
         };
     }, []);
 
