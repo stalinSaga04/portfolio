@@ -71,7 +71,7 @@ const AppContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 selection:bg-indigo-600 selection:text-white flex flex-col relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 selection:bg-indigo-600 selection:text-white flex flex-col relative overflow-x-clip transition-colors duration-500">
       <Navbar />
       <div className="flex-1">
         <Routes>

@@ -73,7 +73,7 @@ const Hero = () => {
     const hintOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [1, 0.5, 0.5, 0]);
 
     return (
-        <section ref={containerRef} className="relative h-[200vh] bg-[#020617] text-white overflow-hidden">
+        <section ref={containerRef} className="relative h-[200vh] bg-[#020617] text-white">
             {/* STICKY CONTAINER: Locks to screen for 200vh to smoothly overlap with Services */}
             <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
                 
