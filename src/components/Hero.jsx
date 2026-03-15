@@ -173,12 +173,12 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-gradient-radial from-[#4F46E522] to-transparent blur-[130px]" />
             </div>
 
-            {/* ── GIANT PORTRAIT (Refined Scaling & Position) ── */}
-            <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-10 pointer-events-none flex items-end justify-center lg:justify-end overflow-visible">
+            {/* ── GIANT PORTRAIT (Center Anchored for Mobile) ── */}
+            <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-10 pointer-events-none flex items-center lg:items-end justify-center lg:justify-end overflow-visible">
                 <motion.div
                     animate={{ y: [0, -12, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative w-full h-[140%] sm:h-[135%] lg:h-[145%] right-[-5%] lg:right-[-6%] bottom-[22%] sm:bottom-[-2%] lg:bottom-[8%]"
+                    className="relative w-full h-[100%] sm:h-[120%] lg:h-[145%] right-[-5%] lg:right-[-6%] bottom-[-5%] sm:bottom-[-2%] lg:bottom-[8%]"
                 >
                     <motion.img
                         initial={{ opacity: 0, scale: 1.3, x: 50 }}
@@ -228,7 +228,7 @@ const Hero = () => {
                             className="relative"
                         >
                             <motion.h1 
-                                whileHover={{ scale: 1.02, filter: "brightness(1.2)" }}
+                                whileHover={{ scale: 1.01 }}
                                 className="font-black leading-[1.1] sm:leading-[0.95] tracking-tighter mb-6 transition-all duration-300 group cursor-default"
                                 style={{ fontSize: 'clamp(32px, 8vw, 68px)' }}
                             >
