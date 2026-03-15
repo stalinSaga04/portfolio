@@ -210,11 +210,10 @@ const Hero = () => {
                         <motion.div 
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="relative flex items-center gap-3 mb-6"
+                            className="relative flex items-center mb-6"
                         >
-                            <div className="w-8 h-[2px] bg-indigo-600 rounded-full" />
-                            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.5em] text-indigo-100 lg:text-indigo-600 dark:text-indigo-400">
-                                Turning ideas into real digital products.
+                            <span className="text-xs sm:text-[13px] font-black uppercase tracking-[0.6em] text-indigo-600/90 dark:text-indigo-400 drop-shadow-sm">
+                                Turning ideas into real digital products
                             </span>
                         </motion.div>
 
