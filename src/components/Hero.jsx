@@ -178,7 +178,7 @@ const Hero = () => {
                 <motion.div
                     animate={{ y: [0, -12, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative w-full h-[120%] sm:h-[125%] lg:h-[135%] right-[-5%] lg:right-[-6%] bottom-[0%] sm:bottom-[-2%] lg:bottom-[5%]"
+                    className="relative w-full h-[140%] sm:h-[135%] lg:h-[145%] right-[-5%] lg:right-[-6%] bottom-[22%] sm:bottom-[-2%] lg:bottom-[8%]"
                 >
                     <motion.img
                         initial={{ opacity: 0, scale: 1.3, x: 50 }}
