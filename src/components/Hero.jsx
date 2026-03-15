@@ -173,21 +173,25 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-gradient-radial from-[#4F46E522] to-transparent blur-[130px]" />
             </div>
 
-            {/* ── GIANT PORTRAIT (Stabilized Anchoring) ── */}
-            <div className="absolute inset-y-0 right-0 w-full lg:w-[55%] z-10 pointer-events-none flex items-center justify-center lg:justify-end overflow-visible">
+            {/* ── GIANT PORTRAIT (Restored & Anchored) ── */}
+            <div className="absolute inset-y-0 right-0 w-full lg:w-[50%] z-10 pointer-events-none flex items-end justify-center lg:justify-end overflow-visible">
                 <motion.div
-                    animate={{ y: [0, -15, 0] }}
-                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative w-[120%] h-[120%] lg:w-full lg:h-[130%] right-[-20%] lg:right-[-8%] bottom-[-15%] lg:bottom-[-10%]"
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative w-full h-[85%] sm:h-[95%] lg:h-[105%] right-[-5%] lg:right-[-5%] bottom-[-5%] lg:bottom-[-2%]"
                 >
                     <motion.img
-                        initial={{ opacity: 0, scale: 1.1, x: 100 }}
-                        animate={{ opacity: 1, scale: 1.25, x: 0 }}
-                        transition={{ duration: 1.8, ease: "easeOut" }}
+                        initial={{ opacity: 0, scale: 1.1, x: 50 }}
+                        animate={{ opacity: 1, scale: 1.2, x: 0 }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
                         src="/hero_portrait.jpg"
                         alt="Stalin"
-                        className="w-full h-full object-contain object-bottom select-none opacity-80 lg:opacity-100"
+                        className="w-full h-full object-contain object-bottom select-none"
                     />
+                    
+                    {/* Floating Accents Restored */}
+                    <div className="absolute top-[30%] right-[40%] w-6 h-6 rounded-full bg-[#4F46E5] blur-[4px] opacity-40 animate-pulse" />
+                    <div className="absolute bottom-[20%] right-[70%] w-5 h-5 rounded-full bg-[#E11D48] blur-[3px] opacity-30" />
                 </motion.div>
             </div>
 
