@@ -56,7 +56,7 @@ const Signature = ({ triggered }) => {
         <motion.div
             initial={{ opacity: 0 }}
             animate={hasAnimated ? { opacity: 1 } : { opacity: 0 }}
-            className="absolute left-0 bottom-[-90px] sm:bottom-[-100px] lg:bottom-[-80px] z-50 w-[240px] sm:w-[280px] h-32 pointer-events-none"
+            className="absolute left-0 bottom-[-110px] z-50 w-[280px] h-32 pointer-events-none md:hidden"
         >
             <svg viewBox="0 0 540 150" className="w-full h-full text-[#334155] drop-shadow-[0_4px_12px_rgba(51,65,85,0.2)]">
                 {/* Subtle under-glow for premium feel */}
@@ -133,27 +133,26 @@ const Hero = () => {
         <section ref={containerRef} className="relative h-screen min-h-[700px] text-[#0F172A] overflow-hidden bg-white" id="hero">
 
             {/* ── UNIFIED BACKGROUND CANVAS ── */}
-            {/* Base Gradient for full coverage */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50 to-indigo-50/30 z-0" />
+            {/* Base White for the right side */}
+            <div className="absolute inset-0 bg-white z-0" />
             
             {/* Diagonal Organic Wave Base (The dynamic part of the split) */}
             <motion.div 
-                className="absolute inset-y-0 left-0 z-5"
+                className="absolute inset-0 z-5"
                 style={{
-                    width: '100%',
                     background: 'linear-gradient(135deg, #E11D48 0%, #4F46E5 100%)',
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%, 0% 90%, 85% 70%, 85% 30%, 0% 10%)'
+                    clipPath: 'polygon(0 0, 78% 0, 85% 15%, 75% 40%, 82% 65%, 72% 85%, 78% 100%, 0% 100%)'
                 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
             />
 
-            {/* Desktop Dynamic Rays */}
-            <div className="absolute top-[50%] right-[-5%] -translate-y-1/2 w-[900px] h-[900px] z-1 pointer-events-none hidden lg:block opacity-[0.15]">
+            {/* ── DYNAMIC RAYS (Layered behind portrait) ── */}
+            <div className="absolute top-[50%] right-[-5%] -translate-y-1/2 w-[900px] h-[900px] z-1 pointer-events-none hidden lg:block opacity-[0.2]">
                 <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                     className="absolute inset-0"
                 >
                     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/01/svg">
@@ -164,45 +163,46 @@ const Hero = () => {
                                 x2={100 + Math.cos((i * (360/32) * Math.PI) / 180) * 100} 
                                 y2={100 + Math.sin((i * (360/32) * Math.PI) / 180) * 100}
                                 stroke="#4F46E5" 
-                                strokeWidth="2"
-                                strokeDasharray="3 6"
+                                strokeWidth="2.5"
+                                strokeDasharray="4 8"
                             />
                         ))}
                     </svg>
                 </motion.div>
-                <div className="absolute inset-0 bg-gradient-radial from-[#4F46E522] to-transparent blur-[130px]" />
+                <div className="absolute inset-0 bg-gradient-radial from-[#4F46E533] to-transparent blur-[120px]" />
             </div>
 
-            {/* ── GIANT PORTRAIT (Center Anchored for Mobile) ── */}
-            <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-10 pointer-events-none flex items-center lg:items-end justify-center lg:justify-end overflow-visible">
+            {/* ── GIANT PORTRAIT (High-level blend) ── */}
+            <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-10 pointer-events-none flex items-end justify-end overflow-visible">
                 <motion.div
-                    animate={{ y: [0, -12, 0] }}
+                    animate={{ y: [0, -10, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative w-full h-[105%] sm:h-[120%] lg:h-[145%] right-[-2%] lg:right-[-5%] bottom-[-10%] sm:bottom-[-2%] lg:bottom-[12%]"
+                    className="relative w-full h-[120%] sm:h-[135%] md:h-[145%] bottom-[8%] sm:bottom-[18%] right-[-12%] sm:right-[-10%]"
+                    style={{ mixBlendMode: 'normal' }}
                 >
                     <motion.img
-                        initial={{ opacity: 0, scale: 1.3, x: 50 }}
-                        animate={{ opacity: 1, scale: 1.6, x: 0 }}
-                        transition={{ duration: 1.8, ease: "easeOut" }}
+                        initial={{ opacity: 0, scale: 1.1, x: 100 }}
+                        animate={{ opacity: 1, scale: 1.35, x: 0 }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
                         src="/hero_portrait.jpg"
                         alt="Stalin"
                         className="w-full h-full object-contain object-bottom select-none"
                     />
                     
                     {/* Floating Accents */}
-                    <div className="absolute top-[35%] right-[45%] w-6 h-6 rounded-full bg-[#4F46E5] blur-[5px] opacity-40 animate-pulse" />
-                    <div className="absolute bottom-[25%] right-[75%] w-5 h-5 rounded-full bg-[#E11D48] blur-[4px] opacity-30" />
+                    <div className="absolute top-[40%] right-[35%] w-6 h-6 rounded-full bg-[#4F46E5] blur-[4px] opacity-40 animate-pulse" />
+                    <div className="absolute bottom-[30%] right-[65%] w-5 h-5 rounded-full bg-[#E11D48] blur-[3px] opacity-30" />
                 </motion.div>
             </div>
 
             {/* ── MAIN CONTENT GRID ── */}
-            <div className="relative z-30 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex items-center lg:items-center">
-                <div className="w-full lg:w-3/5 pt-28 sm:pt-32 lg:pt-10 relative">
+            <div className="relative z-30 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex items-center">
+                <div className="w-full lg:w-1/2 pt-40 sm:pt-44 lg:pt-20 relative">
 
                     {/* Left side: Text content with Glass Contrast Card */}
                     <motion.div
                         style={{ y: contentY, opacity: contentOpacity }}
-                        className="relative p-6 sm:p-10 lg:p-12 rounded-[2rem] bg-indigo-900/10 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none border border-white/10 lg:border-none flex flex-col justify-center text-white lg:text-[#0F172A] z-40"
+                        className="relative p-6 sm:p-12 rounded-[2rem] bg-indigo-900/10 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none border border-white/10 lg:border-none flex flex-col justify-center text-white lg:text-[#0F172A]"
                     >
                         {/* Desktop subtle glass highlight for better contrast */}
                         <div className="absolute inset-0 bg-white/5 lg:bg-[#0F172A]/[0.02] backdrop-blur-[2px] rounded-[2rem] hidden lg:block border border-white/10 lg:border-[#0F172A]/5 pointer-events-none" />
@@ -210,10 +210,11 @@ const Hero = () => {
                         <motion.div 
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="relative flex items-center mb-6"
+                            className="relative flex items-center gap-3 mb-6"
                         >
-                            <span className="text-xs sm:text-[13px] font-black uppercase tracking-[0.6em] text-indigo-600/90 dark:text-indigo-400 drop-shadow-sm">
-                                Turning ideas into real digital products
+                            <div className="w-8 h-[2px] bg-indigo-600 rounded-full" />
+                            <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.5em] text-indigo-100 lg:text-indigo-600 dark:text-indigo-400">
+                                Turning ideas into real digital products.
                             </span>
                         </motion.div>
 
@@ -228,7 +229,7 @@ const Hero = () => {
                             className="relative"
                         >
                             <motion.h1 
-                                whileHover={{ scale: 1.01 }}
+                                whileHover={{ scale: 1.02, filter: "brightness(1.2)" }}
                                 className="font-black leading-[1.1] sm:leading-[0.95] tracking-tighter mb-6 transition-all duration-300 group cursor-default"
                                 style={{ fontSize: 'clamp(32px, 8vw, 68px)' }}
                             >
