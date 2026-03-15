@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent, useInView } from 'framer-motion';
 import { ArrowRight, ExternalLink, Code2, Cpu, Zap, Globe, Facebook, Twitter, Github } from 'lucide-react';
 
 /* ─── Floating ambient dots ─── */
@@ -40,22 +39,18 @@ const TechPill = ({ icon: Icon, label, delay }) => (
     </motion.div>
 );
 
-const Signature = ({ scrollYProgress }) => {
-    const [hasTriggered, setHasTriggered] = useState(false);
+const Signature = ({ triggered }) => {
+    const [hasAnimated, setHasAnimated] = useState(false);
 
-    // Monitor scroll progress to detect the "Navbar Touch" point
-    const threshold = 0.45;
-    
-    useMotionValueEvent(scrollYProgress, "change", (latest) => {
-        if (latest >= threshold && !hasTriggered) {
-            setHasTriggered(true);
-        }
-    });
+    // Only allow the animation to start once when triggered
+    if (triggered && !hasAnimated) {
+        setHasAnimated(true);
+    }
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
-            animate={hasTriggered ? { opacity: 1 } : { opacity: 0 }}
+            animate={hasAnimated ? { opacity: 1 } : { opacity: 0 }}
             className="absolute left-0 bottom-[-110px] z-50 w-64 h-32 pointer-events-none md:hidden"
         >
             <svg viewBox="0 0 500 150" className="w-full h-full text-indigo-600 drop-shadow-[0_4px_12px_rgba(79,70,229,0.3)]">
@@ -66,15 +61,14 @@ const Signature = ({ scrollYProgress }) => {
                     strokeWidth="3.2"
                     strokeLinecap="round"
                     initial={{ pathLength: 0 }}
-                    animate={hasTriggered ? { pathLength: 1 } : { pathLength: 0 }}
+                    animate={hasAnimated ? { pathLength: 1 } : { pathLength: 0 }}
                     transition={{ duration: 3.5, ease: "easeInOut" }}
                 />
-                {/* Live Pen Tip Follower */}
                 <motion.circle
                     r="4"
                     fill="#4F46E5"
                     initial={{ opacity: 0 }}
-                    animate={hasTriggered ? { 
+                    animate={hasAnimated ? { 
                         opacity: [0, 1, 1, 0],
                         offsetDistance: ["0%", "100%"]
                     } : { opacity: 0 }}
@@ -90,10 +84,17 @@ const Signature = ({ scrollYProgress }) => {
 
 const Hero = () => {
     const containerRef = useRef(null);
+    const triggerRef = useRef(null);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ['start start', 'end start'],
+    });
+
+    // Precision trigger: Detect when the paragraph touches the navbar area (approx 100px from top)
+    const isTriggered = useInView(triggerRef, { 
+        margin: "-100px 0px -100% 0px",
+        once: true 
     });
 
     const contentY = useTransform(scrollYProgress, [0, 1], [0, -80]);
@@ -190,7 +191,7 @@ const Hero = () => {
                             </span>
                         </motion.div>
 
-                        <Signature scrollYProgress={scrollYProgress} />
+                        <Signature triggered={isTriggered} />
 
                         <motion.div 
                             initial="hidden"
@@ -260,6 +261,7 @@ const Hero = () => {
                         </motion.div>
 
                         <motion.p 
+                            ref={triggerRef}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2, duration: 0.7 }}
