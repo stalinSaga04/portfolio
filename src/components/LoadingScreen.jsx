@@ -211,90 +211,82 @@ const LoadingScreen = ({ onFinish }) => {
                             </svg>
                         </motion.div>
 
-                        {/* Elite Branding Reveal - UI Nature Edition */}
-                        <div className="flex flex-col items-center gap-6 relative">
+                        {/* Elite Branding Reveal - Stacked & Quick Edition */}
+                        <div className="flex flex-col items-center gap-2 relative">
                             <motion.div
                                 initial="hidden"
                                 animate="visible"
                                 className="relative flex flex-col items-center"
                             >
-                                {/* Character-level blurred reveal */}
-                                <div className="flex items-center gap-3 md:gap-5 text-3xl md:text-5xl font-black uppercase tracking-[0.25em] overflow-hidden">
-                                    <div className="flex overflow-hidden">
-                                        {"stalin sagay".split("").map((char, i) => (
-                                            <motion.span
-                                                key={`name-${i}`}
-                                                variants={{
-                                                    hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
-                                                    visible: { 
-                                                        opacity: 1, 
-                                                        y: 0, 
-                                                        filter: 'blur(0px)',
-                                                        transition: { delay: i * 0.04 + 0.5, duration: 0.8, ease: [0.23, 1, 0.32, 1] }
-                                                    }
-                                                }}
-                                                className="text-white inline-block"
-                                            >
-                                                {char === " " ? "\u00A0" : char}
-                                            </motion.span>
-                                        ))}
-                                    </div>
-
-                                    <motion.span 
-                                        initial={{ scaleY: 0, opacity: 0 }}
-                                        animate={{ scaleY: 1, opacity: 0.3 }}
-                                        transition={{ delay: 1.2, duration: 1 }}
-                                        className="w-[2px] h-10 md:h-12 bg-white origin-center mx-1"
-                                    />
-
-                                    <div className="flex overflow-hidden">
-                                        {"2aj .dev".split("").map((char, i) => (
-                                            <motion.span
-                                                key={`dev-${i}`}
-                                                variants={{
-                                                    hidden: { opacity: 0, y: 20, filter: 'blur(10px)' },
-                                                    visible: { 
-                                                        opacity: 1, 
-                                                        y: 0, 
-                                                        filter: 'blur(0px)',
-                                                        transition: { delay: i * 0.04 + 1.2, duration: 0.8, ease: [0.23, 1, 0.32, 1] }
-                                                    }
-                                                }}
-                                                className="text-indigo-400 inline-block"
-                                            >
-                                                {char === " " ? "\u00A0" : char}
-                                            </motion.span>
-                                        ))}
-                                    </div>
+                                {/* Name - Fast Reveal */}
+                                <div className="flex items-center text-3xl md:text-5xl font-black uppercase tracking-[0.2em] overflow-hidden leading-tight">
+                                    {"stalin sagay".split("").map((char, i) => (
+                                        <motion.span
+                                            key={`name-${i}`}
+                                            variants={{
+                                                hidden: { opacity: 0, scale: 0.8, filter: 'blur(10px)' },
+                                                visible: { 
+                                                    opacity: 1, 
+                                                    scale: 1, 
+                                                    filter: 'blur(0px)',
+                                                    transition: { delay: i * 0.02 + 0.2, duration: 0.5, ease: "easeOut" }
+                                                }
+                                            }}
+                                            className="text-white inline-block"
+                                        >
+                                            {char === " " ? "\u00A0" : char}
+                                        </motion.span>
+                                    ))}
                                 </div>
 
-                                {/* "Liquid Light" Shimmer Sweep Overlay */}
+                                {/* Domain - Vertically Stacked & Quick */}
+                                <div className="flex items-center text-xl md:text-2xl font-black uppercase tracking-[0.4em] overflow-hidden mt-1">
+                                    {"2aj .dev".split("").map((char, i) => (
+                                        <motion.span
+                                            key={`dev-${i}`}
+                                            variants={{
+                                                hidden: { opacity: 0, y: 10, filter: 'blur(5px)' },
+                                                visible: { 
+                                                    opacity: 1, 
+                                                    y: 0, 
+                                                    filter: 'blur(0px)',
+                                                    transition: { delay: i * 0.02 + 0.5, duration: 0.4, ease: "easeOut" }
+                                                }
+                                            }}
+                                            className="text-indigo-400 inline-block"
+                                        >
+                                            {char === " " ? "\u00A0" : char}
+                                        </motion.span>
+                                    ))}
+                                </div>
+
+                                {/* "Liquid Light" Shimmer Sweep */}
                                 <motion.div
                                     initial={{ x: "-150%" }}
                                     animate={{ x: "150%" }}
-                                    transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1, ease: "linear" }}
+                                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5, ease: "linear" }}
                                     className="absolute inset-0 z-10 pointer-events-none"
                                     style={{
-                                        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 60%, transparent 100%)',
+                                        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 60%, transparent 100%)',
                                         mixBlendMode: 'overlay'
                                     }}
                                 />
                             </motion.div>
 
-                            {/* Status Micro-copy - Refined for UX Nature */}
-                            <div className="flex flex-col items-center gap-2">
+                            {/* Status Micro-copy - Snappier Sync */}
+                            <div className="flex flex-col items-center gap-1 mt-4">
                                 <motion.div
-                                    initial={{ opacity: 0, letterSpacing: '0.2em' }}
-                                    animate={{ opacity: 1, letterSpacing: '0.6em' }}
-                                    transition={{ delay: 1.8, duration: 1.5 }}
-                                    className="text-[9px] md:text-[11px] font-mono font-medium text-slate-400/80 uppercase"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.8, duration: 0.8 }}
+                                    className="text-[10px] md:text-[12px] font-mono font-medium text-slate-500 uppercase tracking-[0.4em]"
                                 >
                                     Fabricating Digital Excellence
                                 </motion.div>
                                 <motion.div 
                                     initial={{ width: 0 }}
-                                    animate={{ width: 80 }}
-                                    transition={{ delay: 2, duration: 1.2 }}
+                                    animate={{ width: 100 }}
+                                    transition={{ delay: 1, duration: 0.8 }}
                                     className="h-[1px] bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent"
                                 />
                             </div>
