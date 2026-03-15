@@ -1,3 +1,4 @@
+import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent, useInView } from 'framer-motion';
 import { ArrowRight, ExternalLink, Code2, Cpu, Zap, Globe, Facebook, Twitter, Github } from 'lucide-react';
 
