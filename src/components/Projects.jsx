@@ -47,16 +47,27 @@ const Projects = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8 }}
-                    className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-16 gap-6"
+                    className="flex flex-col mb-12 md:mb-20 px-1"
                 >
-                    <div className="max-w-2xl px-1">
-                        <h2 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6 tracking-tight">
-                            Selected <span className="text-gradient">Projects</span>
-                        </h2>
-                        <p className="text-slate-500 dark:text-slate-400 text-base md:text-xl leading-relaxed font-medium opacity-80">
-                            Modern websites and landing pages built for businesses, professionals, and local brands.
-                        </p>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-[2px] bg-indigo-600 rounded-full" />
+                        <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.5em] text-indigo-600 dark:text-indigo-400">
+                            Curated Selection
+                        </span>
                     </div>
+                    
+                    <div className="relative inline-block">
+                        <h2 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter">
+                            Selected <span className="text-gradient">Projects</span>
+                            <span className="inline-block w-2.5 h-2.5 rounded-full bg-indigo-600 ml-2 mb-1" />
+                        </h2>
+                        {/* Title Accent Glow */}
+                        <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-500/10 dark:bg-indigo-500/5 blur-[80px] -z-10 pointer-events-none" />
+                    </div>
+
+                    <p className="max-w-2xl text-slate-500 dark:text-slate-400 text-base md:text-xl leading-relaxed font-medium opacity-80">
+                        Modern websites and landing pages built for businesses, professionals, and local brands.
+                    </p>
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-10">

@@ -142,7 +142,7 @@ const LoadingScreen = ({ onFinish }) => {
                             initial={{ scale: 0.7, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
-                            className="relative w-64 h-32"
+                            className="relative w-48 h-24"
                         >
                             <svg viewBox="0 0 100 50" className="w-full h-full filter drop-shadow-[0_0_25px_rgba(79,70,229,0.4)]">
                                 <defs>
