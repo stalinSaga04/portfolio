@@ -56,7 +56,7 @@ const Signature = ({ triggered }) => {
         <motion.div
             initial={{ opacity: 0 }}
             animate={hasAnimated ? { opacity: 1 } : { opacity: 0 }}
-            className="absolute left-0 bottom-[-110px] z-50 w-[280px] h-32 pointer-events-none md:hidden"
+            className="absolute left-0 bottom-[-90px] sm:bottom-[-100px] lg:bottom-[-80px] z-50 w-[240px] sm:w-[280px] h-32 pointer-events-none"
         >
             <svg viewBox="0 0 540 150" className="w-full h-full text-[#334155] drop-shadow-[0_4px_12px_rgba(51,65,85,0.2)]">
                 {/* Subtle under-glow for premium feel */}
@@ -177,7 +177,7 @@ const Hero = () => {
                 <motion.div
                     animate={{ y: [0, -10, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative w-full h-[120%] sm:h-[135%] md:h-[145%] bottom-[8%] sm:bottom-[18%] right-[-12%] sm:right-[-10%]"
+                    className="relative w-full h-[110%] sm:h-[125%] md:h-[135%] bottom-[5%] sm:bottom-[15%] right-[-15%] sm:right-[-12%] lg:right-[-10%]"
                     style={{ mixBlendMode: 'normal' }}
                 >
                     <motion.img
@@ -202,7 +202,7 @@ const Hero = () => {
                     {/* Left side: Text content with Glass Contrast Card */}
                     <motion.div
                         style={{ y: contentY, opacity: contentOpacity }}
-                        className="relative p-6 sm:p-12 rounded-[2rem] bg-indigo-900/10 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none border border-white/10 lg:border-none flex flex-col justify-center text-white lg:text-[#0F172A]"
+                        className="relative p-6 sm:p-10 lg:p-12 rounded-[2rem] bg-indigo-900/10 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none border border-white/10 lg:border-none flex flex-col justify-center text-white lg:text-[#0F172A] z-40"
                     >
                         {/* Desktop subtle glass highlight for better contrast */}
                         <div className="absolute inset-0 bg-white/5 lg:bg-[#0F172A]/[0.02] backdrop-blur-[2px] rounded-[2rem] hidden lg:block border border-white/10 lg:border-[#0F172A]/5 pointer-events-none" />
