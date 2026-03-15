@@ -48,36 +48,62 @@ const Signature = ({ triggered }) => {
         setHasAnimated(true);
     }
 
+    // High-fidelity English Calligraphic Path based on reference image
+    // Stalin Sagay A Raj
+    const signaturePath = "M30,100 C30,40 80,40 80,80 C80,120 120,120 120,80 C120,40 160,40 160,80 M160,80 C160,50 190,50 190,90 C190,120 220,120 220,80 M220,80 C220,40 250,40 250,80 M280,40 L280,120 M280,80 C280,50 310,50 310,90 C310,120 340,120 340,80 M340,80 C340,40 370,40 370,80 M410,40 C410,40 400,120 400,120 M400,80 C400,40 440,40 440,80 C440,120 480,120 480,80";
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={hasAnimated ? { opacity: 1 } : { opacity: 0 }}
-            className="absolute left-0 bottom-[-110px] z-50 w-64 h-32 pointer-events-none md:hidden"
+            className="absolute left-0 bottom-[-110px] z-50 w-[280px] h-32 pointer-events-none md:hidden"
         >
-            <svg viewBox="0 0 500 150" className="w-full h-full text-indigo-600 drop-shadow-[0_4px_12px_rgba(79,70,229,0.3)]">
+            <svg viewBox="0 0 540 150" className="w-full h-full text-[#334155] drop-shadow-[0_4px_12px_rgba(51,65,85,0.2)]">
+                {/* Subtle under-glow for premium feel */}
                 <motion.path
-                    d="M30,80 C30,30 60,30 60,80 C60,130 90,130 90,80 C90,30 120,30 120,80 M120,80 C120,40 150,40 150,80 C150,120 180,120 180,80 M180,80 C180,40 210,40 210,80 C210,120 240,120 240,80 M270,90 C270,50 300,50 300,90 C300,130 330,130 330,90 M360,40 L360,120 M360,80 C360,40 400,40 400,80 C400,120 440,120 440,80 C440,40 470,40 470,80"
+                    d={signaturePath}
+                    fill="none"
+                    stroke="#FACC1533"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    animate={hasAnimated ? { pathLength: 1 } : { pathLength: 0 }}
+                    transition={{ duration: 3.8, ease: "easeInOut" }}
+                />
+                
+                {/* Main Calligraphic Stroke */}
+                <motion.path
+                    d={signaturePath}
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="3.2"
                     strokeLinecap="round"
                     initial={{ pathLength: 0 }}
                     animate={hasAnimated ? { pathLength: 1 } : { pathLength: 0 }}
-                    transition={{ duration: 3.5, ease: "easeInOut" }}
+                    transition={{ duration: 3.8, ease: "easeInOut" }}
                 />
-                <motion.circle
-                    r="4"
-                    fill="#4F46E5"
+
+                {/* Live Pen Tip - Glowing Gold Sparkler */}
+                <motion.g
                     initial={{ opacity: 0 }}
                     animate={hasAnimated ? { 
                         opacity: [0, 1, 1, 0],
                         offsetDistance: ["0%", "100%"]
                     } : { opacity: 0 }}
-                    transition={{ duration: 3.5, ease: "easeInOut" }}
+                    transition={{ duration: 3.8, ease: "easeInOut" }}
                     style={{ 
-                        offsetPath: "path('M30,80 C30,30 60,30 60,80 C60,130 90,130 90,80 C90,30 120,30 120,80 M120,80 C120,40 150,40 150,80 C150,120 180,120 180,80 M180,80 C180,40 210,40 210,80 C210,120 240,120 240,80 M270,90 C270,50 300,50 300,90 C300,130 330,130 330,90 M360,40 L360,120 M360,80 C360,40 400,40 400,80 C400,120 440,120 440,80 C440,40 470,40 470,80')" 
+                        offsetPath: `path('${signaturePath}')`
                     }}
-                />
+                >
+                    {/* Inner glowing tip */}
+                    <circle r="4" fill="#FACC15" className="blur-[1px]" />
+                    {/* Outer glow flare */}
+                    <circle r="8" fill="#FACC15" className="opacity-40 blur-[4px]">
+                        <animate attributeName="r" values="6;10;6" dur="0.5s" repeatCount="indefinite" />
+                    </circle>
+                    {/* Sparkle particle */}
+                    <path d="M-5,0 L5,0 M0,-5 L0,5" stroke="#FACC15" strokeWidth="1" className="opacity-60" />
+                </motion.g>
             </svg>
         </motion.div>
     );
