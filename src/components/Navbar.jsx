@@ -46,8 +46,8 @@ const Navbar = () => {
                             />
                         </motion.div>
                             
-                            <div className="flex flex-col ml-3 overflow-hidden">
-                                <span className="text-xl font-black tracking-tighter text-slate-900 dark:text-white">
+                            <div className="flex flex-col ml-2 sm:ml-3 overflow-hidden max-w-[180px] sm:max-w-none">
+                                <span className="text-base sm:text-xl font-black tracking-tighter text-slate-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
                                     Stalin <span className="text-indigo-600 dark:text-indigo-400">Sagay</span> A Raj
                                 </span>
                                 <div className="h-[2px] w-full bg-gradient-to-r from-indigo-600 to-transparent opacity-40 shadow-sm" />

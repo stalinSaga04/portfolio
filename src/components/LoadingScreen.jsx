@@ -102,46 +102,163 @@ const LoadingScreen = ({ onFinish }) => {
             {!isExiting && (
                 <motion.div 
                     initial={{ opacity: 1 }}
-                    exit={{ opacity: 0, filter: 'blur(10px)', scale: 1.05 }}
-                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                    exit={{ opacity: 0, filter: 'blur(20px)', y: -30 }}
+                    transition={{ duration: 1.2, ease: "easeInOut" }}
                     className="fixed inset-0 z-[9999] bg-[#020617] flex flex-col items-center justify-center overflow-hidden"
                 >
-                    {/* Neural Canvas Background */}
-                    <canvas 
-                        ref={canvasRef} 
-                        className="absolute inset-0 pointer-events-none opacity-60 mix-blend-screen"
+                    {/* Cinematic Nebula Glows */}
+                    <motion.div 
+                        animate={{ 
+                            scale: [1, 1.2, 1],
+                            opacity: [0.15, 0.25, 0.15],
+                            rotate: [0, 90, 180, 270, 360]
+                        }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        className="absolute w-[800px] h-[800px] rounded-full blur-[150px] pointer-events-none"
+                        style={{
+                            background: 'radial-gradient(circle, rgba(79,70,229,0.1) 0%, rgba(225,29,72,0.05) 50%, transparent 100%)',
+                            top: '-10%',
+                            left: '-10%'
+                        }}
+                    />
+                    <motion.div 
+                        animate={{ 
+                            scale: [1.2, 1, 1.2],
+                            opacity: [0.1, 0.2, 0.1],
+                            rotate: [360, 270, 180, 90, 0]
+                        }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                        className="absolute w-[800px] h-[800px] rounded-full blur-[150px] pointer-events-none"
+                        style={{
+                            background: 'radial-gradient(circle, rgba(225,29,72,0.08) 0%, rgba(79,70,229,0.04) 50%, transparent 100%)',
+                            bottom: '-10%',
+                            right: '-10%'
+                        }}
                     />
 
-                    {/* Central Glowing Orb */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] animate-pulse pointer-events-none"></div>
+                    {/* Master Infinity Wrapper */}
+                    <div className="relative flex flex-col items-center gap-16">
+                        <motion.div
+                            initial={{ scale: 0.7, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
+                            className="relative w-64 h-32"
+                        >
+                            <svg viewBox="0 0 100 50" className="w-full h-full filter drop-shadow-[0_0_25px_rgba(79,70,229,0.4)]">
+                                <defs>
+                                    <linearGradient id="liquidGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#4F46E5" />
+                                        <stop offset="50%" stopColor="#E11D48" />
+                                        <stop offset="100%" stopColor="#4F46E5" />
+                                    </linearGradient>
+                                    <filter id="neonGlow">
+                                        <feGaussianBlur stdDeviation="1.5" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                </defs>
 
-                    {/* Text Content */}
-                    <div className="relative z-10 flex flex-col items-center">
-                        <motion.h1 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1, delay: 0.2 }}
-                            className="text-4xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-indigo-200"
-                            style={{ textShadow: "0 0 40px rgba(0, 229, 255, 0.3)" }}
-                        >
-                            StalinSaga.dev
-                        </motion.h1>
-                        
-                        <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 1, delay: 0.6 }}
-                            className="mt-6 flex items-center gap-3"
-                        >
-                            <div className="flex gap-1.5">
-                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></div>
-                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse delay-75"></div>
-                                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse delay-150"></div>
-                            </div>
-                            <span className="text-sm font-semibold tracking-[0.3em] text-cyan-500/80 uppercase">
-                                Neural Initializing
-                            </span>
+                                {/* Background Trace */}
+                                <path 
+                                    d="M25 40 C0 40 0 10 25 10 C35 10 40 25 50 25 C60 25 65 40 75 40 C100 40 100 10 75 10 C65 10 60 25 50 25 C40 25 35 40 25 40 Z" 
+                                    fill="none" 
+                                    stroke="rgba(255,255,255,0.03)" 
+                                    strokeWidth="4" 
+                                />
+
+                                {/* Outer Glow Layer */}
+                                <motion.path
+                                    d="M25 40 C0 40 0 10 25 10 C35 10 40 25 50 25 C60 25 65 40 75 40 C100 40 100 10 75 10 C65 10 60 25 50 25 C40 25 35 40 25 40 Z"
+                                    fill="none"
+                                    stroke="url(#liquidGradient)"
+                                    strokeWidth="6"
+                                    strokeLinecap="round"
+                                    style={{ opacity: 0.3, filter: 'blur(4px)' }}
+                                    animate={{ pathOffset: [0, 1] }}
+                                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                />
+
+                                {/* Inner Liquid Neon Layer */}
+                                <motion.path
+                                    d="M25 40 C0 40 0 10 25 10 C35 10 40 25 50 25 C60 25 65 40 75 40 C100 40 100 10 75 10 C65 10 60 25 50 25 C40 25 35 40 25 40 Z"
+                                    fill="none"
+                                    stroke="url(#liquidGradient)"
+                                    strokeWidth="3.5"
+                                    strokeLinecap="round"
+                                    filter="url(#neonGlow)"
+                                    initial={{ pathLength: 0.3, pathOffset: 0 }}
+                                    animate={{ 
+                                        pathOffset: [0, 1],
+                                        strokeWidth: [3.5, 4.2, 3.5]
+                                    }}
+                                    transition={{ 
+                                        pathOffset: { duration: 2.2, repeat: Infinity, ease: "linear" },
+                                        strokeWidth: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+                                    }}
+                                />
+
+                                {/* Moving Light Streak */}
+                                <motion.path
+                                    d="M25 40 C0 40 0 10 25 10 C35 10 40 25 50 25 C60 25 65 40 75 40 C100 40 100 10 75 10 C65 10 60 25 50 25 C40 25 35 40 25 40 Z"
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    style={{ opacity: 0.6 }}
+                                    initial={{ pathLength: 0.1, pathOffset: 0 }}
+                                    animate={{ pathOffset: [0, 1] }}
+                                    transition={{ duration: 1.8, repeat: Infinity, ease: "linear" }}
+                                />
+                            </svg>
                         </motion.div>
+
+                        {/* Elite Branding Reveal */}
+                        <div className="flex flex-col items-center gap-4">
+                            <motion.div
+                                initial="hidden"
+                                animate="visible"
+                                variants={{
+                                    visible: { transition: { staggerChildren: 0.1 } }
+                                }}
+                                className="flex items-center gap-4 text-3xl md:text-4xl font-black uppercase tracking-[0.3em]"
+                            >
+                                <motion.span 
+                                    variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+                                    className="text-white"
+                                >
+                                    stalin sagay
+                                </motion.span>
+                                <motion.span 
+                                    variants={{ hidden: { scaleY: 0 }, visible: { scaleY: 1 } }}
+                                    className="w-[2px] h-8 bg-indigo-500/50 origin-center"
+                                />
+                                <motion.span 
+                                    variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+                                    className="text-indigo-500"
+                                >
+                                    2aj .dev
+                                </motion.span>
+                            </motion.div>
+
+                            {/* Status Micro-copy */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="text-[10px] font-mono tracking-[0.5em] text-slate-500 uppercase"
+                            >
+                                Fabricating Digital Excellence
+                            </motion.div>
+                        </div>
+                    </div>
+
+                    {/* Progress Track */}
+                    <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-white/5 overflow-hidden">
+                        <motion.div 
+                            initial={{ x: "-100%" }}
+                            animate={{ x: "0%" }}
+                            transition={{ duration: 2.5, ease: "easeInOut" }}
+                            className="w-full h-full bg-gradient-to-r from-transparent via-indigo-600 to-transparent"
+                        />
                     </div>
                 </motion.div>
             )}

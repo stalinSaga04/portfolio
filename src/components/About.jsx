@@ -11,7 +11,7 @@ const About = () => {
     ];
 
     return (
-        <section id="about" className="pt-32 pb-24 bg-white dark:bg-slate-950 px-4 sm:px-6 lg:px-8 relative min-h-screen overflow-hidden transition-colors duration-500">
+        <section id="about" className="pt-[340px] sm:pt-[280px] lg:pt-[240px] pb-24 bg-white dark:bg-slate-950 px-4 sm:px-6 lg:px-8 relative min-h-screen overflow-hidden transition-colors duration-500">
             {/* Artistic Background Elements */}
             <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-50 dark:bg-indigo-900/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
             
@@ -23,6 +23,9 @@ const About = () => {
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10">
+                {/* Safe Zone Spacer - Guaranteed Clearance */}
+                <div className="h-16 lg:h-24" /> 
+                
                 <div className="flex flex-col lg:flex-row gap-16 lg:items-center">
                     
                     {/* Catch & Code Narrative */}
@@ -38,12 +41,12 @@ const About = () => {
                                 Catch & Code
                             </div>
                             
-                            <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-slate-900 dark:text-white leading-[1.05] tracking-tight">
+                            <h2 className="text-2xl sm:text-5xl lg:text-7xl font-black text-slate-900 dark:text-white leading-[1.2] sm:leading-[1.05] tracking-tight">
                                 We <span className="text-indigo-600 dark:text-indigo-400">Catch</span> Ideas,<br />
                                 We <span className="text-indigo-600 dark:text-indigo-400">Code</span> Reality.
                             </h2>
                             
-                            <p className="text-lg sm:text-xl text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-2xl">
+                            <p className="text-sm sm:text-lg lg:text-xl text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-2xl">
                                 Engineering is more than just writing syntax. It's about capturing the fleeting spark of an idea 
                                 and meticulously crafting it into a high-performance digital engine that drives growth.
                             </p>
@@ -70,10 +73,10 @@ const About = () => {
                     </div>
 
                     {/* Creative Visual Side */}
-                    <div className="flex-1 w-full lg:max-w-lg relative">
-                        <div className="aspect-square relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800">
+                    <div className="flex-1 w-full lg:max-w-lg relative mt-8 lg:mt-0">
+                        <div className="aspect-square relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800">
                             <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 opacity-20" />
-                            <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center bg-white/40 dark:bg-slate-950/40 backdrop-blur-3xl">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-12 text-center bg-white/40 dark:bg-slate-950/40 backdrop-blur-3xl">
                                 <div className="grid grid-cols-2 gap-6 mb-8">
                                     <Cpu className="w-12 h-12 text-indigo-600 animate-pulse" />
                                     <Globe className="w-12 h-12 text-slate-400" />

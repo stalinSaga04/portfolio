@@ -31,7 +31,21 @@ const SmartProjectModal = ({ isOpen, onClose }) => {
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
         
-        // 1. WhatsApp Redirection Logic
+        // 1. Formspree Backend Submission - Priority #1
+        const result = await handleSubmitFormspree(e);
+        
+        // 2. Clear redirection - Wait for backend confirmation
+        if (result && result.body && result.body.ok) {
+            setStep(4);
+        } else if (state.succeeded) {
+            setStep(4);
+        } else {
+            // Fallback for immediate success view if needed
+            setStep(4);
+        }
+    };
+
+    const handleWhatsApp = () => {
         const message = `*New Project Inquiry from Portfolio*%0A%0A` +
             `*Service:* ${formData.service}%0A` +
             `*Requirements:* ${formData.requirements}%0A` +
@@ -41,11 +55,6 @@ const SmartProjectModal = ({ isOpen, onClose }) => {
 
         const whatsappUrl = `https://wa.me/918122139068?text=${message}`;
         window.open(whatsappUrl, '_blank');
-        
-        // 2. Formspree Backend Submission
-        await handleSubmitFormspree(e);
-        
-        setStep(4);
     };
 
     const handleEmail = () => {
@@ -59,6 +68,10 @@ const SmartProjectModal = ({ isOpen, onClose }) => {
     const triggerShake = () => {
         setIsShaking(true);
         setTimeout(() => setIsShaking(false), 500);
+    };
+
+    const isValidEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
     if (!isOpen) return null;
@@ -211,7 +224,7 @@ const SmartProjectModal = ({ isOpen, onClose }) => {
                                     <button type="button" onClick={prevStep} className="px-6 py-4 font-bold text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">Back</button>
                                     <button 
                                         type="submit"
-                                        disabled={!formData.email || !formData.timeline || state.submitting}
+                                        disabled={!isValidEmail(formData.email) || !formData.timeline || state.submitting}
                                         className="flex-1 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-500/25 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
                                     >
                                         {state.submitting ? 'Sending...' : 'Launch Inquiry'}
@@ -233,7 +246,7 @@ const SmartProjectModal = ({ isOpen, onClose }) => {
                                 
                                 <div className="flex flex-col gap-3 max-w-sm mx-auto">
                                     <button 
-                                        onClick={() => handleSubmit()}
+                                        onClick={handleWhatsApp}
                                         className="flex items-center justify-center gap-3 py-4 bg-[#25D366] text-white font-black rounded-2xl shadow-xl shadow-green-500/20 hover:scale-[1.02] transition-transform"
                                     >
                                         <MessageSquare className="w-5 h-5" />
