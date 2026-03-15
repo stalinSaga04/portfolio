@@ -7,18 +7,27 @@ import Footer from './components/Footer'
 import PrivacyPolicy from './components/PrivacyPolicy'
 import TermsConditions from './components/TermsConditions'
 import LoadingScreen from './components/LoadingScreen'
+import SmartProjectModal from './components/SmartProjectModal'
 
 const AppContent = () => {
   const [showLegal, setShowLegal] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleOpenModal = () => setIsProjectModalOpen(true);
+    window.addEventListener('open-project-modal', handleOpenModal);
+    return () => window.removeEventListener('open-project-modal', handleOpenModal);
+  }, []);
 
   // Theme handling (Storage > Time-based)
   useEffect(() => {
     const updateTheme = () => {
-      // Enforce dark theme site-wide to match Hero section aesthetic
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      // Enforce clean light theme for the Vibrant Artistic aesthetic
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+      localStorage.setItem('theme', 'light');
     };
 
     updateTheme();
@@ -84,6 +93,12 @@ const AppContent = () => {
       {/* Legal Modals */}
       {showLegal === 'privacy' && <PrivacyPolicy onClose={closeLegal} />}
       {showLegal === 'terms' && <TermsConditions onClose={closeLegal} />}
+
+      {/* Global Smart Inquiry Modal */}
+      <SmartProjectModal 
+        isOpen={isProjectModalOpen} 
+        onClose={() => setIsProjectModalOpen(false)} 
+      />
     </div>
   )
 }

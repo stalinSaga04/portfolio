@@ -59,11 +59,11 @@ const Footer = () => {
                         <div className="w-14 h-14 rounded-full flex items-center justify-center bg-white shadow-lg shadow-indigo-500/30 group-hover:rotate-12 transition-all duration-500 overflow-hidden">
                             <img
                                 src="/logo.png"
-                                alt="SagayAI Lab"
+                                alt="Stalin Sagay A Raj"
                                 className="w-[120%] h-[120%] object-contain mix-blend-multiply"
                             />
                         </div>
-                        <span className="text-2xl font-black tracking-tight text-white italic">Sagay<span className="text-indigo-400">AI</span> Lab</span>
+                        <span className="text-2xl font-black tracking-tight text-white mt-1">Stalin <span className="text-indigo-400">Sagay</span> A Raj</span>
                     </div>
 
                     {/* Middle: Signature Quote & Flip Card */}
@@ -135,7 +135,7 @@ const Footer = () => {
                 </div>
 
                 <div className="pt-8 border-t border-slate-700/50 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
-                    <p>© {currentYear} Stalin (Sagay AI Lab). All rights reserved.</p>
+                    <p>© {currentYear} Stalin Sagay A Raj. All rights reserved.</p>
                     <div className="flex items-center gap-10">
                         <button onClick={() => window.dispatchEvent(new CustomEvent('show-legal', { detail: 'privacy' }))} className="hover:text-indigo-400 transition-colors cursor-pointer">Privacy Policy</button>
                         <button onClick={() => window.dispatchEvent(new CustomEvent('show-legal', { detail: 'terms' }))} className="hover:text-indigo-400 transition-colors cursor-pointer">Terms of Service</button>

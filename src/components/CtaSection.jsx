@@ -32,15 +32,15 @@ const CtaSection = () => {
                         Whether you need a high-converting landing page or a complex AI SaaS, let's create something extraordinary together.
                     </p>
 
-                    <a
-                        href="#contact"
-                        className="group/btn relative inline-flex px-10 py-5 bg-white text-slate-900 rounded-2xl font-black text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] items-center justify-center gap-3 overflow-hidden"
+                    <button
+                        onClick={() => window.dispatchEvent(new CustomEvent('open-project-modal'))}
+                        className="group/btn relative inline-flex px-10 py-5 bg-white text-slate-900 rounded-2xl font-black text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] items-center justify-center gap-3 overflow-hidden shadow-xl"
                     >
                         <span className="relative z-10 flex items-center gap-2">
-                            Contact Me
+                            Start a Project
                             <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </span>
-                    </a>
+                    </button>
                 </motion.div>
             </div>
         </section>

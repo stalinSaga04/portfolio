@@ -97,14 +97,38 @@ const Skills = () => {
                     ))}
                 </div>
 
+                {/* Premium Learning Status Card */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                    className="mt-20 text-center"
+                    className="mt-24 max-w-2xl mx-auto"
                 >
-                    <p className="text-slate-500 dark:text-slate-400 font-medium mb-6 animate-pulse">Always learning. Currently expanding into Advanced AI Agents.</p>
+                    <div className="relative group p-8 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden text-center">
+                        {/* Interactive Background Glow */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                        
+                        <div className="relative z-10 flex flex-col items-center">
+                            <div className="flex items-center gap-2 mb-6 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800">
+                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Live Status</span>
+                            </div>
+
+                            <motion.div 
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 4, repeat: Infinity }}
+                                className="w-16 h-16 bg-slate-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-slate-900 shadow-xl mb-6"
+                            >
+                                <Cpu className="w-8 h-8" />
+                            </motion.div>
+
+                            <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Always Learning. Always Building.</h4>
+                            <p className="text-slate-500 dark:text-slate-400 font-bold leading-relaxed">
+                                Currently diving deep into <span className="text-indigo-600 dark:text-indigo-400">Advanced AI Agentic Workflows</span> & 
+                                scalable multi-agent systems.
+                            </p>
+                        </div>
+                    </div>
                 </motion.div>
             </div>
         </section>
