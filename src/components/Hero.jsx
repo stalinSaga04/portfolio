@@ -133,26 +133,27 @@ const Hero = () => {
         <section ref={containerRef} className="relative h-screen min-h-[700px] text-[#0F172A] overflow-hidden bg-white" id="hero">
 
             {/* ── UNIFIED BACKGROUND CANVAS ── */}
-            {/* Base White for the right side */}
-            <div className="absolute inset-0 bg-white z-0" />
+            {/* Base Gradient for full coverage */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50 to-indigo-50/30 z-0" />
             
             {/* Diagonal Organic Wave Base (The dynamic part of the split) */}
             <motion.div 
-                className="absolute inset-0 z-5"
+                className="absolute inset-y-0 left-0 z-5"
                 style={{
+                    width: '100%',
                     background: 'linear-gradient(135deg, #E11D48 0%, #4F46E5 100%)',
-                    clipPath: 'polygon(0 0, 78% 0, 85% 15%, 75% 40%, 82% 65%, 72% 85%, 78% 100%, 0% 100%)'
+                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%, 0% 90%, 85% 70%, 85% 30%, 0% 10%)'
                 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}
             />
 
-            {/* ── DYNAMIC RAYS (Layered behind portrait) ── */}
-            <div className="absolute top-[50%] right-[-5%] -translate-y-1/2 w-[900px] h-[900px] z-1 pointer-events-none hidden lg:block opacity-[0.2]">
+            {/* Desktop Dynamic Rays */}
+            <div className="absolute top-[50%] right-[-5%] -translate-y-1/2 w-[900px] h-[900px] z-1 pointer-events-none hidden lg:block opacity-[0.15]">
                 <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
                     className="absolute inset-0"
                 >
                     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/01/svg">
@@ -163,41 +164,36 @@ const Hero = () => {
                                 x2={100 + Math.cos((i * (360/32) * Math.PI) / 180) * 100} 
                                 y2={100 + Math.sin((i * (360/32) * Math.PI) / 180) * 100}
                                 stroke="#4F46E5" 
-                                strokeWidth="2.5"
-                                strokeDasharray="4 8"
+                                strokeWidth="2"
+                                strokeDasharray="3 6"
                             />
                         ))}
                     </svg>
                 </motion.div>
-                <div className="absolute inset-0 bg-gradient-radial from-[#4F46E533] to-transparent blur-[120px]" />
+                <div className="absolute inset-0 bg-gradient-radial from-[#4F46E522] to-transparent blur-[130px]" />
             </div>
 
-            {/* ── GIANT PORTRAIT (High-level blend) ── */}
-            <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-10 pointer-events-none flex items-end justify-end overflow-visible">
+            {/* ── GIANT PORTRAIT (Stabilized Anchoring) ── */}
+            <div className="absolute inset-y-0 right-0 w-full lg:w-[55%] z-10 pointer-events-none flex items-center justify-center lg:justify-end overflow-visible">
                 <motion.div
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative w-full h-[110%] sm:h-[125%] md:h-[135%] bottom-[5%] sm:bottom-[15%] right-[-15%] sm:right-[-12%] lg:right-[-10%]"
-                    style={{ mixBlendMode: 'normal' }}
+                    animate={{ y: [0, -15, 0] }}
+                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+                    className="relative w-[120%] h-[120%] lg:w-full lg:h-[130%] right-[-20%] lg:right-[-8%] bottom-[-15%] lg:bottom-[-10%]"
                 >
                     <motion.img
                         initial={{ opacity: 0, scale: 1.1, x: 100 }}
-                        animate={{ opacity: 1, scale: 1.35, x: 0 }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        animate={{ opacity: 1, scale: 1.25, x: 0 }}
+                        transition={{ duration: 1.8, ease: "easeOut" }}
                         src="/hero_portrait.jpg"
                         alt="Stalin"
-                        className="w-full h-full object-contain object-bottom select-none"
+                        className="w-full h-full object-contain object-bottom select-none opacity-80 lg:opacity-100"
                     />
-                    
-                    {/* Floating Accents */}
-                    <div className="absolute top-[40%] right-[35%] w-6 h-6 rounded-full bg-[#4F46E5] blur-[4px] opacity-40 animate-pulse" />
-                    <div className="absolute bottom-[30%] right-[65%] w-5 h-5 rounded-full bg-[#E11D48] blur-[3px] opacity-30" />
                 </motion.div>
             </div>
 
             {/* ── MAIN CONTENT GRID ── */}
-            <div className="relative z-30 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex items-center">
-                <div className="w-full lg:w-1/2 pt-40 sm:pt-44 lg:pt-20 relative">
+            <div className="relative z-30 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 h-full flex items-center lg:items-center">
+                <div className="w-full lg:w-3/5 pt-28 sm:pt-32 lg:pt-10 relative">
 
                     {/* Left side: Text content with Glass Contrast Card */}
                     <motion.div
