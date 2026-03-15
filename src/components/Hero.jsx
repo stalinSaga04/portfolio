@@ -173,16 +173,16 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-gradient-radial from-[#4F46E522] to-transparent blur-[130px]" />
             </div>
 
-            {/* ── GIANT PORTRAIT (Upscaled & Dominant) ── */}
+            {/* ── GIANT PORTRAIT (Refined Scaling & Position) ── */}
             <div className="absolute inset-y-0 right-0 w-full lg:w-[60%] z-10 pointer-events-none flex items-end justify-center lg:justify-end overflow-visible">
                 <motion.div
                     animate={{ y: [0, -12, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative w-full h-[100%] sm:h-[115%] lg:h-[125%] right-[-5%] lg:right-[-8%] bottom-[-5%] lg:bottom-[-5%]"
+                    className="relative w-full h-[120%] sm:h-[125%] lg:h-[135%] right-[-5%] lg:right-[-6%] bottom-[0%] sm:bottom-[-2%] lg:bottom-[5%]"
                 >
                     <motion.img
-                        initial={{ opacity: 0, scale: 1.2, x: 50 }}
-                        animate={{ opacity: 1, scale: 1.45, x: 0 }}
+                        initial={{ opacity: 0, scale: 1.3, x: 50 }}
+                        animate={{ opacity: 1, scale: 1.6, x: 0 }}
                         transition={{ duration: 1.8, ease: "easeOut" }}
                         src="/hero_portrait.jpg"
                         alt="Stalin"
